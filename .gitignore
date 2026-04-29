@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Tolaria local state (if any leaks)
+.tolaria/
+
+# Sensitive — uncomment if you ever drop secrets in here
+# secrets/
+# *.env
