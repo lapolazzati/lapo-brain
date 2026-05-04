@@ -7,7 +7,9 @@ updated: 2026-05-04
 
 # Q2 2026 Detailed Targets
 
-**North Star:** Get all three businesses to their next inflection point - Catone to revenue, CEG to regulatory clarity, Klaaryo to contract renewal.
+**North Star:** Gain enough confidence and money in myself to stay self-employed.
+
+Everything below is just how to get there - Catone to revenue, CEG to regulatory clarity, Klaaryo to contract renewal.
 
 ---
 
@@ -32,6 +34,7 @@ Requires minimum 5 contracts:
 - Phase A3 + A1 validator fixes (4 urgent Linear tasks)
 - Design partner contract terms and pricing finalization
 - Cassetto fiscale integration (Vincenzo's ask)
+- **Argos referral fee model:** Get fee for introing studios to buy Catone (additional revenue stream)
 
 ### Success Metric
 By June 30: €1K MRR confirmed, invoices sent, payment confirmed for at least 4 contracts.
