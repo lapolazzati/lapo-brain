@@ -3,7 +3,7 @@ type: Article
 status: inbox
 tags: [design, AI, UI-patterns, product-design, anti-patterns]
 shared: 2026-05-05T10:45:20Z
-context: "Shared via Twitter by Michael Nguyen (@insights_infra)"
+context: "Shared via Twitter by Michael Nguyen (@insights_infra) + Claire Vo (@clairevo)"
 source: https://impeccable.style/slop
 Date: 2026-05-05
 belongs_to: "[[design]]"
@@ -19,6 +19,7 @@ _organized: true
 • Patterns split into "AI slop" (specific to AI-generated UIs) vs "Quality" (general design mistakes)
 • Both 2022 wave (purple gradients, glassmorphism) and 2026 wave documented
 • 25 rules run deterministically via CLI, 12 require LLM review
+• *Claire Vo's anti-prompt list*: Designers now explicitly telling AI to avoid these patterns
 
 ---
 
@@ -236,6 +237,37 @@ The tool ships with 11 example pages demonstrating each pattern:
 - Shared by Michael Nguyen (@insights_infra, Head of Customer Intelligence at Enterpret)
 
 **Why this matters now**: 2026 is the year AI design tools went mainstream. Everyone can generate a "professional-looking" UI in seconds. These patterns are the tells that separate considered design from generated slop.
+
+---
+
+## Claire Vo's Anti-Prompt List (Real-World Designer Response)
+
+**Claire Vo** ([@clairevo](https://x.com/clairevo), building ChatPRD, 3x CPTO)
+
+Posted May 4, 2026: "design slop everywhere. now have to anti-prompt on:"
+
+**Her anti-prompt patterns** (what she explicitly tells AI to avoid):
+1. **Left border accent** (same as Impeccable's "side-tab cards")
+2. **Italicized serif highlight words** (𝒉𝒊𝒈𝒍𝒊𝒈𝒉𝒕 styled text)
+3. **Indigo/blurple** (specific color palette tell)
+4. **Glowey gradients** (same as Impeccable's neon glow)
+5. **Certain icon packs** (generic iconography)
+6. **Blocky grids** (same as Impeccable's "identical card grids")
+
+**What this reveals**:
+- Designers are now *actively fighting against* AI-generated patterns
+- The patterns are SO recognizable that you need explicit negative prompting
+- Even AI design tool users want to avoid looking AI-generated
+- 467 likes, 275 bookmarks, 49K views = this resonates widely
+
+**The meta-game**: We've entered an era where:
+1. AI generates slop patterns
+2. Designers anti-prompt to avoid them
+3. But the anti-prompting itself becomes a pattern
+4. Future AI will learn to avoid what current AI does
+5. Cycle repeats with new patterns
+
+**Implication**: The "tells" will keep evolving. Impeccable needs continuous updates as AI tools learn to avoid current tells.
 
 ---
 
