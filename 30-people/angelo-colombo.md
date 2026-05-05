@@ -5,7 +5,10 @@ company: AC Avvocati e Commercialisti (AC Tax and Law)
 location: Milano
 researched: 2026-05-05
 source: https://actaxlaw.com/professionisti/angelo-carlo-colombo/
-tags: [commercialista, tax-law, M&A, catone-prospect]
+tags: [commercialista, tax-law, M&A, catone-prospect, catone-lead]
+lead_status: new
+lead_quality: strong-fit
+project: catone
 ---
 
 # Angelo Carlo Colombo
