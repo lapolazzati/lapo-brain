@@ -2,6 +2,7 @@
 type: Objectives
 belongs_to: "[[10-projects/catone/README]]"
 related_to: "[[10-projects/catone/leads]]"
+_organized: true
 ---
 # Catone Sales Pipeline
 

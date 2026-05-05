@@ -5,6 +5,7 @@ tags: [parenting, economics, time-allocation, fatherhood, status-competition]
 shared: 2026-05-04T19:53:50Z
 context: "Shared via WhatsApp"
 source: https://www.derekthompson.org/p/why-do-richer-dads-spend-more-time
+Date: 2026-05-04
 ---
 
 # Why Do Richer Dads Spend More Time With Their Kids?

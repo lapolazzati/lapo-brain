@@ -9,6 +9,7 @@ tags: [commercialista, tax-law, M&A, catone-prospect, catone-lead]
 lead_status: new
 lead_quality: strong-fit
 project: catone
+_organized: true
 ---
 
 # Angelo Carlo Colombo
