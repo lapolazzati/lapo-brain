@@ -1,0 +1,10 @@
+name: Catone - All Leads
+icon: null
+color: null
+order: 0
+sort: null
+filters:
+  all:
+  - field: lead_status
+    op: is_not_empty
+    value: ''

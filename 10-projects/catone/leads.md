@@ -1,3 +1,8 @@
+---
+type: Objectives
+belongs_to: "[[10-projects/catone/README]]"
+related_to: "[[10-projects/catone/leads]]"
+---
 # Catone Sales Pipeline
 
 *Last updated: 2026-05-05*
