@@ -1,3 +1,6 @@
+---
+_organized: true
+---
 # Ingest Workflow
 
 How Andy captures and processes shared content into lapo-brain.

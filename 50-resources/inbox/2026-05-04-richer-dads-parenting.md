@@ -7,6 +7,7 @@ context: "Shared via WhatsApp"
 source: https://www.derekthompson.org/p/why-do-richer-dads-spend-more-time
 Date: 2026-05-04
 belongs_to: "[[parenting]]"
+_organized: true
 ---
 
 # Why Do Richer Dads Spend More Time With Their Kids?

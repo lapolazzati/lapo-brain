@@ -5,6 +5,7 @@ tags: [ai, labor-markets, economics, jevons-paradox, knowledge-work]
 shared: 2026-05-04T19:53:24Z
 context: "Shared via WhatsApp"
 source: https://beyondtweets.substack.com/p/the-abundance-paradox
+_organized: true
 ---
 
 # The Abundance Paradox
