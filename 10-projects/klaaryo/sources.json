@@ -1,0 +1,73 @@
+{
+  "project": "klaaryo",
+  "canonical_sources": {
+    "contract": {
+      "description": "GTM Advisory Agreement + NDA",
+      "check_frequency": "daily",
+      "status": "pending_signature",
+      "deadline": "2026-05-09",
+      "location": "Gmail:subject:contract",
+      "watch_for": "signature confirmation from Federico"
+    },
+    "status_updates": {
+      "description": "Daily/weekly status notes",
+      "check_frequency": "daily",
+      "pattern": "status-*.md",
+      "location": "10-projects/klaaryo/"
+    },
+    "meetings": {
+      "description": "Meeting transcripts with Federico, Luca, Luigi",
+      "check_frequency": "after_each",
+      "location": "Granola",
+      "filters": ["Federico Pedron", "Klaaryo", "Luca Tamborino"]
+    },
+    "email_threads": {
+      "description": "Email threads with Federico, Klaaryo team",
+      "check_frequency": "daily",
+      "location": "Gmail",
+      "filters": [
+        "from:federico@klaaryo.com",
+        "subject:klaaryo",
+        "subject:contract"
+      ]
+    },
+    "linear_tasks": {
+      "description": "Tasks related to Klaaryo project",
+      "check_frequency": "hourly",
+      "location": "Linear",
+      "project_filter": "klaaryo"
+    },
+    "market_research": {
+      "description": "Country and competitor analysis",
+      "check_frequency": "weekly",
+      "pattern": "countries/*.md, competitors/*.md",
+      "location": "10-projects/klaaryo/"
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "last_check": "2026-05-08T14:58:00Z",
+    "next_check": "2026-05-09T08:00:00Z",
+    "alerts": {
+      "contract_unsigned_by_deadline": {
+        "condition": "deadline_passed AND status != signed",
+        "action": "escalate",
+        "message": "Contract not signed by Sunday May 9 deadline"
+      },
+      "no_federico_response_24h": {
+        "condition": "no_email_from_federico AND hours_since_sent > 24",
+        "action": "suggest_nudge",
+        "message": "Consider sending nudge to Federico"
+      }
+    }
+  },
+  "sync": {
+    "linear_project_id": null,
+    "auto_create_tasks": true,
+    "auto_update_context": true,
+    "sync_frequency": "on_change"
+  },
+  "generated": "2026-05-08T14:58:00Z",
+  "sources_count": 11,
+  "last_intelligence_extraction": "2026-05-08T14:58:00Z"
+}
