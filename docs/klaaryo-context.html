@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klaaryo - Project Intelligence Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Fraunces:wght@600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-critical: #dc2626;
+            --color-warning: #f59e0b;
+            --color-success: #10b981;
+            --color-info: #3b82f6;
+            --color-purple: #8b5cf6;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            --color-gray-900: #111827;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--color-gray-800);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(245, 158, 11, 0.2);
+            border: 2px solid var(--color-warning);
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--color-gray-200);
+            background: var(--color-gray-50);
+            padding: 0 2rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            font-family: 'Archivo', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-gray-700);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .tab.active {
+            color: var(--color-info);
+            border-bottom-color: var(--color-info);
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline-svg {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 1rem;
+        }
+
+        .market-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .market-card {
+            border: 2px solid var(--color-gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .market-card:hover {
+            border-color: var(--color-info);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .market-card.expanded {
+            grid-column: 1 / -1;
+            border-color: var(--color-info);
+        }
+
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .market-name {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+        }
+
+        .market-stars {
+            color: var(--color-warning);
+            font-size: 1.2rem;
+        }
+
+        .market-tam {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-info);
+            margin-bottom: 0.5rem;
+        }
+
+        .market-detail {
+            color: var(--color-gray-700);
+            margin-bottom: 0.3rem;
+        }
+
+        .market-details-expanded {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--color-gray-200);
+        }
+
+        .market-card.expanded .market-details-expanded {
+            display: block;
+        }
+
+        .competitive-chart {
+            width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+        }
+
+        .collapsible {
+            border: 2px solid var(--color-gray-200);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .collapsible-header {
+            padding: 1.25rem 1.5rem;
+            background: var(--color-gray-50);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .collapsible-header:hover {
+            background: var(--color-gray-100);
+        }
+
+        .collapsible-header.critical {
+            background: rgba(220, 38, 38, 0.1);
+            border-bottom: 3px solid var(--color-critical);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 1.5rem;
+        }
+
+        .collapsible.open .collapsible-content {
+            max-height: 2000px;
+            padding: 1.5rem;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s;
+            font-size: 1.5rem;
+        }
+
+        .collapsible.open .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            padding: 1.5rem;
+            background: var(--color-gray-50);
+            border-radius: 8px;
+            border-left: 4px solid var(--color-info);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+        }
+
+        .priority-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .priority-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--color-gray-50);
+            border-left: 4px solid var(--color-success);
+            border-radius: 4px;
+        }
+
+        .priority-item.critical {
+            border-left-color: var(--color-critical);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .priority-item.warning {
+            border-left-color: var(--color-warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .citation {
+            font-size: 0.85rem;
+            color: var(--color-gray-700);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        .export-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--color-info);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+
+        .stakeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stakeholder-card {
+            padding: 1.25rem;
+            background: var(--color-gray-50);
+            border-radius: 8px;
+            border: 2px solid var(--color-gray-200);
+        }
+
+        .stakeholder-name {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--color-gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stakeholder-role {
+            color: var(--color-gray-700);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                padding: 0;
+            }
+
+            .tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+
+            .competitive-chart {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Klaaryo</h1>
+            <div class="subtitle">Multi-Country GTM Advisory Engagement</div>
+            <div class="status-badge">
+                🟡 Awaiting contract feedback — Deadline: Sunday May 9
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab" onclick="switchTab('timeline')">Timeline & Metrics</button>
+            <button class="tab" onclick="switchTab('markets')">Market Sizing</button>
+            <button class="tab" onclick="switchTab('competitive')">Competitive Landscape</button>
+            <button class="tab" onclick="switchTab('strategy')">Strategy & Decisions</button>
+            <button class="tab" onclick="switchTab('blockers')">Blockers & Risks</button>
+            <button class="tab" onclick="switchTab('targets')">Target Sectors</button>
+            <button class="tab" onclick="switchTab('questions')">Open Questions</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="tab-content active">
+            <div class="section">
+                <div class="section-title">What is this project?</div>
+                <p style="line-height: 1.7; margin-bottom: 1rem;">
+                    GTM Advisory engagement with <strong>Klaaryo</strong>, an HR Tech startup (19 employees, Milan-based)
+                    building conversational AI for operational recruiting via WhatsApp. Lapo is advising on multi-country expansion strategy.
+                </p>
+                <p class="citation">[source: status-2026-05-08.md]</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Key Stakeholders</div>
+                <div class="stakeholder-grid">
+                    <div class="stakeholder-card">
+                        <div class="stakeholder-name">Federico Pedron</div>
+                        <div class="stakeholder-role">CEO, Co-Founder (Primary Contact)</div>
+                    </div>
+                    <div class="stakeholder-card">
+                        <div class="stakeholder-name">Luca Tamborino Frisari</div>
+                        <div class="stakeholder-role">COO, Co-Founder</div>
+                    </div>
+                    <div class="stakeholder-card">
+                        <div class="stakeholder-name">Luigi Adornetto</div>
+                        <div class="stakeholder-role">CTO, Co-Founder</div>
+                    </div>
+                    <div class="stakeholder-card">
+                        <div class="stakeholder-name">Lapo Lazzati</div>
+                        <div class="stakeholder-role">GTM Advisor</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Current Status</div>
+                <ul class="priority-list">
+                    <li class="priority-item critical">
+                        Contract sent with comments May 7
+                    </li>
+                    <li class="priority-item critical">
+                        Awaiting feedback (deadline: Sunday May 9)
+                    </li>
+                    <li class="priority-item">
+                        Kickoff scheduled: Monday May 10, 9:00 AM at Klaaryo office
+                    </li>
+                </ul>
+                <p class="citation">[source: status-2026-05-08.md]</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Product Overview</div>
+                <p style="line-height: 1.7; margin-bottom: 1rem;">
+                    <strong>Core Platform:</strong> Conversational AI for operational recruiting via WhatsApp Business
+                </p>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Primary Solutions:</strong>
+                    <ol>
+                        <li><strong>Recruiting:</strong> Pre-screening, interview scheduling, candidate reactivation</li>
+                        <li><strong>Onboarding:</strong> Document collection, e-signature, workflow automation</li>
+                        <li><strong>Employee Engagement:</strong> Surveys, HR requests, sentiment analysis</li>
+                    </ol>
+                </div>
+                <div>
+                    <strong>Key Features:</strong>
+                    <ul>
+                        <li>24/7 automation</li>
+                        <li>WhatsApp-native (not integration)</li>
+                        <li>ATS/HCM integration layer</li>
+                        <li>Multi-language support</li>
+                    </ul>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Tech Stack:</strong> SaaS + API, operates above existing ATS/HCM systems</p>
+                <p class="citation">[source: company-context.md]</p>
+            </div>
+        </div>
+
+        <!-- TIMELINE & METRICS TAB -->
+        <div id="timeline" class="tab-content">
+            <div class="section">
+                <div class="section-title">North Star Metrics</div>
+                <div class="metric-grid">
+                    <div class="metric-card" style="border-left-color: var(--color-success)">
+                        <div class="metric-label">Year 1 Revenue Target</div>
+                        <div class="metric-value">$1-2M</div>
+                    </div>
+                    <div class="metric-card" style="border-left-color: var(--color-info)">
+                        <div class="metric-label">Pilot Customers</div>
+                        <div class="metric-value">20-30</div>
+                    </div>
+                    <div class="metric-card" style="border-left-color: var(--color-warning)">
+                        <div class="metric-label">EOY 2026 Target</div>
+                        <div class="metric-value">30 Paying</div>
+                    </div>
+                    <div class="metric-card" style="border-left-color: var(--color-purple)">
+                        <div class="metric-label">Countries</div>
+                        <div class="metric-value">3 Markets</div>
+                    </div>
+                </div>
+                <p class="citation">[source: TLDR.md]</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Visual Timeline</div>
+                <svg class="timeline-svg" viewBox="0 0 1200 200">
+                    <!-- Timeline line -->
+                    <line x1="50" y1="100" x2="1150" y2="100" stroke="#d1d5db" stroke-width="3"/>
+
+                    <!-- May 9 - Contract Deadline -->
+                    <circle cx="100" cy="100" r="12" fill="#dc2626"/>
+                    <text x="100" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="#dc2626">May 9</text>
+                    <text x="100" y="158" text-anchor="middle" font-size="12" fill="#374151">Contract</text>
+                    <text x="100" y="172" text-anchor="middle" font-size="12" fill="#374151">Deadline</text>
+
+                    <!-- May 10 - Kickoff -->
+                    <circle cx="250" cy="100" r="12" fill="#f59e0b"/>
+                    <text x="250" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="#f59e0b">May 10</text>
+                    <text x="250" y="158" text-anchor="middle" font-size="12" fill="#374151">Kickoff</text>
+                    <text x="250" y="172" text-anchor="middle" font-size="12" fill="#374151">9:00 AM</text>
+
+                    <!-- Q2-Q3 - Brazil/Poland Pilots -->
+                    <circle cx="500" cy="100" r="12" fill="#10b981"/>
+                    <text x="500" y="50" text-anchor="middle" font-size="14" font-weight="600" fill="#10b981">Q2-Q3 2026</text>
+                    <text x="500" y="68" text-anchor="middle" font-size="12" fill="#374151">Brazil Pilot</text>
+                    <text x="500" y="82" text-anchor="middle" font-size="12" fill="#374151">Poland Pilot</text>
+
+                    <!-- Q4 - Brazil Scale + Spain -->
+                    <circle cx="800" cy="100" r="12" fill="#3b82f6"/>
+                    <text x="800" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="#3b82f6">Q4 2026</text>
+                    <text x="800" y="158" text-anchor="middle" font-size="12" fill="#374151">Brazil Scale</text>
+                    <text x="800" y="172" text-anchor="middle" font-size="12" fill="#374151">Spain Entry</text>
+
+                    <!-- 2027 - Portugal + EU -->
+                    <circle cx="1050" cy="100" r="12" fill="#8b5cf6"/>
+                    <text x="1050" y="50" text-anchor="middle" font-size="14" font-weight="600" fill="#8b5cf6">2027</text>
+                    <text x="1050" y="68" text-anchor="middle" font-size="12" fill="#374151">Portugal</text>
+                    <text x="1050" y="82" text-anchor="middle" font-size="12" fill="#374151">+ EU Markets</text>
+                </svg>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Detailed Milestones</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header critical" onclick="toggleCollapsible(this)">
+                        <span>🔴 Immediate (May 2026)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li><strong>May 9 (Sunday):</strong> Contract signature deadline ⚠️</li>
+                            <li><strong>May 10 (Monday 9am):</strong> Kickoff meeting at Klaaryo office</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🟢 Phase 1 (Q2-Q3 2026)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Brazil pilot: 5-10 retail/franchise clients in São Paulo</li>
+                            <li>Poland pilot: 2-3 logistics/retail clients</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🔵 Phase 2 (Q4 2026)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Brazil scale: Expand to Rio, Brasília</li>
+                            <li>Spain entry: Target staffing agencies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🟣 Phase 3 (2027)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Portugal: BPO sector</li>
+                            <li>Additional European markets</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="citation" style="margin-top: 1rem;">[source: TLDR.md]</p>
+            </div>
+        </div>
+
+        <!-- MARKETS TAB -->
+        <div id="markets" class="tab-content">
+            <div class="section">
+                <div class="section-title">Market Sizing & Opportunities</div>
+                <div class="market-cards">
+                    <div class="market-card" onclick="toggleMarket(this)" data-market="brazil">
+                        <div class="market-header">
+                            <div class="market-name">🇧🇷 Brazil</div>
+                            <div class="market-stars">★★★★★</div>
+                        </div>
+                        <div class="market-tam">$150M TAM</div>
+                        <div class="market-detail">📱 139M WhatsApp users</div>
+                        <div class="market-detail">📊 36% annual turnover</div>
+                        <div class="market-detail">🎯 #1 Priority Market</div>
+                        <div class="market-details-expanded">
+                            <h4 style="margin-bottom: 0.75rem; font-family: 'Archivo', sans-serif;">Quick Wins:</h4>
+                            <ol>
+                                <li><strong>Retail/Franchising:</strong> 1.2M positions/year - McDonald's (800 stores), Cacau Show (1,600 stores)</li>
+                                <li><strong>Manufacturing:</strong> High-volume hiring needs</li>
+                                <li><strong>Services:</strong> 53% of new jobs</li>
+                            </ol>
+                            <h4 style="margin: 1rem 0 0.75rem; font-family: 'Archivo', sans-serif;">Strategy:</h4>
+                            <p>Start São Paulo, target 10-15 retail/franchise chains Year 1. No dominant WhatsApp-native competitor.</p>
+                            <p class="citation">[source: TLDR.md, brazil-market.md]</p>
+                        </div>
+                    </div>
+
+                    <div class="market-card" onclick="toggleMarket(this)" data-market="poland">
+                        <div class="market-header">
+                            <div class="market-name">🇵🇱 Poland</div>
+                            <div class="market-stars">★★★★☆</div>
+                        </div>
+                        <div class="market-tam">$40M TAM</div>
+                        <div class="market-detail">📱 92% WhatsApp penetration</div>
+                        <div class="market-detail">📊 800K vacant positions</div>
+                        <div class="market-detail">🎯 #2 Priority Market</div>
+                        <div class="market-details-expanded">
+                            <h4 style="margin-bottom: 0.75rem; font-family: 'Archivo', sans-serif;">Quick Wins:</h4>
+                            <ol>
+                                <li><strong>Logistics:</strong> Most acute shortage, multilingual needs (Ukrainian workers)</li>
+                                <li><strong>Retail:</strong> Biedronka 81K employees, Dino 47K</li>
+                                <li><strong>Manufacturing:</strong> Aging workforce</li>
+                            </ol>
+                            <h4 style="margin: 1rem 0 0.75rem; font-family: 'Archivo', sans-serif;">Strategy:</h4>
+                            <p>Q2-Q3 2026 timing, pilot with 2-3 logistics/retail companies. 34% automation adoption rate.</p>
+                            <p class="citation">[source: TLDR.md, poland-market.md]</p>
+                        </div>
+                    </div>
+
+                    <div class="market-card" onclick="toggleMarket(this)" data-market="spain">
+                        <div class="market-header">
+                            <div class="market-name">🇪🇸 Spain</div>
+                            <div class="market-stars">★★★☆☆</div>
+                        </div>
+                        <div class="market-tam">$60M TAM</div>
+                        <div class="market-detail">🏨 2.7M tourism jobs</div>
+                        <div class="market-detail">📊 97M annual visitors</div>
+                        <div class="market-detail">🎯 #3 Priority Market</div>
+                        <div class="market-details-expanded">
+                            <h4 style="margin-bottom: 0.75rem; font-family: 'Archivo', sans-serif;">Quick Wins:</h4>
+                            <ol>
+                                <li><strong>Staffing Agencies:</strong> Beachhead - Adecco, Randstad, Gi Group</li>
+                                <li><strong>Tourism/Hospitality:</strong> 2.7M jobs, seasonal hiring chains</li>
+                                <li><strong>Retail:</strong> Mercadona, Inditex</li>
+                            </ol>
+                            <h4 style="margin: 1rem 0 0.75rem; font-family: 'Archivo', sans-serif;">Strategy:</h4>
+                            <p>Target staffing agencies as channel partners. Tourism sector has clear seasonal hiring patterns.</p>
+                            <p class="citation">[source: TLDR.md, spain-market.md]</p>
+                        </div>
+                    </div>
+
+                    <div class="market-card" onclick="toggleMarket(this)" data-market="portugal">
+                        <div class="market-header">
+                            <div class="market-name">🇵🇹 Portugal</div>
+                            <div class="market-stars">★★★☆☆</div>
+                        </div>
+                        <div class="market-tam">$20M TAM</div>
+                        <div class="market-detail">🏢 BPO sector focus</div>
+                        <div class="market-detail">📊 Skills shortage</div>
+                        <div class="market-detail">🎯 2027 Entry</div>
+                        <div class="market-details-expanded">
+                            <h4 style="margin-bottom: 0.75rem; font-family: 'Archivo', sans-serif;">Quick Wins:</h4>
+                            <ol>
+                                <li><strong>BPO/Outsourcing:</strong> High volume, sophisticated buyers, clear ROI</li>
+                                <li><strong>Tourism:</strong> Seasonal hiring needs</li>
+                                <li><strong>Tech Scale-ups:</strong> Fast growth, limited HR resources</li>
+                            </ol>
+                            <h4 style="margin: 1rem 0 0.75rem; font-family: 'Archivo', sans-serif;">Strategy:</h4>
+                            <p>Enter via BPO sector first - volume hiring with sophisticated buyers who understand ROI.</p>
+                            <p class="citation">[source: TLDR.md, portugal-market.md]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPETITIVE TAB -->
+        <div id="competitive" class="tab-content">
+            <div class="section">
+                <div class="section-title">Competitive Positioning</div>
+                <svg class="competitive-chart" viewBox="0 0 800 500">
+                    <!-- Axes -->
+                    <line x1="100" y1="400" x2="700" y2="400" stroke="#374151" stroke-width="2"/>
+                    <line x1="100" y1="400" x2="100" y2="50" stroke="#374151" stroke-width="2"/>
+
+                    <!-- Axis labels -->
+                    <text x="400" y="440" text-anchor="middle" font-size="14" font-weight="600" fill="#374151">Market Segment</text>
+                    <text x="150" y="425" text-anchor="middle" font-size="12" fill="#6b7280">Enterprise</text>
+                    <text x="650" y="425" text-anchor="middle" font-size="12" fill="#6b7280">SMB</text>
+
+                    <text x="50" y="230" text-anchor="middle" font-size="14" font-weight="600" fill="#374151" transform="rotate(-90, 50, 230)">Platform Type</text>
+                    <text x="85" y="100" text-anchor="end" font-size="12" fill="#6b7280">WhatsApp-Native</text>
+                    <text x="85" y="385" text-anchor="end" font-size="12" fill="#6b7280">Traditional ATS</text>
+
+                    <!-- Quadrant backgrounds -->
+                    <rect x="100" y="50" width="300" height="175" fill="#f3f4f6" opacity="0.5"/>
+                    <rect x="400" y="50" width="300" height="175" fill="#dbeafe" opacity="0.5"/>
+
+                    <!-- Sweet spot indicator -->
+                    <rect x="380" y="180" width="180" height="120" fill="#3b82f6" opacity="0.1" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5" rx="8"/>
+                    <text x="470" y="260" text-anchor="middle" font-size="11" font-weight="600" fill="#3b82f6">Sweet Spot</text>
+
+                    <!-- Competitors -->
+                    <!-- Gupy - Enterprise, Traditional -->
+                    <circle cx="200" cy="320" r="25" fill="#dc2626" opacity="0.7"/>
+                    <text x="200" y="325" text-anchor="middle" font-size="11" font-weight="600" fill="white">Gupy</text>
+
+                    <!-- Factorial - Enterprise, Mid -->
+                    <circle cx="250" cy="240" r="22" fill="#f59e0b" opacity="0.7"/>
+                    <text x="250" y="244" text-anchor="middle" font-size="10" font-weight="600" fill="white">Factorial</text>
+
+                    <!-- Paradox - Enterprise, WhatsApp-native -->
+                    <circle cx="220" cy="150" r="20" fill="#8b5cf6" opacity="0.7"/>
+                    <text x="220" y="154" text-anchor="middle" font-size="10" font-weight="600" fill="white">Paradox</text>
+
+                    <!-- Sólides - SMB, Traditional -->
+                    <circle cx="580" cy="320" r="23" fill="#f59e0b" opacity="0.7"/>
+                    <text x="580" y="324" text-anchor="middle" font-size="10" font-weight="600" fill="white">Sólides</text>
+
+                    <!-- Talkpush - SMB, WhatsApp-native -->
+                    <circle cx="550" cy="120" r="24" fill="#dc2626" opacity="0.7"/>
+                    <text x="550" y="125" text-anchor="middle" font-size="11" font-weight="600" fill="white">Talkpush</text>
+
+                    <!-- talentsconnect - Mid-market, WhatsApp-native -->
+                    <circle cx="420" cy="140" r="20" fill="#f59e0b" opacity="0.7"/>
+                    <text x="420" y="133" text-anchor="middle" font-size="9" font-weight="600" fill="white">talents</text>
+                    <text x="420" y="145" text-anchor="middle" font-size="9" font-weight="600" fill="white">connect</text>
+
+                    <!-- KLAARYO - Sweet spot -->
+                    <circle cx="470" cy="200" r="35" fill="#10b981" opacity="0.9" stroke="#059669" stroke-width="3"/>
+                    <text x="470" y="205" text-anchor="middle" font-size="13" font-weight="700" fill="white">KLAARYO</text>
+                </svg>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.2rem; margin-bottom: 1rem;">Direct WhatsApp Threats</h4>
+                    <ul class="priority-list">
+                        <li class="priority-item critical">
+                            <strong>Talkpush</strong> (Philippines-based, operates Portugal/globally)
+                            <br>Most serious competitor - nearly identical product, proven scale: 24,000 hires in 75 days
+                        </li>
+                        <li class="priority-item warning">
+                            <strong>talentsconnect</strong> (Germany-based, operates Spain)
+                            <br>Direct overlap - 82% completion rate, already in Spanish market
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.2rem; margin-bottom: 1rem;">Enterprise Players (Less Direct)</h4>
+                    <ul>
+                        <li><strong>Gupy:</strong> Brazil market leader, 4,000 clients, enterprise-focused</li>
+                        <li><strong>Factorial HR:</strong> Barcelona unicorn, 15,000 customers, traditional ATS</li>
+                        <li><strong>Paradox:</strong> Global enterprise player</li>
+                        <li><strong>Sólides:</strong> Brazil, 40,000 SMB clients, recently added WhatsApp</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.2rem; margin-bottom: 1rem;">Klaaryo's Competitive Advantages</h4>
+                    <ol>
+                        <li>WhatsApp-first design (not bolt-on integration)</li>
+                        <li>Mid-market sweet spot (100-1,000 employees) vs. enterprise focus</li>
+                        <li>High-volume specialization (retail, hospitality, logistics)</li>
+                        <li>EU compliance built-in (GDPR, AI Act)</li>
+                        <li>Proven Italian success (La Piadineria case study)</li>
+                    </ol>
+                </div>
+
+                <p class="citation">[source: TLDR.md, brazil-competitors.md, poland-competitors.md, spain-competitors.md, portugal-competitors.md]</p>
+            </div>
+        </div>
+
+        <!-- STRATEGY TAB -->
+        <div id="strategy" class="tab-content">
+            <div class="section">
+                <div class="section-title">Major Decisions</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>1. Market Prioritization (May 5, 2026)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li><strong>#1 Priority: Brazil</strong> - 139M WhatsApp users, 36% annual turnover, USD 454M market by 2035</li>
+                            <li><strong>#2 Priority: Poland</strong> - 800K vacant positions, 34% automation adoption, 92% WhatsApp penetration</li>
+                            <li><strong>#3 Priority: Spain/Portugal</strong> - Smaller but viable markets</li>
+                        </ul>
+                        <p class="citation">[source: TLDR.md]</p>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>2. Entry Strategy per Market</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li><strong>Brazil:</strong> Start São Paulo, target 10-15 retail/franchise chains Year 1</li>
+                            <li><strong>Poland:</strong> Q2-Q3 2026 timing, pilot with 2-3 logistics/retail companies</li>
+                            <li><strong>Spain:</strong> Target staffing agencies as beachhead (Adecco, Randstad, Gi Group)</li>
+                            <li><strong>Portugal:</strong> Enter via BPO sector first (clear ROI, volume hiring)</li>
+                        </ul>
+                        <p class="citation">[source: TLDR.md]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Strategic Bets Ranked by Impact</div>
+
+                <div class="priority-list">
+                    <li class="priority-item" style="border-left-color: #10b981;">
+                        <strong>1. Brazil Retail/Franchising</strong> ★★★★★
+                        <ul style="margin-top: 0.5rem;">
+                            <li>TAM: ~USD 150M</li>
+                            <li>1.2M positions/year in retail</li>
+                            <li>McDonald's (800 stores), Cacau Show (1,600 stores)</li>
+                            <li>No dominant WhatsApp-native competitor</li>
+                        </ul>
+                    </li>
+                    <li class="priority-item" style="border-left-color: #3b82f6;">
+                        <strong>2. Poland Logistics</strong> ★★★★☆
+                        <ul style="margin-top: 0.5rem;">
+                            <li>TAM: ~USD 40M</li>
+                            <li>Multilingual needs (Ukrainian workers)</li>
+                            <li>WhatsApp penetration 92%</li>
+                        </ul>
+                    </li>
+                    <li class="priority-item" style="border-left-color: #f59e0b;">
+                        <strong>3. Spain Staffing Agencies</strong> ★★★☆☆
+                        <ul style="margin-top: 0.5rem;">
+                            <li>TAM: ~USD 60M</li>
+                            <li>Tourism: 2.7M jobs, seasonal hiring</li>
+                        </ul>
+                    </li>
+                </div>
+                <p class="citation">[source: TLDR.md, brazil-market.md, poland-market.md]</p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Open Strategic Decisions</div>
+                <ul>
+                    <li>Simultaneous vs. sequential market launch? (Brazil first recommended)</li>
+                    <li>Sales capacity for multi-country expansion?</li>
+                    <li>Partnership strategy with local staffing agencies?</li>
+                    <li>Brazilian Portuguese language optimization timeline?</li>
+                </ul>
+                <p class="citation">[source: TLDR.md]</p>
+            </div>
+        </div>
+
+        <!-- BLOCKERS TAB -->
+        <div id="blockers" class="tab-content">
+            <div class="section">
+                <div class="section-title">Active Blockers</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header critical" onclick="toggleCollapsible(this)">
+                        <span>🔴 CRITICAL: Contract Signature Pending</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Comments sent May 7</li>
+                            <li>No response as of May 8</li>
+                            <li>Deadline: Sunday May 9</li>
+                            <li><strong>Risk:</strong> Kickoff Monday May 10 depends on signed contract</li>
+                        </ul>
+                        <p class="citation">[source: status-2026-05-08.md]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Known Risks</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" style="background: rgba(220, 38, 38, 0.05); border-bottom: 3px solid var(--color-critical);" onclick="toggleCollapsible(this)">
+                        <span>🔴 HIGH: Talkpush Competitive Threat</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Nearly identical product to Klaaryo</li>
+                            <li>Proven scale: 24,000 hires in 75 days</li>
+                            <li>WhatsApp-native, direct competitor</li>
+                            <li><strong>Implication:</strong> Need to move fast in Brazil before they establish dominance</li>
+                        </ul>
+                        <p class="citation">[source: TLDR.md, portugal-competitors.md]</p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" style="background: rgba(245, 158, 11, 0.05); border-bottom: 3px solid var(--color-warning);" onclick="toggleCollapsible(this)">
+                        <span>🟡 MEDIUM: talentsconnect in Spain</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Germany-based WhatsApp-native</li>
+                            <li>82% completion rate</li>
+                            <li>Already operating in Spanish market</li>
+                        </ul>
+                        <p class="citation">[source: spain-competitors.md]</p>
+                    </div>
+                </div>
+
+                <div class="collapsible">
+                    <div class="collapsible-header" style="background: rgba(245, 158, 11, 0.05); border-bottom: 3px solid var(--color-warning);" onclick="toggleCollapsible(this)">
+                        <span>🟡 MEDIUM: CLT Compliance in Brazil</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ul>
+                            <li>Brazilian labor law (Consolidação das Leis do Trabalho)</li>
+                            <li>Need to verify Klaaryo's readiness</li>
+                            <li>Critical for market entry</li>
+                        </ul>
+                        <p class="citation">[source: TLDR.md]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Next Actions</div>
+
+                <ul class="priority-list">
+                    <li class="priority-item critical">
+                        <strong>🔴 CRITICAL (Today, May 8):</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Monitor inbox for Federico's contract feedback</li>
+                            <li>If reply: Review and sign if acceptable</li>
+                            <li>If no reply by EOD: Prep nudge for Friday morning</li>
+                        </ul>
+                    </li>
+                    <li class="priority-item warning">
+                        <strong>🟡 URGENT (Friday, May 9 if needed):</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Send nudge: "Ciao Fede, avete visto i commenti sul contratto? Voglio chiudere entro weekend così siamo pronti per kickoff Monday."</li>
+                            <li>Goal: Signed contract before weekend ends</li>
+                        </ul>
+                    </li>
+                    <li class="priority-item">
+                        <strong>🟢 SCHEDULED (Monday, May 10, 9:00 AM):</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            <li>Kickoff meeting at Klaaryo office (pending contract signature)</li>
+                            <li>Re-read Brazil research before meeting</li>
+                            <li>Draft onboarding questions for Federico</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="citation">[source: status-2026-05-08.md]</p>
+            </div>
+        </div>
+
+        <!-- TARGETS TAB -->
+        <div id="targets" class="tab-content">
+            <div class="section">
+                <div class="section-title">Target Sectors by Market</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🇧🇷 Brazil (Quick Wins)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li><strong>Retail/Franchising:</strong> 1.2M positions/year - McDonald's, Cacau Show</li>
+                            <li><strong>Manufacturing:</strong> High-volume hiring</li>
+                            <li><strong>Services:</strong> 53% of new jobs</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🇵🇱 Poland (Quick Wins)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li><strong>Logistics:</strong> Most acute shortage, multilingual needs</li>
+                            <li><strong>Retail:</strong> Biedronka 81K employees, Dino 47K</li>
+                            <li><strong>Manufacturing:</strong> Aging workforce</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🇪🇸 Spain (Quick Wins)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li><strong>Staffing Agencies:</strong> Adecco, Randstad, Gi Group</li>
+                            <li><strong>Tourism/Hospitality:</strong> 2.7M jobs, 97M visitors</li>
+                            <li><strong>Retail:</strong> Mercadona, Inditex</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>🇵🇹 Portugal (Quick Wins)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li><strong>BPO/Outsourcing:</strong> High volume, sophisticated buyers</li>
+                            <li><strong>Tourism:</strong> Seasonal hiring</li>
+                            <li><strong>Tech Scale-ups:</strong> Fast growth, limited HR</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <p class="citation">[source: TLDR.md, brazil-market.md, poland-market.md, spain-market.md, portugal-market.md]</p>
+            </div>
+        </div>
+
+        <!-- QUESTIONS TAB -->
+        <div id="questions" class="tab-content">
+            <div class="section">
+                <div class="section-title">Open Questions</div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header critical" onclick="toggleCollapsible(this)">
+                        <span>For Federico (Contract/Kickoff)</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li>Is Monday 9am kickoff still confirmed pending contract signature?</li>
+                            <li>What's the scope of work for Week 1?</li>
+                            <li>Who else will be at kickoff besides Federico?</li>
+                        </ol>
+                        <p class="citation">[source: status-2026-05-08.md]</p>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                        <span>For Strategic Discussion</span>
+                        <span class="collapsible-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <ol>
+                            <li>What's Klaaryo's sales capacity for multi-country expansion?</li>
+                            <li>Do they have Brazilian Portuguese language optimization ready?</li>
+                            <li>Are they set up for CLT compliance in Brazil?</li>
+                            <li>Timeline preference: Simultaneous launch or sequential (Brazil first)?</li>
+                            <li>Partnership strategy: Local staffing agencies as channel partners?</li>
+                        </ol>
+                        <p class="citation">[source: TLDR.md]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Sources</div>
+                <p style="margin-bottom: 1rem;"><strong>Total:</strong> 11 markdown files, ~5,000 lines of research</p>
+
+                <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.1rem; margin: 1.5rem 0 0.75rem;">Raw Documents:</h4>
+                <ul>
+                    <li><strong>TLDR.md</strong> (5KB) - Executive summary of expansion research</li>
+                    <li><strong>company-context.md</strong> (12KB) - Company overview, product, technology</li>
+                    <li><strong>status-2026-05-08.md</strong> (2KB) - Current status and next actions</li>
+                </ul>
+
+                <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.1rem; margin: 1.5rem 0 0.75rem;">Competitors (4 files):</h4>
+                <ul>
+                    <li>brazil-competitors.md (Gupy, Sólides, others)</li>
+                    <li>poland-competitors.md (InteliWISE, Traffit, Paradox)</li>
+                    <li>spain-competitors.md (Factorial HR, Orbio, talentsconnect)</li>
+                    <li>portugal-competitors.md (Talkpush, Paradox)</li>
+                </ul>
+
+                <h4 style="font-family: 'Archivo', sans-serif; font-size: 1.1rem; margin: 1.5rem 0 0.75rem;">Countries (4 files):</h4>
+                <ul>
+                    <li>brazil-market.md (Market analysis, TAM, entry strategy)</li>
+                    <li>poland-market.md (Labor shortage, automation adoption)</li>
+                    <li>spain-market.md (Tourism sector, youth unemployment)</li>
+                    <li>portugal-market.md (Skills shortage, BPO opportunity)</li>
+                </ul>
+
+                <p style="margin-top: 1.5rem; font-style: italic; color: var(--color-gray-700);">
+                    Last auto-generated: 2026-05-08 14:58 UTC
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <button class="export-btn" onclick="exportSummary()">📋 Export Summary</button>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function toggleCollapsible(header) {
+            const collapsible = header.parentElement;
+            collapsible.classList.toggle('open');
+        }
+
+        function toggleMarket(card) {
+            // Close all other market cards
+            document.querySelectorAll('.market-card').forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('expanded');
+                }
+            });
+
+            // Toggle this card
+            card.classList.toggle('expanded');
+        }
+
+        function exportSummary() {
+            const summary = `
+# Klaaryo - Project Intelligence Summary
+
+**Generated:** ${new Date().toISOString().split('T')[0]}
+
+## Status
+🟡 Awaiting contract feedback — Deadline: Sunday May 9
+
+## North Star Metrics
+- Year 1 Revenue: $1-2M
+- Pilot Customers: 20-30
+- EOY 2026: 30 paying customers across 3 countries
+
+## Market Priorities
+1. 🇧🇷 Brazil ($150M TAM) ★★★★★
+2. 🇵🇱 Poland ($40M TAM) ★★★★☆
+3. 🇪🇸 Spain ($60M TAM) ★★★☆☆
+
+## Critical Next Actions
+- Monitor inbox for contract feedback (May 8)
+- Sign contract before May 9
+- Kickoff meeting: Monday May 10, 9:00 AM
+
+## Key Risks
+🔴 Talkpush competitive threat (direct WhatsApp competitor)
+🟡 talentsconnect in Spain
+🟡 CLT compliance in Brazil
+
+---
+Source: klaaryo-context.html
+            `.trim();
+
+            navigator.clipboard.writeText(summary).then(() => {
+                const btn = document.querySelector('.export-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Auto-open critical sections on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const criticalHeaders = document.querySelectorAll('.collapsible-header.critical');
+            criticalHeaders.forEach(header => {
+                header.parentElement.classList.add('open');
+            });
+        });
+    </script>
+</body>
+</html>
