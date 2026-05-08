@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEG Intelligence Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e4;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        /* Critical Blocker Banner */
+        .blocker-banner {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.4);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 10px 40px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 10px 60px rgba(220, 38, 38, 0.6); }
+        }
+
+        .blocker-banner h2 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .blocker-icon {
+            font-size: 2rem;
+        }
+
+        .blocker-text {
+            font-size: 1.1rem;
+            color: #fecaca;
+            margin-bottom: 15px;
+        }
+
+        .countdown {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fbbf24;
+        }
+
+        /* Card System */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+            color: #888;
+        }
+
+        .collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+        .card-content {
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .collapsed .card-content {
+            max-height: 0;
+        }
+
+        /* Structure Options Diagram */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .option-card.risk-low {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        .option-card.risk-low::before {
+            background: #22c55e;
+        }
+
+        .option-card.risk-medium {
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+        .option-card.risk-medium::before {
+            background: #fbbf24;
+        }
+
+        .option-card.risk-high {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .option-card.risk-high::before {
+            background: #ef4444;
+        }
+
+        .option-card.recommended {
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.2);
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        .risk-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .risk-badge.low {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .risk-badge.medium {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .risk-badge.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .recommended-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #1a1a2e;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .option-description {
+            color: #ccc;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .pros-cons {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pros-cons h4 {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+
+        .pros-cons ul {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .pros-cons li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .pros-cons .pros li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #22c55e;
+        }
+
+        .pros-cons .cons li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: #ef4444;
+        }
+
+        /* Timeline Visual */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #fbbf24 0%, #dc2626 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 90px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 38px;
+            top: 5px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #fbbf24;
+            border: 3px solid #1a1a2e;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+        }
+
+        .timeline-marker.urgent {
+            background: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+            animation: pulse-marker 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-marker {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.5); }
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #fbbf24;
+        }
+
+        .timeline-week {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .timeline-events {
+            list-style: none;
+            font-size: 0.95rem;
+        }
+
+        .timeline-events li {
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .timeline-events li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+
+        /* Stakeholder Map */
+        .stakeholder-map {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .stakeholders {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .stakeholder {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stakeholder-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 10px;
+            border: 3px solid #1a1a2e;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stakeholder-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .stakeholder-avatar.ceo {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .stakeholder-avatar.contractor {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .stakeholder-avatar.advisor {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .stakeholder-name {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 3px;
+        }
+
+        .stakeholder-role {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .stakeholder-connection {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.3);
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Turkey Opportunity Locked */
+        .turkey-locked {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.1) 100%);
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .turkey-locked::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(59, 130, 246, 0.05) 10px,
+                rgba(59, 130, 246, 0.05) 20px
+            );
+            animation: drift 20s linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .lock-icon {
+            font-size: 4rem;
+            color: rgba(59, 130, 246, 0.5);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .turkey-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .huge-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .unlock-message {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Action Items */
+        .action-items {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .action-items h3 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .action-items ul {
+            list-style: none;
+        }
+
+        .action-items li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        .action-items li::before {
+            content: '☐';
+            position: absolute;
+            left: 10px;
+            font-size: 1.2rem;
+            color: #fbbf24;
+        }
+
+        /* Strategic Notes */
+        .strategic-note {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #d8b4fe;
+        }
+
+        .strategic-note-title {
+            font-weight: 600;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+
+        /* Key People */
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .person-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+        }
+
+        .person-name {
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 5px;
+        }
+
+        .person-role {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .person-status {
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        /* Pipeline */
+        .pipeline-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid transparent;
+        }
+
+        .pipeline-item.active {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .pipeline-item.stalled {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .pipeline-item.pending {
+            border-left-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .pipeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .pipeline-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .pipeline-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .pipeline-status.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .pipeline-status.stalled {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .pipeline-status.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .pipeline-details {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .blocker-banner h2 {
+                font-size: 1.3rem;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stakeholders {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .timeline-item {
+                padding-left: 70px;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-marker {
+                left: 18px;
+            }
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+        /* Clarity Checklist */
+        .clarity-checklist {
+            margin-top: 15px;
+        }
+
+        .clarity-checklist li {
+            padding: 8px;
+            margin-bottom: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .clarity-checklist li::before {
+            content: '☐';
+            margin-right: 10px;
+            color: #fbbf24;
+        }
+
+        /* Revenue Path */
+        .revenue-path {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .revenue-step {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+        }
+
+        .revenue-step::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #ffd700;
+        }
+
+        .revenue-step:last-child::after {
+            display: none;
+        }
+
+        .revenue-step-title {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .revenue-step-amount {
+            color: #22c55e;
+            font-size: 0.85rem;
+        }
+
+        /* Last Updated */
+        .last-updated {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CEG Intelligence Dashboard</h1>
+            <div class="subtitle">Italy Market Entry • Bioremediation Technology • Equity Play</div>
+        </header>
+
+        <!-- Critical Blocker Banner -->
+        <div class="blocker-banner">
+            <h2>
+                <span class="blocker-icon">⚠️</span>
+                CRITICAL BLOCKER: Company Structure Clarity
+            </h2>
+            <div class="blocker-text">
+                Company structure clarity is BLOCKING Turkey opportunity (flagged as "huge"). Cannot engage Turkey conversations without knowing entity structure, ownership %, and regulatory constraints.
+            </div>
+            <div class="countdown">
+                ⏱️ Luca Call Scheduled: Next Week (Week 20: May 11-17)
+            </div>
+        </div>
+
+        <!-- Structure Options -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    🎯 Structure Strategy Options
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <p style="color: #ccc; margin-bottom: 20px;">
+                    Four approaches to extract company structure clarity. Option C (Propose 3 structures) is recommended as it shifts the dynamic from "they're blocking me" to "I'm helping them decide."
+                </p>
+
+                <div class="options-grid">
+                    <!-- Option A -->
+                    <div class="option-card risk-medium">
+                        <div class="option-header">
+                            <div class="option-title">Option A: Extract Indirectly</div>
+                            <span class="risk-badge medium">Medium Risk</span>
+                        </div>
+                        <div class="option-description">
+                            Extract clarity through Luca call. Frame structure questions as "to properly advise, I need to understand entity setup."
+                        </div>
+                        <div class="pros-cons">
+                            <h4>Pros:</h4>
+                            <ul class="pros">
+                                <li>Non-confrontational approach</li>
+                                <li>Natural conversation flow</li>
+                                <li>Builds rapport with Luca</li>
+                            </ul>
+                            <h4>Cons:</h4>
+                            <ul class="cons">
+                                <li>Luca may not have authority/knowledge on structure</li>
+                                <li>Indirect approach may not get full clarity</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Option B -->
+                    <div class="option-card risk-high">
+                        <div class="option-header">
+                            <div class="option-title">Option B: Frame as Blocker</div>
+                            <span class="risk-badge high">High Risk</span>
+                        </div>
+                        <div class="option-description">
+                            Make it explicit: "I can't engage Turkey conversations without knowing structure because [specific reason]." Focus on blocked revenue opportunity.
+                        </div>
+                        <div class="pros-cons">
+                            <h4>Pros:</h4>
+                            <ul class="pros">
+                                <li>Clear and direct communication</li>
+                                <li>Emphasizes business impact</li>
+                                <li>Sets expectations</li>
+                            </ul>
+                            <h4>Cons:</h4>
+                            <ul class="cons">
+                                <li>May still get pushback if they're not ready</li>
+                                <li>Could damage relationship</li>
+                                <li>Confrontational tone</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Option C - RECOMMENDED -->
+                    <div class="option-card risk-low recommended">
+                        <div class="option-header">
+                            <div class="option-title">Option C: Propose 3 Structures</div>
+                            <span class="risk-badge low">Low Risk</span>
+                        </div>
+                        <div class="recommended-badge">⭐ RECOMMENDED</div>
+                        <div class="option-description">
+                            Research 3 viable structure options for environmental/energy plays in Italy. Present: "Here are 3 paths that could work. Which aligns with your vision?"
+                        </div>
+                        <div class="pros-cons">
+                            <h4>Pros:</h4>
+                            <ul class="pros">
+                                <li>Shifts dynamic from "tell me" to "choose one"</li>
+                                <li>Demonstrates value and initiative</li>
+                                <li>Collaborative framing</li>
+                                <li>Creates decision forcing function</li>
+                            </ul>
+                            <h4>Cons:</h4>
+                            <ul class="cons">
+                                <li>They may reject all 3 options</li>
+                                <li>Requires upfront research work</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Option D -->
+                    <div class="option-card risk-high">
+                        <div class="option-header">
+                            <div class="option-title">Option D: Parallel Track</div>
+                            <span class="risk-badge high">High Risk</span>
+                        </div>
+                        <div class="option-description">
+                            Start Turkey research/outreach independently. Keep CEG structure as separate workstream. Move fast without waiting for clarity.
+                        </div>
+                        <div class="pros-cons">
+                            <h4>Pros:</h4>
+                            <ul class="pros">
+                                <li>Maintains momentum</li>
+                                <li>Doesn't wait for structure decision</li>
+                                <li>Tests Turkey market independently</li>
+                            </ul>
+                            <h4>Cons:</h4>
+                            <ul class="cons">
+                                <li>HIGH RISK: Could get burned</li>
+                                <li>Structure may be incompatible with Turkey approach</li>
+                                <li>Wasted effort if structure doesn't align</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-note">
+                    <div class="strategic-note-title">Recommended Approach: Option C + Option A Combo</div>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Before Luca call:</strong> Research 3 viable structure options for CEG (environmental consulting/energy company in Italy)</li>
+                        <li><strong>During Luca call:</strong> Frame questions to understand current setup, then propose options</li>
+                        <li><strong>After Luca call:</strong> Send structured proposal to Steve/decision maker: "Based on Luca conversation, here are 3 paths. Which one do we optimize for?"</li>
+                    </ol>
+                </div>
+
+                <div class="action-items">
+                    <h3>⚡ Next Actions</h3>
+                    <ul>
+                        <li>Research 3 viable entity structure options before Luca call</li>
+                        <li>Prepare Luca call talking points (background, CEG fit, structure questions)</li>
+                        <li>Draft structure proposal document for post-call send</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    📅 Timeline & Critical Path
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker urgent"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-week">Week 20: May 11-17, 2026</div>
+                            <div class="timeline-date">URGENT WINDOW</div>
+                            <ul class="timeline-events">
+                                <li>Luca call (contractor) — scheduled</li>
+                                <li>Submit structure proposal with 3 options</li>
+                                <li>Goal: Get structure clarity or decision timeline</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-week">Week 21: May 18-24, 2026</div>
+                            <div class="timeline-date">Decision Window</div>
+                            <ul class="timeline-events">
+                                <li>Structure decision from Steve/CEG</li>
+                                <li>OR escalation if still blocked</li>
+                                <li>Finalize entity setup path</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-week">Week 22+: May 25+, 2026</div>
+                            <div class="timeline-date">Execution Phase (if structure clear)</div>
+                            <ul class="timeline-events">
+                                <li>Turkey market engagement unlocked</li>
+                                <li>First feasibility study outreach</li>
+                                <li>Decommissioned fuel station target list</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">What "Clarity" Means</div>
+                    <ul class="clarity-checklist">
+                        <li>What entity structure options are available? (holding company, JV, subsidiary, partnership)</li>
+                        <li>What % equity/ownership can Lapo have?</li>
+                        <li>What regulatory constraints affect structure? (environmental permits, Italian incorporation requirements)</li>
+                        <li>What's the timeline for structure decision?</li>
+                        <li>Who makes final call on structure? (Steve? Board? Regulatory requirement?)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stakeholder Map -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    👥 Stakeholder Network
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="stakeholder-map">
+                    <div class="stakeholders">
+                        <div class="stakeholder">
+                            <div class="stakeholder-avatar ceo" title="Click for details">🎯</div>
+                            <div class="stakeholder-name">Steve</div>
+                            <div class="stakeholder-role">CEO-Level Contact</div>
+                        </div>
+
+                        <div class="stakeholder">
+                            <div class="stakeholder-avatar contractor" title="Click for details">🔧</div>
+                            <div class="stakeholder-name">Luca</div>
+                            <div class="stakeholder-role">Contractor (Call Next Week)</div>
+                        </div>
+
+                        <div class="stakeholder">
+                            <div class="stakeholder-avatar contractor" title="Click for details">🏗️</div>
+                            <div class="stakeholder-name">Giuseppe</div>
+                            <div class="stakeholder-role">Contractor (via Toscani)</div>
+                        </div>
+
+                        <div class="stakeholder">
+                            <div class="stakeholder-avatar advisor" title="Click for details">💡</div>
+                            <div class="stakeholder-name">Lapo</div>
+                            <div class="stakeholder-role">Advisor</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="people-grid" style="margin-top: 30px;">
+                    <div class="person-card">
+                        <div class="person-name">Steve</div>
+                        <div class="person-role">CEG Italy Contact (CEO-level)</div>
+                        <div class="person-status">Last contact: May 7, 2026. Scheduled Luca call for next week.</div>
+                    </div>
+
+                    <div class="person-card">
+                        <div class="person-name">Luca</div>
+                        <div class="person-role">Contractor (RIGHT PERSON)</div>
+                        <div class="person-status">Call scheduled next week. Actual remediation contractor who does the work. NOT insurance broker.</div>
+                    </div>
+
+                    <div class="person-card">
+                        <div class="person-name">Giuseppe Santagostino</div>
+                        <div class="person-role">Contractor (via Toscani)</div>
+                        <div class="person-status">Not followed up yet. Backup contractor lead.</div>
+                    </div>
+
+                    <div class="person-card">
+                        <div class="person-name">Peter Kepich</div>
+                        <div class="person-role">CEG Contact</div>
+                        <div class="person-status">Follow-up pending.</div>
+                    </div>
+
+                    <div class="person-card">
+                        <div class="person-name">Matt Joen</div>
+                        <div class="person-role">CEG Contact</div>
+                        <div class="person-status">Follow-up pending.</div>
+                    </div>
+
+                    <div class="person-card" style="border-left-color: #ef4444;">
+                        <div class="person-name">Frank Kilburg</div>
+                        <div class="person-role">Aon Insurance Broker</div>
+                        <div class="person-status" style="color: #ef4444;">DEPRIORITIZED. Wrong person (insurance, not contractor).</div>
+                    </div>
+                </div>
+
+                <div class="strategic-note">
+                    <div class="strategic-note-title">Strategy Shift</div>
+                    Focus on contractors (Luca, Giuseppe) not insurance brokers (Frank). Contractors have direct client relationships and understand remediation economics. They are the right entry point for CEG's bioremediation technology.
+                </div>
+            </div>
+        </div>
+
+        <!-- Turkey Opportunity (Locked) -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    🇹🇷 Turkey Market Opportunity
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="turkey-locked">
+                    <div class="lock-icon">🔒</div>
+                    <div class="huge-badge">HUGE OPPORTUNITY</div>
+                    <h3 class="turkey-title">Turkey Market Expansion</h3>
+                    <p class="unlock-message">
+                        🔓 Unlock after company structure clarity achieved
+                    </p>
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 8px; position: relative; z-index: 2;">
+                        <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.8;">
+                            Turkey market engagement is ready to launch but <strong>blocked</strong> until entity structure is clarified.
+                            Cannot proceed with Turkey conversations without knowing structure options, ownership percentages, and regulatory constraints.
+                            <br><br>
+                            <strong style="color: #fbbf24;">Action Required:</strong> Resolve structure clarity in Week 20-21 to unlock Turkey opportunity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Overview -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    📊 Project Overview
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border-left: 3px solid #ffd700;">
+                        <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">Project Type</div>
+                        <div style="font-size: 1.3rem; font-weight: 600; color: #ffd700;">Equity Bet</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                        <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">Status</div>
+                        <div style="font-size: 1.3rem; font-weight: 600; color: #3b82f6;">Active</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border-left: 3px solid #fbbf24;">
+                        <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">Priority</div>
+                        <div style="font-size: 1.3rem; font-weight: 600; color: #fbbf24;">Level 2</div>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border-left: 3px solid #10b981;">
+                        <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">Clock Speed</div>
+                        <div style="font-size: 1.3rem; font-weight: 600; color: #10b981;">Slower (vs Catone)</div>
+                    </div>
+                </div>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">One-Liner</h3>
+                <p style="color: #ccc; font-size: 1.1rem; margin-bottom: 25px;">
+                    Bring CEG's bioremediation tech to Italian brownfield/contaminated-site market.
+                </p>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Why This Matters</h3>
+                <p style="color: #ccc; margin-bottom: 25px;">
+                    Equity bet. Slower clock than Catone, but real. Italy has a deep contamination backlog and a regulated framework (D.Lgs. 152/2006) that creates predictable demand.
+                </p>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Revenue Path</h3>
+                <div class="revenue-path">
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Paid Feasibility Studies</div>
+                        <div class="revenue-step-amount">€5,000 - €15,000</div>
+                    </div>
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Decommissioned Fuel Stations</div>
+                        <div class="revenue-step-amount">Quick wins</div>
+                    </div>
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Broader Brownfield Market</div>
+                        <div class="revenue-step-amount">Scale phase</div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 25px;">
+                    <div class="info-box-title">Catone-CEG Flywheel Thesis</div>
+                    Commercialisti (accountants/advisors) see contaminated property transactions early in the deal flow → they can provide warm introductions to brownfield property owners → this creates a natural lead generation channel for CEG's bioremediation services.
+                </div>
+
+                <div class="strategic-note" style="margin-top: 20px;">
+                    <div class="strategic-note-title">Anti-Patterns to Resist</div>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Treating CEG as the project that gets attention only when Catone is unblocked. It's an equity bet too.</li>
+                        <li>Building the perfect Italy entry plan instead of getting the first paid feasibility study.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Status & Pipeline -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    🎯 Current Status & Pipeline
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Current Status: Contractor Call Scheduled ✅</h3>
+
+                <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+                    <strong style="color: #22c55e;">May 7 Update:</strong> Call with Steve completed. Luca (contractor) call scheduled for next week. Goal: Book 1 feasibility study or decommissioned fuel station project.
+                </div>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Active Leads</h3>
+
+                <div class="pipeline-item active">
+                    <div class="pipeline-header">
+                        <div class="pipeline-name">Luca (Contractor)</div>
+                        <span class="pipeline-status active">Active</span>
+                    </div>
+                    <div class="pipeline-details">
+                        Call scheduled next week. <strong>RIGHT PERSON</strong> — actual remediation contractor who does the work (NOT insurance broker). This is the warm lead to pursue.
+                    </div>
+                </div>
+
+                <div class="pipeline-item pending">
+                    <div class="pipeline-header">
+                        <div class="pipeline-name">Giuseppe Santagostino (Contractor via Toscani)</div>
+                        <span class="pipeline-status pending">Not Followed Up</span>
+                    </div>
+                    <div class="pipeline-details">
+                        Backup contractor lead. No follow-up yet. Keep as secondary option.
+                    </div>
+                </div>
+
+                <div class="pipeline-item stalled">
+                    <div class="pipeline-header">
+                        <div class="pipeline-name">Frank Kilburg (Aon Insurance)</div>
+                        <span class="pipeline-status stalled">Deprioritized</span>
+                    </div>
+                    <div class="pipeline-details">
+                        <strong>Wrong person.</strong> Insurance broker, not contractor. Doesn't have direct client relationships or understand remediation economics.
+                    </div>
+                </div>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; margin-top: 30px; font-size: 1.2rem;">Luca Call Preparation</h3>
+
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #fbbf24; margin-bottom: 12px;">Background Questions</h4>
+                    <ol style="margin-left: 20px; color: #ccc; margin-bottom: 20px;">
+                        <li>What type of contamination projects does he typically work on?</li>
+                        <li>What's his process for feasibility studies today?</li>
+                        <li>Where does he get stuck (regulatory? cost estimation? client education?)</li>
+                    </ol>
+
+                    <h4 style="color: #fbbf24; margin-bottom: 12px;">CEG Fit Questions</h4>
+                    <ol start="4" style="margin-left: 20px; color: #ccc; margin-bottom: 20px;">
+                        <li>Has he heard of bioremediation vs traditional dig-and-haul?</li>
+                        <li>What would make him try a new remediation approach on next project?</li>
+                        <li>Does he have clients who want cheaper/faster cleanup?</li>
+                    </ol>
+
+                    <h4 style="color: #fbbf24; margin-bottom: 12px;">Next Steps Questions</h4>
+                    <ol start="7" style="margin-left: 20px; color: #ccc;">
+                        <li>Would he be open to a paid feasibility study on one of his sites? (€5-15K)</li>
+                        <li>Can we tour a site together to see current approach vs CEG approach?</li>
+                    </ol>
+                </div>
+
+                <div class="action-items" style="margin-top: 25px;">
+                    <h3>📋 Active Threads & Next Actions</h3>
+                    <ul>
+                        <li>Wait for Steve to send Luca call details (time, agenda)</li>
+                        <li>Prep talking points for Luca call</li>
+                        <li>Goal for Luca call: Understand current projects, pain points, CEG value prop fit</li>
+                        <li>Ask Luca: Does he have any decommissioned fuel stations or brownfield sites in pipeline?</li>
+                        <li>Convert Luca call into first feasibility study or site tour</li>
+                        <li>Follow-up with Peter Kepich and Matt Joen</li>
+                        <li>Build decommissioned fuel station target list</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategic Context -->
+        <div class="card">
+            <div class="card-header" onclick="toggleCard(this)">
+                <h2 class="card-title">
+                    🧠 Strategic Context & Market Framework
+                </h2>
+                <span class="collapse-icon">▼</span>
+            </div>
+            <div class="card-content">
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Market Opportunity</h3>
+                <p style="color: #ccc; margin-bottom: 20px;">
+                    Italy has a deep contamination backlog and a regulated framework (D.Lgs. 152/2006 - Environmental Code) that creates predictable demand for remediation services.
+                </p>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Technology: Bioremediation</h3>
+                <p style="color: #ccc; margin-bottom: 20px;">
+                    CEG's bioremediation technology uses biological processes to clean contaminated sites, offering potential advantages over traditional "dig-and-haul" methods in terms of cost, speed, and environmental impact.
+                </p>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Strategic Mapping Complete</h3>
+                <ul style="color: #ccc; margin-left: 20px; margin-bottom: 20px;">
+                    <li>Regulatory framework analyzed (D.Lgs. 152/2006)</li>
+                    <li>Competitive landscape mapped</li>
+                    <li>Revenue scenarios modeled</li>
+                    <li>18-month execution plan drafted</li>
+                </ul>
+
+                <h3 style="color: #ffd700; margin-bottom: 15px; font-size: 1.2rem;">Fastest Path to Revenue</h3>
+                <div class="revenue-path">
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Step 1</div>
+                        <div style="color: #ccc; font-size: 0.9rem; margin-top: 8px;">Paid feasibility studies (€5-15K) for contaminated sites</div>
+                    </div>
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Step 2</div>
+                        <div style="color: #ccc; font-size: 0.9rem; margin-top: 8px;">Target decommissioned fuel stations (quick wins)</div>
+                    </div>
+                    <div class="revenue-step">
+                        <div class="revenue-step-title">Step 3</div>
+                        <div style="color: #ccc; font-size: 0.9rem; margin-top: 8px;">Expand to broader brownfield market</div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 25px;">
+                    <div class="info-box-title">Week 19 Review: Structure Clarity Flagged</div>
+                    Company structure clarity was identified as the #1 carry-over item from Week 19. This blocker has persisted and is now preventing Turkey market engagement, escalating its priority.
+                </div>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            Last updated: May 8, 2026 • Data from /workspace/group/lapo-brain/10-projects/ceg/
+        </div>
+    </div>
+
+    <script>
+        function toggleCard(header) {
+            const card = header.parentElement;
+            card.classList.toggle('collapsed');
+        }
+
+        // Auto-expand first card on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // All cards start expanded, no need to do anything
+        });
+
+        // Add click handlers for stakeholder avatars
+        document.querySelectorAll('.stakeholder-avatar').forEach(avatar => {
+            avatar.addEventListener('click', function() {
+                const stakeholder = this.parentElement;
+                const name = stakeholder.querySelector('.stakeholder-name').textContent;
+                const role = stakeholder.querySelector('.stakeholder-role').textContent;
+                alert(`${name}\n${role}\n\nClick to view full profile (feature coming soon)`);
+            });
+        });
+
+        // Add tooltip behavior for option cards
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-5px)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+
+        // Countdown timer update (mock - would need real dates)
+        function updateCountdown() {
+            const countdownEl = document.querySelector('.countdown');
+            if (countdownEl) {
+                const now = new Date();
+                const targetWeek = new Date('2026-05-11');
+                const daysUntil = Math.ceil((targetWeek - now) / (1000 * 60 * 60 * 24));
+
+                if (daysUntil > 0) {
+                    countdownEl.innerHTML = `⏱️ Luca Call: ${daysUntil} days until Week 20 (May 11-17)`;
+                } else if (daysUntil === 0) {
+                    countdownEl.innerHTML = `⏱️ Luca Call: THIS WEEK (Week 20: May 11-17)`;
+                } else {
+                    countdownEl.innerHTML = `⏱️ Luca Call Scheduled: Next Week (Week 20: May 11-17)`;
+                }
+            }
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 60000); // Update every minute
+    </script>
+</body>
+</html>

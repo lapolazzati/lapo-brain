@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catone Intelligence Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid #10b981;
+        }
+
+        header h1 {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        header .tagline {
+            font-size: 1.2em;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        header .domain {
+            font-size: 0.9em;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+        }
+
+        .executive-summary h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-label {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .metric-target {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Section Grid */
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .section {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+            color: #3b82f6;
+        }
+
+        /* Product Status Cards */
+        .product-cards {
+            display: grid;
+            gap: 15px;
+        }
+
+        .product-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .product-card.shipped {
+            border-color: #10b981;
+        }
+
+        .product-card.review {
+            border-color: #f59e0b;
+        }
+
+        .product-card.planned {
+            border-color: #6366f1;
+        }
+
+        .product-card .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .shipped .status-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .review .status-badge {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .planned .status-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366f1;
+        }
+
+        .product-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+        }
+
+        .product-card p {
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+
+        /* Lead Pipeline */
+        .pipeline {
+            display: grid;
+            gap: 15px;
+        }
+
+        .lead-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+            transition: all 0.3s ease;
+        }
+
+        .lead-card:hover {
+            border-color: #10b981;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .lead-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .lead-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .lead-stage {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .stage-design {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .stage-new {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .lead-details {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        .lead-details div {
+            margin: 5px 0;
+        }
+
+        /* Verifiche Grid */
+        .verifiche-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .verifica-item {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #334155;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .verifica-item:hover {
+            border-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .verifica-item .check {
+            color: #10b981;
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .verifica-item .title {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .verifica-item .desc {
+            font-size: 0.85em;
+            color: #64748b;
+        }
+
+        /* Time Savings Calculator */
+        .calculator {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #334155;
+        }
+
+        .calculator-input {
+            margin: 20px 0;
+        }
+
+        .calculator-input label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .calculator-input input {
+            width: 100%;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 1.1em;
+        }
+
+        .calculator-input input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .calculator-result {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .calculator-result .label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .calculator-result .value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .calculator-result .roi {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+        }
+
+        /* Weekly Update Preview */
+        .update-preview {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #334155;
+        }
+
+        .update-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .update-item:last-child {
+            border-bottom: none;
+        }
+
+        .update-item h4 {
+            color: #10b981;
+            margin-bottom: 8px;
+        }
+
+        .update-item p {
+            color: #94a3b8;
+            font-size: 0.95em;
+        }
+
+        /* Full Width Section */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Accuracy Badge */
+        .accuracy-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1.3em;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+            margin: 10px 0;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: #0f172a;
+            border-radius: 20px;
+            height: 30px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: width 1s ease;
+        }
+
+        /* Key People */
+        .people-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .person-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: start;
+            gap: 15px;
+        }
+
+        .person-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .person-info h4 {
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+
+        .person-info .role {
+            color: #10b981;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .person-info .details {
+            color: #94a3b8;
+            font-size: 0.85em;
+        }
+
+        /* Roadmap */
+        .roadmap-item {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #10b981;
+            margin-bottom: 15px;
+        }
+
+        .roadmap-item h4 {
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .roadmap-item p {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        .roadmap-number {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Catone</h1>
+            <div class="tagline">AI-Powered Tax Due Diligence Platform</div>
+            <div class="domain">catone.ai</div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section class="executive-summary">
+            <h2>EXECUTIVE SUMMARY</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Revenue Target</div>
+                    <div class="metric-value">€1K MRR</div>
+                    <div class="metric-target">Q2 2026 (by June 30)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Current Status</div>
+                    <div class="metric-value">0 → 5</div>
+                    <div class="metric-target">Contracts needed (3 DP + 2 new)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Time-to-Value</div>
+                    <div class="metric-value">10x</div>
+                    <div class="metric-target">40 hrs → 4 hrs improvement</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Next Milestone</div>
+                    <div class="metric-value">Auto-Onboard</div>
+                    <div class="metric-target">Ready for production deploy</div>
+                </div>
+            </div>
+            <div class="stats-grid" style="margin-top: 30px;">
+                <div class="stat-item">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Verifiche Implemented</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Classification Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Active Leads</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Design Partners</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Grid -->
+        <div class="section-grid">
+            <!-- Product Status -->
+            <section class="section">
+                <h2>📦 Product Status Dashboard</h2>
+                <div class="product-cards">
+                    <div class="product-card shipped">
+                        <span class="status-badge">✅ SHIPPED</span>
+                        <h4>Auto-Onboard System</h4>
+                        <p>Self-serve signup via Google Form → magic link → inside Catone in 60 seconds. Ready for production deployment. Zero manual onboarding from Lapo.</p>
+                    </div>
+                    <div class="product-card review">
+                        <span class="status-badge">🟡 IN REVIEW</span>
+                        <h4>Phase A3 (form_year validator)</h4>
+                        <p>CAT-111, CAT-110 - Critical for design partner conversions. Blocking Gianni, Vincenzo, and DWF contract negotiations.</p>
+                    </div>
+                    <div class="product-card shipped">
+                        <span class="status-badge">✅ SHIPPED</span>
+                        <h4>Credito IVA Verifica (VL8)</h4>
+                        <p>Automatic check that VL8 matches VL33 from previous year. Detects accounting irregularities and credit misstatements.</p>
+                    </div>
+                    <div class="product-card shipped">
+                        <span class="status-badge">✅ SHIPPED</span>
+                        <h4>Manual Classification Protection</h4>
+                        <p>System now preserves user corrections and won't overwrite manual document classifications.</p>
+                    </div>
+                    <div class="product-card shipped">
+                        <span class="status-badge">✅ SHIPPED</span>
+                        <h4>Enhanced PPTX Export</h4>
+                        <p>More accurate document extraction for PowerPoint presentations with improved formatting.</p>
+                    </div>
+                    <div class="product-card shipped">
+                        <span class="status-badge">✅ SHIPPED</span>
+                        <h4>Declaration Timeliness in Overview</h4>
+                        <p>Panoramica now shows tempestività dichiarazioni at a glance for faster risk assessment.</p>
+                    </div>
+                </div>
+
+                <h3>Weekly Update Automation</h3>
+                <div class="update-preview">
+                    <div class="update-item">
+                        <h4>Every Friday 9:00 AM (Rome time)</h4>
+                        <p>Automated changelog extraction from git commits, filtered for client-facing updates, sent via Resend API.</p>
+                    </div>
+                    <div class="update-item">
+                        <h4>Italian Voice DNA</h4>
+                        <p>Collega preparato tone, no marketing speak, max 500 words, benefit-focused framing.</p>
+                    </div>
+                    <div class="update-item">
+                        <h4>Current Reach</h4>
+                        <p>Test mode: lapo.lazzati@gmail.com. Production: pending domain verification for luca@catone.ai.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lead Pipeline -->
+            <section class="section">
+                <h2>🎯 Lead Pipeline</h2>
+                <div class="pipeline">
+                    <div class="lead-card">
+                        <div class="lead-header">
+                            <div class="lead-name">Gianni Rizzi</div>
+                            <span class="lead-stage stage-design">DESIGN PARTNER</span>
+                        </div>
+                        <div class="lead-details">
+                            <div>📍 Lazzati Rizzi (LR) - Milan</div>
+                            <div>🎯 Confirmed distribution partner</div>
+                            <div>🚧 Blocked: Phase A3 + A1 in review</div>
+                            <div>✅ Auto-onboard ready to deploy</div>
+                            <div>📊 Next: First signed engagement with payment</div>
+                        </div>
+                    </div>
+
+                    <div class="lead-card">
+                        <div class="lead-header">
+                            <div class="lead-name">Vincenzo Di Salvo</div>
+                            <span class="lead-stage stage-design">DESIGN PARTNER</span>
+                        </div>
+                        <div class="lead-details">
+                            <div>📍 Tax Coach Milan</div>
+                            <div>🎯 Cassetto fiscale integration request</div>
+                            <div>💰 Pushed for subscription pricing</div>
+                            <div>🚧 Blocked: Phase A3 reliability</div>
+                            <div>📊 Next: Contract terms finalization</div>
+                        </div>
+                    </div>
+
+                    <div class="lead-card">
+                        <div class="lead-header">
+                            <div class="lead-name">DWF Partners</div>
+                            <span class="lead-stage stage-design">DESIGN PARTNER</span>
+                        </div>
+                        <div class="lead-details">
+                            <div>📍 International law firm</div>
+                            <div>🎯 Early validation stage</div>
+                            <div>🚧 Blocked: Phase A3 reliability</div>
+                            <div>📊 Next: Production readiness validation</div>
+                        </div>
+                    </div>
+
+                    <div class="lead-card">
+                        <div class="lead-header">
+                            <div class="lead-name">Angelo Carlo Colombo</div>
+                            <span class="lead-stage stage-new">NEW LEAD</span>
+                        </div>
+                        <div class="lead-details">
+                            <div>📍 AC Avvocati e Commercialisti - Milan</div>
+                            <div>⭐ Managing Partner, 38+ years experience</div>
+                            <div>🎯 Cross-border M&A, Legal 500 recognized</div>
+                            <div>💡 Pain: Team efficiency, junior staff accuracy</div>
+                            <div>📧 angelo.colombo@actaxlaw.com</div>
+                            <div>📊 Next: Warm intro check → personalized LinkedIn outreach</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Conversion Funnel</h3>
+                <div style="margin-top: 20px;">
+                    <div style="color: #94a3b8; margin-bottom: 10px; font-size: 0.9em;">Design Partner → Paid Customer</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;">Phase A3 In Review</div>
+                    </div>
+                    <div style="color: #94a3b8; margin-top: 5px; font-size: 0.85em;">
+                        3 design partners ready for conversion once technical blockers resolved
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verifiche Coverage Map -->
+            <section class="section full-width">
+                <h2>✓ Verifiche Coverage Map</h2>
+                <div class="accuracy-badge">
+                    ⭐ 94% Accuracy
+                </div>
+                <div class="verifiche-grid" style="margin-top: 20px;">
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">770 vs F24</div>
+                        <div class="desc">Ritenute cross-validation</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">IRES/IRAP vs F24</div>
+                        <div class="desc">Corporate tax payments</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">IVA Mensile vs F24</div>
+                        <div class="desc">Monthly VAT reconciliation</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">LIPE/VH vs Liquidazioni</div>
+                        <div class="desc">Periodic communications</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">VE50 Volume Affari</div>
+                        <div class="desc">Business volume verification</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">RF4 vs Bilancio</div>
+                        <div class="desc">Financial statement cross-check</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">Credito IVA (VL8/VL33)</div>
+                        <div class="desc">VAT credit year-over-year</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">VL9 Credit Utilization</div>
+                        <div class="desc">F24 6099 code matching</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">VL30 Periodic Payments</div>
+                        <div class="desc">Monthly/quarterly VAT (6001-6012)</div>
+                    </div>
+                    <div class="verifica-item">
+                        <div class="check">✓</div>
+                        <div class="title">VL38/39 Final Credit</div>
+                        <div class="desc">December LIPE vs declaration</div>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #94a3b8; font-size: 0.9em;">
+                    Each verifica automatically detects irregularities that previously required 30-60 minutes of manual cross-referencing across multiple documents.
+                </p>
+            </section>
+
+            <!-- Time Savings Calculator -->
+            <section class="section">
+                <h2>⏱️ Time Savings Calculator</h2>
+                <div class="calculator">
+                    <div class="calculator-input">
+                        <label for="manualHours">Manual DD Hours per Deal:</label>
+                        <input type="number" id="manualHours" value="40" min="1" max="200">
+                    </div>
+                    <div class="calculator-input">
+                        <label for="dealsPerYear">Deals per Year:</label>
+                        <input type="number" id="dealsPerYear" value="10" min="1" max="100">
+                    </div>
+                    <div class="calculator-result">
+                        <div class="label">TIME SAVED PER YEAR</div>
+                        <div class="value" id="timeSaved">360 hrs</div>
+                        <div class="roi" id="roiValue">9 weeks of work recovered</div>
+                    </div>
+                    <div class="calculator-result" style="margin-top: 15px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                        <div class="label">CATONE PROCESSING TIME</div>
+                        <div class="value" id="catoneTime">40 hrs</div>
+                        <div class="roi">vs. <span id="manualTotal">400 hrs</span> manually</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Roadmap -->
+            <section class="section">
+                <h2>🚀 Product Roadmap (Horizontal Expansion)</h2>
+                <div class="roadmap-item">
+                    <h4><span class="roadmap-number">1</span>Document Classification</h4>
+                    <p>AI-powered classification for ~45K studi commercialisti (current focus)</p>
+                </div>
+                <div class="roadmap-item">
+                    <h4><span class="roadmap-number">2</span>Compliance Quality Checks</h4>
+                    <p>Automated F24, LIPE, IVA verifiche (10 implemented, expanding)</p>
+                </div>
+                <div class="roadmap-item">
+                    <h4><span class="roadmap-number">3</span>AI-Personalized Regulatory Feeds</h4>
+                    <p>Agenzia delle Entrate news monitoring, deadline tracking, codice tributo updates</p>
+                </div>
+                <p style="margin-top: 20px; color: #10b981; font-weight: 600;">
+                    Path to €10M ARR: Depth per studio, not breadth of studios
+                </p>
+                <p style="margin-top: 10px; color: #94a3b8; font-size: 0.9em;">
+                    Pricing thesis: Fewer studios paying €50-100K/year for multiple modules vs. many at low SaaS fees
+                </p>
+            </section>
+
+            <!-- Key People -->
+            <section class="section full-width">
+                <h2>👥 Key People</h2>
+                <div class="people-grid">
+                    <div class="person-card">
+                        <div class="person-avatar">GR</div>
+                        <div class="person-info">
+                            <h4>Gianni Rizzi</h4>
+                            <div class="role">Design Partner & Distribution Channel</div>
+                            <div class="details">Lazzati Rizzi (LR) - Confirmed distribution partner. Primary WhatsApp network for lead generation. First to test auto-onboard system.</div>
+                        </div>
+                    </div>
+                    <div class="person-card">
+                        <div class="person-avatar">VD</div>
+                        <div class="person-info">
+                            <h4>Vincenzo Di Salvo</h4>
+                            <div class="role">Design Partner</div>
+                            <div class="details">Tax Coach Milan - Pushed for cassetto fiscale integration and subscription pricing model. Active feedback on Phase A3.</div>
+                        </div>
+                    </div>
+                    <div class="person-card">
+                        <div class="person-avatar">AL</div>
+                        <div class="person-info">
+                            <h4>Antonio Lamura</h4>
+                            <div class="role">Market Validator</div>
+                            <div class="details">Independent market validation and commercialisti network connections.</div>
+                        </div>
+                    </div>
+                    <div class="person-card">
+                        <div class="person-avatar">AC</div>
+                        <div class="person-info">
+                            <h4>Angelo Carlo Colombo</h4>
+                            <div class="role">Strong Fit Lead</div>
+                            <div class="details">AC Tax and Law - Managing Partner, 38+ years, Legal 500 recognized. Cross-border M&A specialist. Ideal for team multiplier positioning.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Anti-Patterns & Strategy -->
+            <section class="section">
+                <h2>⚠️ Anti-Patterns to Resist</h2>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; border-left: 4px solid #ef4444; margin-bottom: 15px;">
+                    <h4 style="color: #ef4444; margin-bottom: 10px;">Building before selling</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em;">New features come from a paying studio's pull, not a builder's push.</p>
+                </div>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; border-left: 4px solid #ef4444;">
+                    <h4 style="color: #ef4444; margin-bottom: 10px;">Adding modules before first prints revenue</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em;">Focus on depth and conversion of current module before expanding horizontally.</p>
+                </div>
+
+                <h3>Why This Matters</h3>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; margin-top: 15px;">
+                    <p style="color: #94a3b8; font-size: 0.95em; margin-bottom: 10px;">
+                        <strong style="color: #10b981;">Equity bet.</strong> Primary commercialization push.
+                    </p>
+                    <p style="color: #94a3b8; font-size: 0.95em;">
+                        April commitment with Gloria: hit committed revenue target → unlock full-time on Catone.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Current Blockers -->
+            <section class="section">
+                <h2>🚧 Current Blockers</h2>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; margin-bottom: 12px; border-left: 4px solid #f59e0b;">
+                    <h4 style="color: #f59e0b; margin-bottom: 8px;">Technical</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em;">Phase A3/A1 in review - Must merge before design partner conversions</p>
+                </div>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; margin-bottom: 12px; border-left: 4px solid #f59e0b;">
+                    <h4 style="color: #f59e0b; margin-bottom: 8px;">Operational</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em;">Auto-onboard ready but not yet deployed (20 min deploy time)</p>
+                </div>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; border-left: 4px solid #f59e0b;">
+                    <h4 style="color: #f59e0b; margin-bottom: 8px;">Capacity</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em;">No active outreach this week - Need Gianni's full commercialisti list</p>
+                </div>
+
+                <h3 style="margin-top: 25px;">Next Actions</h3>
+                <div style="background: #0f172a; border-radius: 12px; padding: 20px; margin-top: 15px;">
+                    <div style="color: #94a3b8; margin-bottom: 10px;">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>Deploy auto-onboard to production (20 min)</span>
+                    </div>
+                    <div style="color: #94a3b8; margin-bottom: 10px;">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>Post LinkedIn update about VL8 verifica</span>
+                    </div>
+                    <div style="color: #94a3b8; margin-bottom: 10px;">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>Share Google Form link with Gianni</span>
+                    </div>
+                    <div style="color: #94a3b8; margin-bottom: 10px;">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>Outreach 2 commercialisti from Gianni's list</span>
+                    </div>
+                    <div style="color: #94a3b8;">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>Follow up on Phase A3/A1 PR reviews</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 40px 0; color: #64748b; font-size: 0.9em; border-top: 1px solid #334155; margin-top: 40px;">
+            <p>Catone Intelligence Dashboard • Last updated: May 8, 2026</p>
+            <p style="margin-top: 10px;">Compressing ~40 hours of manual due diligence to under 4 hours</p>
+        </footer>
+    </div>
+
+    <script>
+        // Time Savings Calculator
+        const manualHoursInput = document.getElementById('manualHours');
+        const dealsPerYearInput = document.getElementById('dealsPerYear');
+        const timeSavedDisplay = document.getElementById('timeSaved');
+        const roiValueDisplay = document.getElementById('roiValue');
+        const catoneTimeDisplay = document.getElementById('catoneTime');
+        const manualTotalDisplay = document.getElementById('manualTotal');
+
+        function calculateSavings() {
+            const manualHours = parseFloat(manualHoursInput.value) || 40;
+            const dealsPerYear = parseFloat(dealsPerYearInput.value) || 10;
+            const catoneHoursPerDeal = manualHours * 0.1; // 10x improvement
+
+            const manualTotal = manualHours * dealsPerYear;
+            const catoneTotal = catoneHoursPerDeal * dealsPerYear;
+            const timeSaved = manualTotal - catoneTotal;
+            const weeksSaved = Math.round(timeSaved / 40);
+
+            timeSavedDisplay.textContent = `${Math.round(timeSaved)} hrs`;
+            roiValueDisplay.textContent = `${weeksSaved} weeks of work recovered`;
+            catoneTimeDisplay.textContent = `${Math.round(catoneTotal)} hrs`;
+            manualTotalDisplay.textContent = `${Math.round(manualTotal)} hrs`;
+        }
+
+        manualHoursInput.addEventListener('input', calculateSavings);
+        dealsPerYearInput.addEventListener('input', calculateSavings);
+
+        // Initial calculation
+        calculateSavings();
+
+        // Animate progress bars on load
+        window.addEventListener('load', () => {
+            const progressFills = document.querySelectorAll('.progress-fill');
+            progressFills.forEach(fill => {
+                const targetWidth = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = targetWidth;
+                }, 100);
+            });
+        });
+
+        // Add hover effects to cards
+        const cards = document.querySelectorAll('.product-card, .lead-card, .verifica-item');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
