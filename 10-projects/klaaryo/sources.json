@@ -4,10 +4,11 @@
     "contract": {
       "description": "GTM Advisory Agreement + NDA",
       "check_frequency": "daily",
-      "status": "pending_signature",
-      "deadline": "2026-05-09",
+      "status": "signed",
+      "signed_date": "2026-05-08",
+      "kickoff_date": "2026-05-12",
       "location": "Gmail:subject:contract",
-      "watch_for": "signature confirmation from Federico"
+      "watch_for": "kickoff meeting updates"
     },
     "status_updates": {
       "description": "Daily/weekly status notes",
@@ -46,18 +47,18 @@
   },
   "monitoring": {
     "enabled": true,
-    "last_check": "2026-05-08T14:58:00Z",
-    "next_check": "2026-05-09T08:00:00Z",
+    "last_check": "2026-05-10T09:15:00Z",
+    "next_check": "2026-05-12T08:00:00Z",
     "alerts": {
-      "contract_unsigned_by_deadline": {
-        "condition": "deadline_passed AND status != signed",
-        "action": "escalate",
-        "message": "Contract not signed by Sunday May 9 deadline"
+      "kickoff_reminder": {
+        "condition": "date = 2026-05-12",
+        "action": "reminder",
+        "message": "Klaaryo kickoff today at 9am - review Brazil research beforehand"
       },
-      "no_federico_response_24h": {
-        "condition": "no_email_from_federico AND hours_since_sent > 24",
-        "action": "suggest_nudge",
-        "message": "Consider sending nudge to Federico"
+      "weekly_status_check": {
+        "condition": "friday_eod",
+        "action": "request_update",
+        "message": "Weekly status update due - capture week's progress"
       }
     }
   },

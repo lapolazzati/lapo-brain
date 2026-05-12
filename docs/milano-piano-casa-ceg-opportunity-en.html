@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milano Piano Casa — CEG Channel Opportunity</title>
+    <style>
+        :root {
+            --ceg-navy: #0A2540;
+            --ceg-teal: #00A9A5;
+            --ceg-orange: #FF6B35;
+            --ceg-light: #F7F9FB;
+            --ceg-gray: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--ceg-navy);
+            background: var(--ceg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--ceg-navy) 0%, #0d3a5f 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .alert-banner {
+            background: linear-gradient(135deg, var(--ceg-orange) 0%, #ff8659 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .alert-banner h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .alert-banner p {
+            font-size: 1.1rem;
+            margin: 5px 0;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            color: var(--ceg-navy);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--ceg-teal);
+        }
+
+        .section h3 {
+            color: var(--ceg-teal);
+            font-size: 1.3rem;
+            margin: 25px 0 15px 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e0f7f6 0%, #f0fffe 100%);
+            border-left: 4px solid var(--ceg-teal);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .value-prop {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .value-item {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--ceg-navy) 0%, #0d3a5f 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .value-item .number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--ceg-orange);
+            margin-bottom: 10px;
+        }
+
+        .value-item .text {
+            font-size: 1.1rem;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, var(--ceg-teal) 0%, #00bfbb 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .cta-box h2 {
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .cta-box p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .partner-card {
+            background: var(--ceg-light);
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .partner-card h4 {
+            color: var(--ceg-navy);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .partner-card .metric {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ceg-teal);
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background: var(--ceg-navy);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: var(--ceg-light);
+        }
+
+        .competitive-edge {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-left: 4px solid var(--ceg-orange);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .competitive-edge h3 {
+            color: var(--ceg-orange);
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .value-item .number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏗️ Milano Piano Casa Accessibile</h1>
+        <div class="subtitle">PNRR Channel Opportunity — €7.8M Environmental Remediation Contracts</div>
+    </header>
+
+    <div class="container">
+        <div class="alert-banner">
+            <h2>⏰ DEADLINE: June 26, 2026</h2>
+            <p><strong>€7.8M allocated by Milano Municipality</strong> for demolition + environmental remediation</p>
+            <p>Three public sites — 90-year concession for social housing development</p>
+        </div>
+
+        <div class="section">
+            <h2>📋 The Opportunity</h2>
+
+            <p style="font-size: 1.1rem; margin-bottom: 25px;">
+                Milano Municipality has opened tenders for its <strong>Extraordinary Plan for Affordable Housing</strong> (Piano Straordinario Casa Accessibile),
+                granting 90-year surface rights to developers who will build and manage controlled-rent housing (€90/sqm annually).
+            </p>
+
+            <div class="highlight-box">
+                <h3 style="margin-top: 0;">💰 Total Allocated Budget: €11M+</h3>
+                <ul style="margin-top: 15px;">
+                    <li><strong>€6.2M</strong> — Environmental remediation at Via Sant'Elia (ex-Palasharp site)</li>
+                    <li><strong>€3.15M</strong> — Demolition of ex-Palasharp structure (includes hazardous materials handling)</li>
+                    <li><strong>€1.6M</strong> — Environmental remediation at Via Bovisasca</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 1.05rem; font-weight: 600;">
+                    <strong>Total environmental remediation budget: €7.8M</strong>
+                </p>
+            </div>
+
+            <h3>Three Sites</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Area</th>
+                        <th>Remediation Budget</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Via Sant'Elia (Ex-Palasharp)</strong></td>
+                        <td>18,000 m²</td>
+                        <td>€6.2M</td>
+                        <td>Lampugnano district — Former sports complex, likely hydrocarbon + heavy metals contamination</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Via Bovisasca</strong></td>
+                        <td>1,800 m²</td>
+                        <td>€1.6M</td>
+                        <td>Bovisa district — Former industrial area</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Via San Romanello</strong></td>
+                        <td>7,200 m²</td>
+                        <td>TBD</td>
+                        <td>Quinto Romano — Buildable land (remediation status unclear)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>🎯 CEG's Go-to-Market Strategy</h2>
+
+            <div class="competitive-edge">
+                <h3>Why This is a Channel Opportunity</h3>
+                <p style="margin-top: 10px;">
+                    Real estate developers bidding on these tenders <strong>don't do environmental remediation in-house</strong>. They will:
+                </p>
+                <ul style="margin-top: 15px;">
+                    <li>Subcontract remediation to specialized <strong>bonifica contractors</strong> (Categoria 9 certified companies)</li>
+                    <li>Accept whatever timeline and costs the contractor quotes</li>
+                    <li>Absorb the risk of delays, cost overruns, and regulatory approval issues</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: 600;">
+                    CEG's technology enables bonifica contractors to win these contracts by offering:
+                </p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>30-50% lower costs</strong> vs. traditional excavation/landfill disposal</li>
+                    <li><strong>2x faster timeline</strong> to permanent closure (not just containment)</li>
+                    <li><strong>100% regulatory approval rate</strong> (140+ projects, zero failures)</li>
+                </ul>
+            </div>
+
+            <h3>Target Channel Partners: Bonifica Contractors</h3>
+
+            <p>These are the companies that will actually <strong>execute the €7.8M in remediation work</strong>:</p>
+
+            <div class="partners-grid">
+                <div class="partner-card">
+                    <h4>🏢 Riva e Mariani</h4>
+                    <div class="metric">€36M revenue</div>
+                    <p style="color: var(--ceg-gray); margin-top: 10px;">
+                        <strong>80 years</strong> in business<br>
+                        Milano-based, strong PNRR tender track record<br>
+                        Categoria 9 certified
+                    </p>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Contact:</strong> Rosario Morretta (CEO)<br>
+                        <a href="https://www.linkedin.com/in/rosario-morretta-6152a02b/" style="color: var(--ceg-teal);">LinkedIn</a> | rosario.morretta@rivamariani.com
+                    </p>
+                </div>
+
+                <div class="partner-card">
+                    <h4>🏢 SELI SpA</h4>
+                    <div class="metric">€29M revenue</div>
+                    <p style="color: var(--ceg-gray); margin-top: 10px;">
+                        <strong>€200M+ project portfolio</strong><br>
+                        Family-owned (Cucini family)<br>
+                        Categoria 9 certified
+                    </p>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Contact:</strong> Michele Christian Cucini (CEO)<br>
+                        <a href="https://www.linkedin.com/in/michele-christian-cucini-55ab7b241/" style="color: var(--ceg-teal);">LinkedIn</a> | michele.cucini@seli.com
+                    </p>
+                </div>
+
+                <div class="partner-card">
+                    <h4>🏢 Isovit Srl</h4>
+                    <div class="metric">60+ years</div>
+                    <p style="color: var(--ceg-gray); margin-top: 10px;">
+                        <strong>Established 1963</strong><br>
+                        Milano metro area specialist<br>
+                        Categoria 9 certified
+                    </p>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Contact:</strong> Davide Moratti (Technical Director + Procuratore)<br>
+                        <a href="https://www.linkedin.com/in/davide-moratti-87a25824/" style="color: var(--ceg-teal);">LinkedIn</a> | davide.moratti@isovit.com
+                    </p>
+                </div>
+
+                <div class="partner-card">
+                    <h4>🏢 HTR Bonifica Siti</h4>
+                    <div class="metric">€42.7M revenue</div>
+                    <p style="color: var(--ceg-gray); margin-top: 10px;">
+                        <strong>Scaling rapidly</strong><br>
+                        Strong PNRR positioning<br>
+                        Categoria 9 certified
+                    </p>
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        <strong>Note:</strong> Contact research in progress
+                    </p>
+                </div>
+            </div>
+
+            <h3>Why These Contractors Need CEG</h3>
+
+            <div class="value-prop">
+                <div class="value-item">
+                    <div class="number">30-50%</div>
+                    <div class="text">Cost Savings vs. Excavation/Disposal</div>
+                </div>
+                <div class="value-item">
+                    <div class="number">2x</div>
+                    <div class="text">Faster to Permanent Site Closure</div>
+                </div>
+                <div class="value-item">
+                    <div class="number">100%</div>
+                    <div class="text">Regulatory Approval Rate (140+ Projects)</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3 style="margin-top: 0;">Competitive Positioning for Contractors</h3>
+                <p>Bonifica contractors using CEG technology can offer developers:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Lower total project cost</strong> (more competitive bid or higher margins)</li>
+                    <li><strong>Faster timeline</strong> (developers can start construction sooner = earlier ROI)</li>
+                    <li><strong>Permanent destruction</strong> of contaminants in situ (not just containment or transfer)</li>
+                    <li><strong>No long-term monitoring liabilities</strong> (site fully remediated, unrestricted use)</li>
+                    <li><strong>Proven regulatory approval pathway</strong> (CEG validated under multiple US regulators equivalent to ARPA/ISPRA)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💼 CEG Value Proposition to Contractors</h2>
+
+            <h3>CEG Proprietary Technologies</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Application</th>
+                        <th>Timeline</th>
+                        <th>Ideal For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bio Blend</strong></td>
+                        <td>Enhances natural bacterial populations, protects enzymatic secretion</td>
+                        <td>4–24 weeks</td>
+                        <td>Petroleum hydrocarbons (TPH, BTEX)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Advanced Oxidation</strong></td>
+                        <td>Uses organic compounds to rapidly destroy contaminants</td>
+                        <td>2–10 days</td>
+                        <td>Solvents, PCBs, rapid treatment needs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phytoremediation</strong></td>
+                        <td>Aggressive plants absorb contaminants through root systems</td>
+                        <td>3–9 months</td>
+                        <td>Heavy metals (arsenic, lead) — synergistic with Bio Blend</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Track Record</h3>
+            <ul>
+                <li><strong>20+ years</strong> of commercial operation</li>
+                <li><strong>140+ projects</strong> completed successfully</li>
+                <li><strong>Zero failures</strong> — 100% success rate</li>
+                <li><strong>100% regulatory approval</strong> under US environmental regulators (EPA, DTSC, RWQCB, FDEP — equivalent to ARPA/ISPRA)</li>
+                <li><strong>Cross-legislative validation</strong> — Hawaii to New Jersey (different state regulations, all approved)</li>
+            </ul>
+
+            <h3>Case Studies (Proven Savings)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>CEG Cost</th>
+                        <th>Traditional Alternative</th>
+                        <th>Savings</th>
+                        <th>Contaminants</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Barry Swenson Builders (Milpitas, CA)</td>
+                        <td>$4.5M</td>
+                        <td>$10.5M</td>
+                        <td><strong>55%</strong></td>
+                        <td>PCBs</td>
+                    </tr>
+                    <tr>
+                        <td>S.G. Borello Elementary (Morgan Hill, CA)</td>
+                        <td>$2.5M</td>
+                        <td>$5.25M</td>
+                        <td><strong>52%</strong></td>
+                        <td>Pesticides (Toxaphene, Dieldrin)</td>
+                    </tr>
+                    <tr>
+                        <td>Milpitas Unified School District</td>
+                        <td>$1.5M</td>
+                        <td>$3.25M</td>
+                        <td><strong>51%</strong></td>
+                        <td>PCBs</td>
+                    </tr>
+                    <tr>
+                        <td>Palmetto Fertilizer Plant (FL)</td>
+                        <td>$1.8M</td>
+                        <td>$4.0M</td>
+                        <td><strong>54%</strong></td>
+                        <td>Arsenic, Pesticides</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 10px; font-style: italic; color: var(--ceg-gray);">
+                Total: <strong>$13.05M saved</strong> across 5 documented projects (54% average savings)
+            </p>
+
+            <h3>Contaminants Treated</h3>
+            <p>CEG technologies handle the full spectrum of urban/industrial contamination:</p>
+            <ul>
+                <li><strong>Petroleum hydrocarbons</strong> (gasoline, diesel, fuel oil)</li>
+                <li><strong>PCBs</strong> (polychlorinated biphenyls — electrical equipment)</li>
+                <li><strong>Pesticides</strong> (agricultural chemicals, toxaphene, dieldrin)</li>
+                <li><strong>Solvents</strong> (industrial degreasers, dry cleaning fluids)</li>
+                <li><strong>Dioxins</strong> (chemical production, incineration)</li>
+                <li><strong>Arsenic</strong> (wood preservatives, historic pesticides)</li>
+                <li><strong>Algae/HABs</strong> (harmful algal blooms)</li>
+                <li><strong>PFAS/PFOS</strong> (lab-tested, emerging application)</li>
+            </ul>
+
+            <h3>Environmental Matrices</h3>
+            <ul>
+                <li>Soil</li>
+                <li>Groundwater</li>
+                <li>Sediments</li>
+                <li>Wetlands</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Go-to-Market Execution Plan</h2>
+
+            <h3>Phase 1: Immediate Outreach (Weeks 1-2, May 9-23)</h3>
+            <ol>
+                <li><strong>Contact top 4 bonifica contractors</strong>
+                    <ul>
+                        <li>Target: Davide Moratti (Isovit), Michele Cucini (SELI), Rosario Morretta (Riva e Mariani)</li>
+                        <li>Messaging: "Win Milano PNRR tender with 30-50% cost advantage and 2x faster timeline"</li>
+                        <li>Pitch: CEG provides proprietary remediation chemicals; contractor executes with their crews</li>
+                    </ul>
+                </li>
+                <li><strong>Position CEG as technology supplier, not competitor</strong>
+                    <ul>
+                        <li>CEG = Chemical/biotech company selling proprietary formulations</li>
+                        <li>Contractor = Retains client relationship, project management, execution</li>
+                        <li>Value split: Contractor wins on lower bid + higher margin; CEG sells technology</li>
+                    </ul>
+                </li>
+                <li><strong>Provide technical package</strong>
+                    <ul>
+                        <li>CEG One Pager (Italian version available)</li>
+                        <li>Case studies with cost comparisons</li>
+                        <li>Regulatory approval documentation (US precedents for ISPRA/ARPA review)</li>
+                        <li>Application guide for Milano site conditions</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Phase 2: Partnership + Bid Support (Weeks 3-6, May 24 - June 20)</h3>
+            <ol>
+                <li><strong>Site assessment with partner contractor</strong>
+                    <ul>
+                        <li>Via Bovisasca (€1.6M budget, smaller scope = pilot candidate)</li>
+                        <li>Via Sant'Elia (€6.2M budget, largest opportunity)</li>
+                        <li>Confirm contaminant types, soil/groundwater conditions</li>
+                        <li>Validate CEG technology applicability</li>
+                    </ul>
+                </li>
+                <li><strong>Co-develop bid proposal</strong>
+                    <ul>
+                        <li>Contractor leads proposal (they're the prime bidder)</li>
+                        <li>CEG provides: technical methodology, cost estimates, timeline projections, regulatory pathway</li>
+                        <li>Differentiation: Permanent in-situ destruction vs. excavation/disposal</li>
+                    </ul>
+                </li>
+                <li><strong>Pricing model with contractor</strong>
+                    <ul>
+                        <li>Option A: CEG sells chemicals at fixed price per site (e.g., €400K-€1M for Bovisasca)</li>
+                        <li>Option B: Revenue share on contractor's margin improvement vs. traditional bid</li>
+                        <li>Option C: Success fee if project wins + completes with CEG technology</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Phase 3: Execution + Case Study (Post-Award, Q3-Q4 2026)</h3>
+            <ol>
+                <li><strong>Deploy CEG technology with winning contractor</strong></li>
+                <li><strong>Document results</strong>
+                    <ul>
+                        <li>Cost savings vs. original budget allocation</li>
+                        <li>Timeline to regulatory closure (ISPRA/ARPA approval)</li>
+                        <li>Contaminant destruction verification</li>
+                    </ul>
+                </li>
+                <li><strong>Create Italian case study</strong>
+                    <ul>
+                        <li>First EU/Italian precedent for CEG technology</li>
+                        <li>Use for national PNRR housing tender pipeline (Rome, Turin, Bologna, Naples)</li>
+                        <li>Validate ISPRA/ARPA regulatory pathway for future projects</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>📊 Market Sizing</h2>
+
+            <h3>Immediate: Milano Piano Casa (2026)</h3>
+            <ul>
+                <li><strong>CEG revenue potential:</strong> €1.5M - €3M (technology sales to contractors for 3 sites)</li>
+                <li><strong>Contractor remediation revenue:</strong> €7.8M total (Via Sant'Elia + Bovisasca + potential San Romanello)</li>
+                <li><strong>CEG share:</strong> 20-40% of contractor's remediation budget (chemical/technology component)</li>
+            </ul>
+
+            <h3>Medium-Term: Full Piano Casa Program (2026-2030)</h3>
+            <div class="highlight-box">
+                <p style="font-size: 1.1rem;">
+                    Milano's full Extraordinary Housing Plan targets:
+                </p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>10,000+ housing units</strong> by 2030</li>
+                    <li><strong>Multiple additional sites</strong> (current 3 tenders = first phase only)</li>
+                    <li><strong>Many ex-industrial brownfields</strong> requiring remediation</li>
+                    <li><strong>Estimated remediation spend:</strong> €50M+ over 4 years (if 30% of sites need cleanup)</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 1.05rem; font-weight: 600;">
+                    <strong>CEG opportunity:</strong> €10M-€20M technology revenue across full program
+                </p>
+            </div>
+
+            <h3>Long-Term: National PNRR Housing Pipeline</h3>
+            <p>Other Italian cities launching similar PNRR housing tenders:</p>
+            <ul>
+                <li><strong>Rome</strong> — Brownfield redevelopment (Ostiense, Tiburtina districts)</li>
+                <li><strong>Turin</strong> — Ex-Fiat industrial sites for housing</li>
+                <li><strong>Bologna</strong> — PNRR social housing program</li>
+                <li><strong>Naples</strong> — Abandoned industrial area recovery</li>
+            </ul>
+            <p style="margin-top: 15px;">
+                <strong>Pattern:</strong> PNRR requires speed + transparency. Traditional remediation = bottleneck. CEG = national enabler.
+            </p>
+            <p style="margin-top: 10px; font-weight: 600;">
+                <strong>National market:</strong> €100M+ environmental remediation tied to PNRR housing (2026-2030)
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Recommended Next Steps</h2>
+
+            <h3>Week 1 (May 9-16)</h3>
+            <ol>
+                <li><strong>Email outreach to top 4 contractors</strong> (templates ready, need CEG approval to send)</li>
+                <li><strong>Prepare Italian regulatory brief</strong>
+                    <ul>
+                        <li>How US regulatory approvals (EPA, DTSC, etc.) translate to ISPRA/ARPA requirements</li>
+                        <li>Timeline for Italian regulatory review (estimated)</li>
+                        <li>Any EU precedents or GDPR/data considerations</li>
+                    </ul>
+                </li>
+                <li><strong>Finalize pricing model options</strong> for contractor partnerships</li>
+            </ol>
+
+            <h3>Week 2-3 (May 17-30)</h3>
+            <ol>
+                <li><strong>Schedule calls with responsive contractors</strong></li>
+                <li><strong>Site visit coordination</strong> (Via Bovisasca or Sant'Elia, pending access)</li>
+                <li><strong>Technical package delivery</strong> (CEG materials translated/adapted for Italian market)</li>
+            </ol>
+
+            <h3>Week 4-6 (June 1-20)</h3>
+            <ol>
+                <li><strong>Support contractor bid development</strong></li>
+                <li><strong>Finalize partnership terms</strong> with chosen contractor(s)</li>
+                <li><strong>Prepare for June 26 submission</strong></li>
+            </ol>
+        </div>
+
+        <div class="cta-box">
+            <h2>💼 Strategic Opportunity for CEG Italia</h2>
+            <p><strong>€7.8M remediation budget</strong> allocated across 3 sites (Sant'Elia, Bovisasca)</p>
+            <p><strong>€1.5-3M CEG revenue potential</strong> on immediate tender (technology sales to contractors)</p>
+            <p><strong>€10-20M pipeline</strong> on full Milano Piano Casa program (2026-2030)</p>
+            <p style="margin-top: 25px; font-size: 1.3rem; font-weight: 600;">
+                🎯 7 weeks to establish contractor partnerships before June 26 deadline
+            </p>
+            <p style="margin-top: 15px;">
+                First Italian project = case study for €100M+ national PNRR housing remediation market
+            </p>
+        </div>
+
+        <div style="margin-top: 40px; padding: 30px; background: white; border-radius: 12px; border: 2px solid #e5e7eb;">
+            <h3 style="color: var(--ceg-navy); margin-bottom: 15px;">📚 Sources</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin: 8px 0;">
+                    → <a href="https://www.comune.milano.it/w/piano-casa.-comune-di-milano-apre-i-primi-tre-bandi-proposte-entro-il-26-giugno" target="_blank" style="color: var(--ceg-teal); text-decoration: none;">Comune di Milano — Piano Casa Official Announcement</a>
+                </li>
+                <li style="margin: 8px 0;">
+                    → <a href="https://www.milanotoday.it/politica/bandi-case-accessibili-palasharp-bovisasca-san-romanello.html" target="_blank" style="color: var(--ceg-teal); text-decoration: none;">MilanoToday — Tender Details & Site Information</a>
+                </li>
+                <li style="margin: 8px 0;">
+                    → <a href="https://www.ansa.it/lombardia/notizie/2026/04/30/dallex-palasharp-alla-bovisasca-a-milano-tre-bandi-per-il-piano-casa_3cfec046-3dbe-4830-8fb2-4559fe8e867c.html" target="_blank" style="color: var(--ceg-teal); text-decoration: none;">ANSA — Budget Allocations & Deadline</a>
+                </li>
+                <li style="margin: 8px 0;">
+                    → CEG Italia One Pager (Internal) — Technology portfolio, case studies, track record
+                </li>
+                <li style="margin: 8px 0;">
+                    → CEG Overview 2026 (Internal) — Detailed contaminant coverage & target property types
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 60px 0 40px 0; color: var(--ceg-gray); font-size: 0.9rem;">
+            <p>Prepared for CEG Management Team — May 2026</p>
+            <p style="margin-top: 5px;">Lapo Lazzati, VP Business Development — CEG Italia</p>
+        </div>
+    </div>
+</body>
+</html>
