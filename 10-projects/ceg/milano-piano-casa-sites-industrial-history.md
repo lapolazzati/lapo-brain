@@ -64,9 +64,16 @@ The Municipality of Milan opened three bandi (tenders) for the Piano Straordinar
 **HEAVY INDUSTRIAL - Chemical manufacturing district**:
 
 - **18th century:** Small farmstead in open countryside
+- **1862:** **Giuseppe Candiani** founded establishment for sulfuric acid production
+- **1880s:** Candiani transferred operations to Bovisa, between Bovisasca road and railway tracks
+- **1897:** Established joint-stock company **Giuseppe Candiani & C.** (managed with sons Attilio and Ettore)
+- **Products manufactured:**
+  - **Copper arsenite** (arsenic-containing compound) - for dyeing wool and silk
+  - Chrome yellow
+  - Ferrigine (iron-based pigments)
+  - Sulfuric acid
 - **19th-20th century transformation:** Rapid industrialization - earned nickname **"piccola Manchester di Milano"** (little Manchester of Milan)
 - **Industries:** Heavy industrial and productive district with large working-class population
-- **Key industry:** **Chemical plants** (multiple facilities)
 - **Social transformation:** Rural farmers → urban factory workers within 40 years
 
 **Contamination Status:**
@@ -327,6 +334,7 @@ When contacting Milano contractors, emphasize:
 - [Wikipedia: Bovisasca](https://en.wikipedia.org/wiki/Bovisasca)
 - [Zero.eu: Bovisa piccola Manchester](https://zero.eu/en/news/bovisa-piccola-manchester-archeologia-industriale/)
 - [MiTomorrow: Bovisasca bando](https://www.mitomorrow.it/milano-verra/bovisasca-milano-bando-case-calmierate/)
+- [Milano Città Stato: 21 fatti sulla Bovisa](https://www.milanocittastato.it/milano/quartieri-di-milano/21-fatti-sulla-bovisa-che-non-conoscevi/)
 
 ### San Romanello / Quinto Romano
 - [MiTomorrow: San Romanello bando](https://www.mitomorrow.it/milano-verra/san-romanello-milano-bando-case/)
