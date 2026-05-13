@@ -25,6 +25,7 @@ week: 20
 **TODAY's commitment:**
 - **ALL DAY KLAARYO** — This is the externally committed focus day
 - **The One Decision:** Job board integration feasibility (due EOD today)
+- **Setup cybersecurity skills** — Run https://github.com/briiirussell/cybersecurity-skills (recon, OWASP audit, OSINT, forensics, incident response, cloud audit modules for Claude Code)
 
 ### 🟠 TIER 3 — MOMENTUM RISKS (lose progress if delayed)
 
