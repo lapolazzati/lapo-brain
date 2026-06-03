@@ -1,0 +1,38 @@
+[
+  {
+    "id": "WH-001",
+    "lane": "Lane 2",
+    "topic": "DoD ER-2715 project updates",
+    "source": "serdp-estcp.mil",
+    "frequency": "monthly",
+    "why": "Project conclusions will affect CEG's technical credibility",
+    "created": "2026-06-03"
+  },
+  {
+    "id": "WH-002",
+    "lane": "Lane 2",
+    "topic": "REGENESIS PFAS marketing and new product releases",
+    "source": "regenesis.com",
+    "frequency": "monthly",
+    "why": "Primary competitor. Their moves signal market direction.",
+    "created": "2026-06-03"
+  },
+  {
+    "id": "WH-003",
+    "lane": "Lane 1",
+    "topic": "Startup expansion advisory content saturation",
+    "source": "LinkedIn, Medium, Substack",
+    "frequency": "weekly",
+    "why": "Track how fast 'validate before you spend' becomes generic advice",
+    "created": "2026-06-03"
+  },
+  {
+    "id": "WH-004",
+    "lane": "Lane 3",
+    "topic": "AI & children regulatory developments",
+    "source": "EU AI Act, COPPA updates, GDPR-K enforcement",
+    "frequency": "monthly",
+    "why": "Regulation shapes product design and parent expectations",
+    "created": "2026-06-03"
+  }
+]

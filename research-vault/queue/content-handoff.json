@@ -1,0 +1,72 @@
+[
+  {
+    "id": "CH-001",
+    "claim_id": "C-001",
+    "lane": "Lane 1",
+    "title": "The old expansion playbook is dead",
+    "format": "LinkedIn post",
+    "angle": "Position your pre-commitment validation method as the emerging standard. Tie to Klaaryo Brazil case study.",
+    "evidence": [
+      "SRC-001",
+      "SRC-002"
+    ],
+    "priority": "high",
+    "effort": "low",
+    "status": "ready",
+    "created": "2026-06-03",
+    "deadline": "2026-06-10"
+  },
+  {
+    "id": "CH-002",
+    "claim_id": "C-003",
+    "lane": "Lane 2",
+    "title": "What the US military researches \u2014 and why CEG already does it",
+    "format": "LinkedIn post + CEG technical one-pager",
+    "angle": "DoD ER-2715 validates dual ISCO + bioremediation. CEG has 20 years of this exact stack.",
+    "evidence": [
+      "SRC-003"
+    ],
+    "priority": "high",
+    "effort": "medium",
+    "status": "blocked",
+    "blocked_by": "V-004 (need to map ER-2715 specs vs CEG platform)",
+    "created": "2026-06-03",
+    "deadline": "2026-06-17"
+  },
+  {
+    "id": "CH-003",
+    "claim_id": "C-004",
+    "lane": "Lane 3",
+    "title": "What builders should know about parenting in the AI age",
+    "format": "LinkedIn post or newsletter",
+    "angle": "Builder + parent perspective. AI literacy for parents, not bans. Position as rare voice.",
+    "evidence": [
+      "SRC-007",
+      "SRC-008",
+      "SRC-009",
+      "SRC-010"
+    ],
+    "priority": "medium",
+    "effort": "low",
+    "status": "ready",
+    "created": "2026-06-03",
+    "deadline": "2026-06-15"
+  },
+  {
+    "id": "CH-004",
+    "claim_id": "C-005",
+    "lane": "Lane 3",
+    "title": "My daughter will grow up with AI as infrastructure",
+    "format": "Long-form essay or newsletter",
+    "angle": "Personal + professional. What it means to parent an AI-native child when you build the systems.",
+    "evidence": [
+      "SRC-008",
+      "SRC-010"
+    ],
+    "priority": "low",
+    "effort": "medium",
+    "status": "ready",
+    "created": "2026-06-03",
+    "deadline": "2026-06-30"
+  }
+]

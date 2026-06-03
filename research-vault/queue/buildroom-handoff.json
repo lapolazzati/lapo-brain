@@ -1,0 +1,52 @@
+[
+  {
+    "id": "BH-001",
+    "claim_id": "C-003",
+    "lane": "Lane 2",
+    "title": "CEG vs DoD ER-2715 technical alignment map",
+    "type": "document",
+    "description": "One-page comparison of ER-2715 specs vs CEG platform technologies (BioBlend, ISCO, phytoremediation). Show alignment.",
+    "evidence": [
+      "SRC-003"
+    ],
+    "priority": "high",
+    "effort": "medium",
+    "status": "blocked",
+    "blocked_by": "V-004",
+    "created": "2026-06-03",
+    "deadline": "2026-06-17"
+  },
+  {
+    "id": "BH-002",
+    "claim_id": "F-006",
+    "lane": "Lane 2",
+    "title": "Italian PFAS regulatory tracker",
+    "type": "tool / spreadsheet",
+    "description": "Track ISPRA updates, PNRR funding, Lombardy-specific regulations, EU Drinking Water Directive implementation. Weekly refresh.",
+    "evidence": [
+      "SRC-006"
+    ],
+    "priority": "medium",
+    "effort": "medium",
+    "status": "open",
+    "created": "2026-06-03",
+    "deadline": "2026-06-24"
+  },
+  {
+    "id": "BH-003",
+    "claim_id": "C-001",
+    "lane": "Lane 1",
+    "title": "Market validation ROI calculator",
+    "type": "tool / spreadsheet",
+    "description": "Calculator that shows cost of traditional market entry (deck + local rep + 6 months) vs. pre-commitment validation (15 buyer conversations + 4 weeks).",
+    "evidence": [
+      "SRC-001",
+      "SRC-002"
+    ],
+    "priority": "low",
+    "effort": "medium",
+    "status": "open",
+    "created": "2026-06-03",
+    "deadline": "2026-07-15"
+  }
+]
