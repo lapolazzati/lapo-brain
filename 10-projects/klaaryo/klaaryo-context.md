@@ -1,8 +1,8 @@
 # Klaaryo - Project Context
 
-**Last updated**: 2026-05-08\
+**Last updated**: 2026-05-26\
 **Sources analyzed**: 11 files (TLDR, company-context, status, 4 countries, 4 competitors)\
-**Status**: 🟡 Awaiting contract feedback (deadline Sunday May 9)
+**Status**: 🟢 Active — Brazil strategy presented, feedback incorporated
 
 ***
 
@@ -17,14 +17,17 @@ GTM Advisory engagement with Klaaryo, an HR Tech startup (19 employees, Milan-ba
 - **Federico Pedron** (CEO, Co-Founder) - Primary contact
 - **Luca Tamborino Frisari** (COO, Co-Founder)
 - **Luigi Adornetto** (CTO, Co-Founder)
+- **Luana** — Strategic advisor / partner
 - **Lapo Lazzati** - GTM Advisor
 
 **Current status**:
 
 - Contract Signed
-- Onboarding in work
+- Brazil strategy deck presented to leadership (May 26)
+- Feedback received on pricing, ROI calculator, and performance-review positioning
+- Discovery calls and target-account list building in progress
 
-[source: status-2026-05-08.md]
+[source: status-2026-05-08.md, [[brazil-strategy-presentation-klaaryo-2026-05-26]]]
 
 ***
 

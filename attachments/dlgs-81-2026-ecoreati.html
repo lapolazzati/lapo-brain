@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D.Lgs. 81/2026 — Criminal Protection of the Environment</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-light: #334155;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-dark: #16a34a;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-dark);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .alert {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .alert-title {
+      color: var(--danger);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.25rem;
+    }
+
+    .alert p {
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.5rem;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    p strong {
+      color: var(--text);
+    }
+
+    ul, ol {
+      margin: 0.5rem 0 1rem 1.25rem;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    .penalty-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+    }
+
+    .penalty-box .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--warning);
+      margin-bottom: 0.25rem;
+    }
+
+    .penalty-box .value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--surface-light);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-right: 0.35rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .source {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .source a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .source a:hover {
+      text-decoration: underline;
+    }
+
+    .highlight {
+      background: rgba(34, 197, 94, 0.1);
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      border-radius: 0 0.35rem 0.35rem 0;
+    }
+
+    .highlight p {
+      margin: 0;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Environmental Criminal Law</div>
+      <h1>D.Lgs. 81/2026 — Criminal Protection of the Environment</h1>
+      <p class="subtitle">Implementation of EU Directive 2024/1203: new environmental crimes, harsher penalties, and expanded administrative liability under D.Lgs. 231/2001</p>
+      <div class="meta">
+        <span>📋 Legislative Decree 21 April 2026, No. 81</span>
+        <span>📋 Official Gazette No. 113, 18 May 2026</span>
+        <span>⚠️ Effective from <strong>2 June 2026</strong></span>
+      </div>
+    </header>
+
+    <div class="alert">
+      <div class="alert-title">Relevance for CEG</div>
+      <p>The decree extends criminal protection to <strong>ecosystems, habitats, and biodiversity</strong>, tightens penalties for pollution and waste offenses, and expands administrative liability for entities. For companies operating in <strong>soil remediation and bioremediation</strong>, permit compliance, product traceability, and technical documentation are now critical.</p>
+    </div>
+
+    <h2>1. New Crime: Trafficking in Polluting Products</h2>
+    <p><strong>Art. 452-bis.1 Criminal Code</strong> — Punishes anyone who <em>unlawfully</em> places on the market or circulates a product whose use causes significant and measurable impairment or deterioration of:</p>
+    <ul>
+      <li>water or air</li>
+      <li>extensive or significant portions of <strong>soil or subsoil</strong></li>
+      <li>ecosystems, habitats, biodiversity (including agricultural), flora or fauna</li>
+    </ul>
+
+    <div class="grid-2">
+      <div class="penalty-box">
+        <div class="label">Imprisonment</div>
+        <div class="value">2 to 6 years</div>
+      </div>
+      <div class="penalty-box">
+        <div class="label">Fine</div>
+        <div class="value">€10,000 – €100,000</div>
+      </div>
+    </div>
+
+    <h3>Aggravating Circumstances</h3>
+    <ul>
+      <li>Offense committed in a protected natural area or restricted zone</li>
+      <li>Damage to protected animal or plant species</li>
+      <li>Damage to an ecosystem of <strong>considerable size</strong></li>
+      <li>Damage to an ecosystem with <strong>lasting effects</strong></li>
+      <li>Destruction of a habitat in a protected area: increase from one-third to <strong>two-thirds</strong></li>
+    </ul>
+
+    <h2>2. New Crimes on Ozone-Depleting Substances and Fluorinated Gases</h2>
+
+    <h3>Ozone-Depleting Substances (Art. 4)</h3>
+    <div class="grid-2">
+      <div class="penalty-box">
+        <div class="label">Imprisonment</div>
+        <div class="value">2 to 5 years</div>
+      </div>
+      <div class="penalty-box">
+        <div class="label">Fine</div>
+        <div class="value">€10,000 – €80,000</div>
+      </div>
+    </div>
+
+    <h3>Fluorinated Greenhouse Gases (Art. 5)</h3>
+    <div class="grid-2">
+      <div class="penalty-box">
+        <div class="label">Arrest</div>
+        <div class="value">6 months to 1 year</div>
+      </div>
+      <div class="penalty-box">
+        <div class="label">Fine</div>
+        <div class="value">€10,000 – €150,000</div>
+      </div>
+    </div>
+
+    <h2>3. Amendments to Environmental Pollution (Art. 452-bis C.P.)</h2>
+    <ul>
+      <li>Extended protection to the introduction of <strong>energy</strong>: heat, noise, vibrations, electromagnetic fields, electricity, light</li>
+      <li>Explicit inclusion of <strong>"habitats"</strong> alongside ecosystems</li>
+      <li>New aggravating circumstances: ecosystem of considerable size, lasting effects</li>
+    </ul>
+
+    <h2>4. New Definition of "Unlawfully"</h2>
+    <p><strong>Art. 452-quinquiesdecies C.P.</strong> — Conduct is unlawful if:</p>
+    <ol>
+      <li>It violates EU legislative provisions on environmental protection</li>
+      <li>It violates national implementing legislative/regulatory/administrative provisions</li>
+      <li>It is based on permits obtained <strong>fraudulently</strong>, through violence or threats, or by committing crimes against the public administration</li>
+    </ol>
+
+    <div class="highlight">
+      <p><strong>Practical impact:</strong> A formally valid permit obtained through false declarations can still render conduct <em>unlawful</em> for criminal purposes. Procedural correctness is essential.</p>
+    </div>
+
+    <h2>5. New Common Aggravating Circumstances (Art. 452-sexiesdecies C.P.)</h2>
+    <p>For all environmental crimes (Title VI-bis C.P.), increased penalties if:</p>
+    <ul>
+      <li>The offense yields <strong>significant profit</strong></li>
+      <li>The offense is committed using <strong>false statements or documents</strong></li>
+    </ul>
+
+    <h2>6. Waste: Harsher Penalties (Art. 256 D.Lgs. 152/2006)</h2>
+    <div class="grid-2">
+      <div class="penalty-box">
+        <div class="label">Non-Hazardous Waste</div>
+        <div class="value">Arrest 2–6 months<br>or fine €2,000–€18,000</div>
+      </div>
+      <div class="penalty-box">
+        <div class="label">Hazardous Waste</div>
+        <div class="value">Imprisonment 6 months – 3 years</div>
+      </div>
+    </div>
+
+    <h2>7. Expanded Administrative Liability (D.Lgs. 231/2001)</h2>
+    <p>All new environmental offenses enter the catalog of <strong>predicate offenses</strong> under D.Lgs. 231/2001. Companies face administrative liability in addition to the criminal liability of individuals.</p>
+
+    <h3>Required Corporate Actions</h3>
+    <ul>
+      <li>Update <strong>organizational models (231)</strong></li>
+      <li>Strengthen environmental control safeguards</li>
+      <li>Verify compliance of products, permits, processes, and technical documentation</li>
+    </ul>
+
+    <h2>8. Common Provisions Applicable</h2>
+    <p>The new crimes are subject to:</p>
+    <ul>
+      <li>Active repentance (Art. 452-decies C.P.)</li>
+      <li>Mandatory confiscation (Art. 452-undecies C.P.)</li>
+      <li>Restoration of the site (Art. 452-duodecies C.P.)</li>
+      <li>Publication of the conviction sentence</li>
+    </ul>
+
+    <h2>Operational Checklist for CEG</h2>
+    <ol>
+      <li><strong>Product traceability</strong>: complete documentation of permits, safety data sheets, and EU/national regulatory compliance for every product used in remediation</li>
+      <li><strong>Permit verification</strong>: confirm all permits were obtained through correct procedures, without false declarations or omissions</li>
+      <li><strong>Waste management</strong>: remediation waste (especially hazardous) is subject to harsher criminal penalties — strengthen protocols</li>
+      <li><strong>Model 231</strong>: evaluate adoption/update of the organization and management model</li>
+      <li><strong>Technical documentation</strong>: presenting false documents is now a specific aggravating circumstance — accuracy is critical</li>
+      <li><strong>Baseline and monitoring</strong>: the decree requires "significant and measurable" impairment — environmental baseline and monitoring become defensive evidence</li>
+    </ol>
+
+    <h2>Legal References</h2>
+    <p>
+      <span class="tag">EU Directive 2024/1203</span>
+      <span class="tag">L. 91/2025 Art. 9</span>
+      <span class="tag">D.Lgs. 231/2001</span>
+      <span class="tag">D.Lgs. 152/2006</span>
+      <span class="tag">Reg. EU 2024/590</span>
+      <span class="tag">Reg. EU 2024/573</span>
+    </p>
+
+    <div class="source">
+      <p><strong>Sources:</strong></p>
+      <p>• <a href="https://www.gazzettaufficiale.it/atto/stampa/serie_generale/originario" target="_blank">Official Gazette — D.Lgs. 81/2026 Full Text</a></p>
+      <p>• <a href="https://pg-perugia.giustizia.it/cmsresources/cms/documents/DL%202026%2081%20tutela%20penale%20ambiente_1.pdf" target="_blank">Official PDF — Perugia Court</a></p>
+      <p>• <a href="https://www.ingenio-web.it/articoli/ecoreati-dal-2-giugno-nuove-sanzioni-per-imprese-e-prodotti-inquinanti-multe-fino-a-100mila-euro/" target="_blank">INGENIO — Technical Analysis (25.05.2026)</a></p>
+      <p>• <a href="https://www.safegreen.it/2026/05/26/ecoreati-la-nuova-tutela-penale-dellambiente-una-sintesi-delle-principali-novita-del-d-lgs-21-aprile-2026-n-81/" target="_blank">Safegreen — Summary of Novelties (26.05.2026)</a></p>
+      <p>• <a href="https://www.diritto.it/reati-ambientali-nuove-sanzioni-per-imprese-enti/" target="_blank">Diritto.it — Sanctions for Companies and Entities (20.05.2026)</a></p>
+      <p>• <a href="https://www.altalex.com/documents/2026/05/21/importanti-novita-d-lgs-n-81-2026-tutela-penale-ambiente" target="_blank">Altalex — Decree Novelties (21.05.2026)</a></p>
+    </div>
+  </div>
+</body>
+</html>
