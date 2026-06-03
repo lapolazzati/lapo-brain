@@ -1,0 +1,54 @@
+{
+  "profile_version": "0.1.0",
+  "generated_at": "2026-06-03T15:00:00Z",
+  "source": "lapo-brain + run-inference",
+  "lanes": [
+    {
+      "id": "lane-1",
+      "name": "International Business Consulting / Startup Expansion",
+      "description": "Validating international expansion bets by talking to buyers before clients spend. Current focus: Klaaryo (HR SaaS \u2192 Brazil), CEG (bioremediation \u2192 Italy).",
+      "evidence_signals": [
+        "positioning.md exists",
+        "active outreach drafts",
+        "Klaaryo case study documented",
+        "CEG Milano project active"
+      ],
+      "priority": "high",
+      "recent_activity": "Outreach Batch 2 executed (May 2026), Corrected technical drafts drafted"
+    },
+    {
+      "id": "lane-2",
+      "name": "BioRemediation / CEG / PFAS",
+      "description": "In-situ remediation technologies. Market entry for CEG in Italy. Regulatory-first approach (ISPRA / ARPA).",
+      "evidence_signals": [
+        "CEG action items file",
+        "outreach drafts for multiple buyer types",
+        "\u20ac5M revenue target set",
+        "pipeline math documented"
+      ],
+      "priority": "high",
+      "recent_activity": "Technical buyer drafts corrected, new contacts batch identified"
+    },
+    {
+      "id": "lane-3",
+      "name": "AI & Parenting",
+      "description": "How AI changes the parent role. Personal (Mira) + professional (building AI systems). Content opportunity.",
+      "evidence_signals": [
+        "parenting.md exists (empty)",
+        "Mira sleep regression guide",
+        "mira-4-month-sleep-regression-guide.md"
+      ],
+      "priority": "medium",
+      "recent_activity": "Sleep regression documented (personal note), no professional content yet"
+    }
+  ],
+  "crosscut_themes": [
+    "Market validation before spending",
+    "Regulatory alignment before commercial push",
+    "Builder perspective on personal topics"
+  ],
+  "models_used_for_inference": [
+    "moonshotai/kimi-k2.6"
+  ],
+  "confidence": "medium \u2014 single-run inference, no longitudinal trend data"
+}

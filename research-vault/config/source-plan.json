@@ -1,0 +1,81 @@
+{
+  "version": "0.1.0",
+  "updated_at": "2026-06-03T15:00:00Z",
+  "sources": [
+    {
+      "id": "firecrawl-search",
+      "type": "web-search",
+      "enabled": true,
+      "weight": 0.3,
+      "description": "Firecrawl search for topical queries",
+      "lanes": [
+        "all"
+      ]
+    },
+    {
+      "id": "firecrawl-scrape",
+      "type": "web-scrape",
+      "enabled": true,
+      "weight": 0.2,
+      "description": "Firecrawl scrape for specific URLs",
+      "lanes": [
+        "all"
+      ]
+    },
+    {
+      "id": "hn-algolia",
+      "type": "social",
+      "enabled": true,
+      "weight": 0.15,
+      "description": "Hacker News search via Algolia",
+      "lanes": [
+        "Lane 1",
+        "Lane 2",
+        "Lane 3"
+      ]
+    },
+    {
+      "id": "arxiv",
+      "type": "academic",
+      "enabled": true,
+      "weight": 0.1,
+      "description": "arXiv search for technical/research papers",
+      "lanes": [
+        "Lane 2"
+      ]
+    },
+    {
+      "id": "xurl",
+      "type": "social",
+      "enabled": false,
+      "weight": 0.15,
+      "description": "X/Twitter via xurl CLI",
+      "lanes": [
+        "Lane 1",
+        "Lane 3"
+      ],
+      "notes": "Not installed \u2014 needs setup"
+    },
+    {
+      "id": "blogwatcher",
+      "type": "rss",
+      "enabled": false,
+      "weight": 0.1,
+      "description": "RSS feed monitoring",
+      "lanes": [
+        "Lane 1",
+        "Lane 2",
+        "Lane 3"
+      ],
+      "notes": "Not installed \u2014 needs setup"
+    }
+  ],
+  "degraded": [
+    "xurl",
+    "blogwatcher"
+  ],
+  "blocked": [
+    "PMC (reCAPTCHA)",
+    "EdWeek (paywall/404)"
+  ]
+}
