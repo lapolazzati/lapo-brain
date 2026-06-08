@@ -1,0 +1,16 @@
+{
+  "run_id": "research-run-20260608-060016",
+  "timestamp": "2026-06-08T06:01:05.222450+00:00",
+  "mode": "weekly",
+  "lanes_processed": 3,
+  "new_sources": 12,
+  "new_findings": 12,
+  "degraded_sources": [
+    "xurl",
+    "blogwatcher"
+  ],
+  "blocked_sources": [
+    "PMC (reCAPTCHA)",
+    "EdWeek (paywall/404)"
+  ]
+}
