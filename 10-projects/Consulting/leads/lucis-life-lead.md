@@ -50,6 +50,16 @@ Spain, Germany, Italy by end of 2026.
 
 Classic profile: founder-led, ~20 employees, just raised $20M, expanding internationally, no Brazil validation yet. They are likely executing EU expansion now, but Latin America is a logical next wave. AETHON can validate the Fleury partnership hypothesis and map the regulatory/commercial path before Lucis commits a team or budget.
 
+## Contacts
+
+- **Maxime Berthelot (CEO/Co-founder)** — Primary BD contact. LinkedIn: `linkedin.com/in/maximeberthelot`. Status: Verified via Lucis blog + YC directory.
+- **Baptiste Debever (CTO/Co-founder)** — Secondary. Built Lucis AI biomarker engine + lab integrations (Eurofins, Randox).
+
+## Outreach strategy
+
+Full strategy doc with channels, draft messages, timeline, and Fleury parallel track:
+**https://pastel-signal-h385.here.now/**
+
 ## Open questions
 
 - Do Berthelot / Debever have any Brazil connections or plans?
