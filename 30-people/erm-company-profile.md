@@ -85,6 +85,8 @@ ERM operates alongside:
 | Field | Known |
 |---|---|
 | **Email** | michele.remonti@gmail.com |
+| **LinkedIn** | linkedin.com/in/idrogeo/ (handle = "idrogeo") |
+| **Profession** | **Hydrogeologist** (idrógeologo) |
 | **Source** | Introduced by Umberto Puppini (GRAM Milano, direzione@gram.mi.it) |
 | **Engagement** | Strong positive response (May 26, 2026); asked for materials + call |
 | **Outreach style** | Formal, deep-technical (BioBlend, oxidation, phytoremediation detail) |
@@ -93,15 +95,15 @@ ERM operates alongside:
 | **Follow-up** | May 30 draft: “Visto il suo interesse per il progetto PFAS in Belgio...” with US partner meeting proposed |
 
 ### Unknowns / To Confirm
-- [ ] **Is Remonti at ERM?** No direct evidence in vault — ERM research is inference from Belgian PFAS context + LIF-25 labeling. Need confirmation on first call.
+- [ ] **Is Remonti at ERM?** No direct evidence in vault — connection to ERM is **inferred** from Belgian PFAS context + LIF-25 labeling. He's a hydrogeologist (idrógeologo); could be independent consultant, at a contractor, or at ERM. Need confirmation on first call.
 - [ ] If at ERM: exact title, scope, geography (Italy, Belgium, or cross-border)
-- [ ] If not at ERM: what organization does he represent?
+- [ ] If not at ERM: what organization does he represent, or is he independent?
 - [ ] Nature of his interest in the Belgian PFAS project — advisory? Implementation? JV?
-- [ ] Whether ERM has existing bioremediation partnerships in Europe
-- [ ] ERM's specific view of CEG's technology vs. conventional remediation approaches
-- [ ] Budget/authority: can Remonti make partnership decisions, or is he a scout?
+- [ ] Whether whoever he represents has existing bioremediation partnerships in Europe
+- [ ] Their specific view of CEG's technology vs. conventional remediation approaches
+- [ ] Budget/authority: can Remonti make partnership decisions, or is he technical evaluator / scout?
 - [ ] Timeline: is this exploratory, or is there a live project with a deadline?
-- [ ] Relationship to Umberto Puppini — how did Puppini know Remonti?
+- [ ] Relationship to Umberto Puppini — how did Puppini know Remonti? (Did they work together on a previous project?)
 
 ## AETHON Angle
 
