@@ -200,3 +200,83 @@ Commercial strategy built around validated regulatory and ecosystem realities ra
 Don't enter a market because a spreadsheet says you should.
 
 Enter because the people who will buy have already told you why they will.
+
+# Aethon as Loops
+
+Inspired by: [[wtf-is-a-loop-matt-van-horn]]
+
+AETHON is a system of loops. The model does the prompting. We write the loops.
+
+## Loop 1: Lead Discovery
+
+**Trigger:** Daily (cron)
+**What it does:** Monitors funding announcements (Crunchbase, TechCrunch, local VC blogs), LinkedIn signals, and industry news for companies matching AETHON's ICP.
+
+**ICP filter:**
+- Founder-led
+- 10–100 employees
+- Recently raised Series A/B ($5M–$50M)
+- Announcing or signaling international expansion
+- Home-market product proven
+
+**Output:** Auto-generated lead brief (company profile, expansion signals, why AETHON fits, outreach angles) dropped into `10-projects/Consulting/leads/`. Sends alert to Lapo + partner Slack.
+
+**Example in the wild:** Lucis Life — caught via WhatsApp forward, but the loop should have surfaced it from the $20M Series A announcement before that.
+
+## Loop 2: Market Validation
+
+**Trigger:** Human kickoff (when a lead is promoted to active)
+**What it does:** Runs a continuous validation cycle against the target market until it produces a go/no-go brief with named contacts.
+
+**Each iteration:**
+1. Map the target market (partners, regulators, competitors, buyers)
+2. Identify 3–5 named individuals with LinkedIn + email where possible
+3. Draft outreach messages personalized to each
+4. Check for warm intro paths (investor network, alumni, mutual contacts)
+5. Verify regulatory pathway (e.g., ANVISA for health tech in Brazil)
+6. Publish strategy brief to here.now for partner review
+
+**Stopping condition:**
+- Brief delivered with ≥3 verified contacts and a validated partnership angle, OR
+- Red flag discovered that kills the hypothesis (e.g., target company already has local team)
+
+**Example in the wild:** Lucis Life → Fleury partnership hypothesis, validated via public partnership history + CEO LinkedIn mapping.
+
+## Loop 3: Content-to-Lead
+
+**Trigger:** Weekly (cron) + on new content publish
+**What it does:** Monitors AETHON's content pipeline (case studies, market briefs, expansion playbooks) and auto-distributes to relevant prospects with personalized angles.
+
+**Each iteration:**
+1. Scan published content (lapo-brain, here.now hosted pages, LinkedIn posts)
+2. Match content to active and cold leads by industry, geography, or expansion stage
+3. Draft personalized outreach: "Saw you raised $X / announced Y — we just published a brief on [relevant market] that may be useful"
+4. Send via LinkedIn or email (human-approved for now)
+5. Track engagement signals (views, replies, clicks)
+6. When engagement threshold hits, promote lead to Loop 2
+
+**Stopping condition:**
+- Lead promoted to active (Loop 2), OR
+- 3 touches with no engagement → deprioritize
+
+## What We Still Need
+
+- [ ] Funding/news API feed (Crunchbase API, PitchBook, or RSS aggregation)
+- [ ] LinkedIn monitoring for expansion signals (hiring in new market, founder posts)
+- [ ] Automated lead brief generation (structured output from research agent)
+- [ ] Warm intro pathfinder (graph Lapo's network vs. target company investors/advisors)
+- [ ] Content engagement tracking (UTM params on here.now links, LinkedIn analytics)
+
+## The Principle
+
+> A loop with no reusable skills inside it is just a while-true around a stranger. A loop that calls a library of sharp, tested, named skills is a system that compounds.
+>
+> — Matt Van Horn
+
+AETHON's skills are:
+- BD research (the bd-research skill in Hermes)
+- Market validation briefs
+- here.now publishing
+- lapo-brain note creation
+
+The loops are the cron jobs that call these skills on repeat.

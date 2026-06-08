@@ -94,3 +94,12 @@ A loop with no reusable skills inside it is just a while-true around a stranger.
 - Loop is only as good as its feedback. Continuous review and validation gates make it trustworthy
 - Expensive resource shifted from tokens to loop management. Cap iterations, detect no-progress, set dollar budget
 - Reusable unit inside the loop is a skill, not a prompt
+
+## Applied to AETHON
+
+See: [[aethon]] → "Aethon as Loops"
+
+Three loops AETHON is building:
+1. **Lead Discovery** — Daily scan for companies matching ICP (funding, expansion signals)
+2. **Market Validation** — Active lead runs continuous market mapping until go/no-go brief with named contacts
+3. **Content-to-Lead** — Weekly distribution of AETHON content to matched prospects, promoting engaged leads to validation
