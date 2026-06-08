@@ -58,7 +58,7 @@ Classic profile: founder-led, ~20 employees, just raised $20M, expanding interna
 ## Outreach strategy
 
 Full strategy doc with channels, draft messages, timeline, and Fleury parallel track:
-**https://bronze-urchin-6jya.here.now/**
+**https://polite-rapids-c9jb.here.now/**
 
 ## Open questions
 
