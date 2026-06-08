@@ -80,15 +80,28 @@ ERM operates alongside:
 3. **Belgium connection:** Sustainalize gave them Belgium presence. Belgian PFAS project (mentioned in Remonti outreach) is in their geographic footprint.
 4. **Complementary, not competitive:** CEG's in-situ bioremediation is a specific technology. ERM is a consulting/project management layer. Natural partnership if the technology is proven.
 
-## Unknowns / To Confirm on Call
+## Michele Remonti — Context (from internal records)
 
-- [ ] Remonti's exact title and scope within ERM Italy
+| Field | Known |
+|---|---|
+| **Email** | michele.remonti@gmail.com |
+| **Source** | Introduced by Umberto Puppini (GRAM Milano, direzione@gram.mi.it) |
+| **Engagement** | Strong positive response (May 26, 2026); asked for materials + call |
+| **Outreach style** | Formal, deep-technical (BioBlend, oxidation, phytoremediation detail) |
+| **Trigger** | Asked for his judgment as *expert judge* — best-performing email of the three Puppini intros |
+| **Flag** | Mentioned interest in a **Belgian PFAS project** to Lapo |
+| **Follow-up** | May 30 draft: “Visto il suo interesse per il progetto PFAS in Belgio...” with US partner meeting proposed |
+
+### Unknowns / To Confirm
+- [ ] **Is Remonti at ERM?** No direct evidence in vault — ERM research is inference from Belgian PFAS context + LIF-25 labeling. Need confirmation on first call.
+- [ ] If at ERM: exact title, scope, geography (Italy, Belgium, or cross-border)
+- [ ] If not at ERM: what organization does he represent?
 - [ ] Nature of his interest in the Belgian PFAS project — advisory? Implementation? JV?
 - [ ] Whether ERM has existing bioremediation partnerships in Europe
 - [ ] ERM's specific view of CEG's technology vs. conventional remediation approaches
 - [ ] Budget/authority: can Remonti make partnership decisions, or is he a scout?
 - [ ] Timeline: is this exploratory, or is there a live project with a deadline?
-- [ ] Relationship to Umberto Puppini — who is Puppini and how does he connect to ERM?
+- [ ] Relationship to Umberto Puppini — how did Puppini know Remonti?
 
 ## AETHON Angle
 
