@@ -35,3 +35,10 @@ Lapo needs:
 - Molecular intuition: what bonds look like, why some break easier than others
 - Contaminant → technology matching: which CEG tech for which contaminant class
 - Conversational depth: the 2-3 sentence technical explanation that makes ARPA nod
+
+## Landing Page
+- **Live:** https://present-trellis-fjyy.here.now/
+- Dark-themed course catalog. Currently one course: Chemistry for Bioremediation.
+- Each lesson is a self-contained HTML file served from here.now.
+- When creating new lessons or courses, update the landing page at `~/.hermes/publish/chemistry-learnings/index.html` and re-publish with `--slug present-trellis-fjyy`.
+- Future /teach courses (e.g., "Hydrogeology for Site Assessment") get added as new course cards to this same landing page.
