@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 0001: The Lego Brick — Bioremediation at the Molecular Level</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f0883e;
+    --danger: #ff7b72;
+    --success: #56d364;
+    --warning: #d29922;
+    --chlorine: #3fb950;
+    --carbon: #8b949e;
+    --hydrogen: #e6edf3;
+    --bond: #58a6ff;
+    --break: #ff7b72;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  h1 { font-size: 2.1rem; margin-bottom: 0.3rem; color: #fff; letter-spacing: -0.02em; }
+  h2 { font-size: 1.45rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--text); }
+  p { margin: 0.9rem 0; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2rem; }
+  strong { color: #fff; }
+  em { color: var(--accent2); font-style: normal; }
+
+  .metaphor-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1.4rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .metaphor-box p { margin: 0.4rem 0; }
+
+  .molecule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 600px) { .molecule-grid { grid-template-columns: 1fr; } }
+
+  .molecule-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .molecule-card .header {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(88,166,255,0.06);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .molecule-card .body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .molecule-card svg { max-width: 220px; height: auto; }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+  }
+  .tag-red { background: rgba(255,123,114,0.15); color: var(--danger); }
+  .tag-green { background: rgba(86,211,100,0.15); color: var(--success); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--warning); }
+
+  .fact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .fact-row span { color: var(--text-dim); }
+  .fact-row strong { color: var(--text); }
+
+  .pathway {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.2rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  .pathway .arrow { color: var(--accent2); font-weight: bold; font-size: 1.3rem; }
+  .pathway .step { background: rgba(88,166,255,0.08); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; }
+
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz h3 { margin-top: 0; color: var(--warning); }
+  .quiz .q { margin: 1.2rem 0; }
+  .quiz .q p { margin: 0.3rem 0; font-weight: 600; }
+  .quiz button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 1rem;
+    margin: 0.3rem 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+  }
+  .quiz button:hover { border-color: var(--accent); }
+  .quiz .answer {
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    display: none;
+  }
+  .quiz .answer.show { display: block; }
+  .quiz .correct { background: rgba(86,211,100,0.12); border: 1px solid rgba(86,211,100,0.3); }
+  .quiz .wrong { background: rgba(255,123,114,0.12); border: 1px solid rgba(255,123,114,0.3); }
+
+  .ceg-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(240,136,62,0.06));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .ceg-box h3 { margin-top: 0; color: var(--accent2); }
+
+  .footer-note {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  ul { margin: 0.6rem 0 0.6rem 1.4rem; }
+  li { margin: 0.3rem 0; }
+
+  svg text { font-family: 'Inter', -apple-system, sans-serif; }
+</style>
+<script>
+  function showAnswer(id, correct) {
+    const el = document.getElementById(id);
+    el.className = 'answer show ' + (correct ? 'correct' : 'wrong');
+  }
+</script>
+</head>
+<body>
+
+<h1>🔬 Lesson 0001: The Lego Brick</h1>
+<p class="subtitle">How bioremediation actually works — at the molecular level</p>
+
+<div class="metaphor-box">
+  <p><strong>The Lego Brick Metaphor</strong> — from Chris Young, CEG Chief Scientist:</p>
+  <p><em>"Our job is to break covalent bonds at the right position so the molecule loses the property that made it toxic or persistent."</em></p>
+  <p>Every contaminant has a "Lego brick" — a specific bond that, when broken, neutralizes the threat. Everything else (the rest of the molecule, the soil, the bacteria) is context. <strong>Find the brick. Break it.</strong></p>
+</div>
+
+<h2>What actually makes something toxic?</h2>
+
+<p>Most organic contaminants aren't toxic just because they exist. They're toxic because of <em>specific structural features</em>:</p>
+
+<ul>
+  <li>A <strong>chlorine atom</strong> in the wrong place (TCE, PCE, dioxins) — the body mistakes it for something else</li>
+  <li>A <strong>benzene ring</strong> that DNA can't process (benzene, PAHs) — it intercalates between DNA base pairs</li>
+  <li>A <strong>carbon-fluorine bond</strong> that nothing in biology can break (PFAS) — it just accumulates forever</li>
+</ul>
+
+<p>If you can <em>remove or transform that feature</em>, the molecule either becomes harmless or becomes something bacteria can finish off.</p>
+
+<h2>The three most common Lego bricks</h2>
+
+<div class="molecule-grid">
+
+  <!-- TCE card -->
+  <div class="molecule-card">
+    <div class="header">☠️ Trichloroethylene (TCE) — <span class="tag tag-red">Solvent</span></div>
+    <div class="body">
+      <svg viewBox="0 0 240 140" width="240" height="140">
+        <!-- Left carbon, three Cl -->
+        <circle cx="100" cy="70" r="22" fill="var(--carbon)" opacity="0.0" stroke="none"/>
+        <text x="100" y="75" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="600">C</text>
+        <text x="65" y="35" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <text x="65" y="105" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <!-- Right carbon, one H, one Cl -->
+        <circle cx="160" cy="70" r="22" fill="var(--carbon)" opacity="0.0" stroke="none"/>
+        <text x="160" y="75" text-anchor="middle" fill="#e6edf3" font-size="13" font-weight="600">C</text>
+        <text x="195" y="35" text-anchor="middle" fill="#e6edf3" font-size="11" font-weight="600">H</text>
+        <text x="195" y="105" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <!-- Double bond between carbons -->
+        <line x1="118" y1="62" x2="142" y2="62" stroke="#58a6ff" stroke-width="2.5"/>
+        <line x1="118" y1="78" x2="142" y2="78" stroke="#58a6ff" stroke-width="2.5"/>
+        <!-- Single bonds to Cl -->
+        <line x1="88" y1="56" x2="72" y2="38" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <line x1="88" y1="84" x2="72" y2="102" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <line x1="172" y1="84" x2="188" y2="102" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <!-- Single bond to H -->
+        <line x1="172" y1="56" x2="188" y2="38" stroke="#8b949e" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="58" y="22" text-anchor="middle" fill="#3fb950" font-size="9">Cl</text>
+        <text x="82" y="58" text-anchor="start" fill="#ff7b72" font-size="9">C–Cl ×3</text>
+        <text x="58" y="120" text-anchor="middle" fill="#3fb950" font-size="9">Cl</text>
+        <text x="200" y="120" text-anchor="middle" fill="#3fb950" font-size="9">Cl</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">C–Cl bonds</span> = the Lego bricks
+        <div style="margin-top:0.3rem;color:var(--text-dim);">Formula: CHCl=CCl₂ · CSC: 1.5 μg/L (groundwater)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Benzene card -->
+  <div class="molecule-card">
+    <div class="header">⛽ Benzene — <span class="tag tag-yellow">Fuel component</span></div>
+    <div class="body">
+      <svg viewBox="0 0 220 220" width="220" height="220">
+        <!-- Benzene ring -->
+        <polygon points="110,25 184,67 184,151 110,193 36,151 36,67"
+                 fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+        <!-- Inner circle (aromatic) -->
+        <circle cx="110" cy="109" r="28" fill="none" stroke="#ff7b72" stroke-width="2" stroke-dasharray="6,3"/>
+        <!-- Carbons at vertices -->
+        <text x="110" y="22" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="192" y="72" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="192" y="160" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="110" y="208" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="28" y="160" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="28" y="72" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <!-- Hydrogens outward -->
+        <text x="110" y="8" text-anchor="middle" fill="#8b949e" font-size="10">H</text>
+        <text x="206" y="56" text-anchor="start" fill="#8b949e" font-size="10">H</text>
+        <text x="206" y="176" text-anchor="start" fill="#8b949e" font-size="10">H</text>
+        <text x="110" y="226" text-anchor="middle" fill="#8b949e" font-size="10">H</text>
+        <text x="14" y="176" text-anchor="end" fill="#8b949e" font-size="10">H</text>
+        <text x="14" y="56" text-anchor="end" fill="#8b949e" font-size="10">H</text>
+        <!-- Arrow to ring -->
+        <text x="110" y="130" text-anchor="middle" fill="#ff7b72" font-size="9">aromatic</text>
+        <text x="110" y="142" text-anchor="middle" fill="#ff7b72" font-size="9">ring = target</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">Aromatic ring</span> = the Lego brick
+        <div style="margin-top:0.3rem;color:var(--text-dim);">Formula: C₆H₆ · CSC: 1 μg/L (groundwater)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<h2>The mechanism: what "breaking the brick" actually means</h2>
+
+<p>Two fundamentally different approaches. CEG has both:</p>
+
+<div class="pathway">
+  <div class="step"><strong>ISCO</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">Advanced Oxidation</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Persulfate radical<br/><span style="color:var(--accent2);">SO₄•⁻</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Attacks bond<br/><span style="color:var(--danger);">steals electrons</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Bond breaks<br/><span style="color:var(--success);">✓ Cl removed</span></div>
+</div>
+
+<div style="margin: 0.5rem 0; text-align: center; color: var(--text-dim); font-size: 0.9rem;">— OR —</div>
+
+<div class="pathway">
+  <div class="step"><strong>BioBlend</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">Biostimulation</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Bacteria<br/><span style="color:var(--accent2);">woken up</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Enzyme attack<br/><span style="color:var(--danger);">reductive dechlorination</span></div>
+  <span class="arrow">→</span>
+  <div class="step">Cl replaced by H<br/><span style="color:var(--success);">✓ Cl removed one at a time</span></div>
+</div>
+
+<h3>ISCO — The chemical sledgehammer</h3>
+
+<p>When you activate persulfate (S₂O₈²⁻) with heat, iron, or high pH, it splits into two <strong>persulfate radicals</strong> (SO₄•⁻). A radical is a molecule with an <em>unpaired electron</em> — it's desperately unstable and will rip an electron from the first thing it touches.</p>
+
+<p>When SO₄•⁻ meets a C–Cl bond, it steals an electron from that bond. The bond breaks. The chlorine falls off. What's left is a dechlorinated fragment that's either harmless or biodegradable.</p>
+
+<div class="fact-row">
+  <div><span>Speed:</span> <strong>Hours to days</strong></div>
+  <div><span>Best for:</span> <strong>Chlorinated solvents</strong></div>
+  <div><span>Energy:</span> <strong>High (needs activation)</strong></div>
+  <div><span>Byproducts:</span> <strong>Cl⁻, SO₄²⁻, CO₂</strong></div>
+</div>
+
+<h3>BioBlend — The biological scalpel</h3>
+
+<p>Native bacteria already live in contaminated soil. Many of them <em>can</em> break down chlorinated solvents — they just don't have enough energy to do it fast. BioBlend adds nutrients (carbon sources, nitrogen, phosphorus) that wake them up. The bacteria then use enzymes to perform <strong>reductive dechlorination</strong>: they replace each chlorine atom with a hydrogen, one at a time.</p>
+
+<p>TCE (C₂HCl₃) → DCE (C₂H₂Cl₂) → VC (C₂H₃Cl) → ethene (C₂H₄) — all harmless.</p>
+
+<div class="fact-row">
+  <div><span>Speed:</span> <strong>Weeks to months</strong></div>
+  <div><span>Best for:</span> <strong>Hydrocarbons, chlorinated solvents</strong></div>
+  <div><span>Energy:</span> <strong>Low (bacteria do the work)</strong></div>
+  <div><span>Byproducts:</span> <strong>H₂O, CO₂, biomass</strong></div>
+</div>
+
+<h2>Why this matters for the Milano tender</h2>
+
+<div class="ceg-box">
+  <h3>🇮🇹 The ARPA Conversation You'll Actually Have</h3>
+  <p><strong>ARPA technician:</strong> "What's your approach for the chlorinated solvent plume at the Bovisasca site?"</p>
+  <p><strong>You (now):</strong> "We'd profile the plume first to determine redox conditions. If it's anaerobic, BioBlend's biostimulation can drive reductive dechlorination — the native bacteria convert TCE stepwise to ethene by replacing the C–Cl bonds with C–H. For any residual, or if the plume is aerobic, our Advanced Oxidation activates persulfate to generate sulfate radicals that attack the C–Cl bonds directly. The mechanism is the same — we're breaking chlorine-carbon bonds — the approach depends on site conditions."</p>
+  <p style="color:var(--success); margin-top:0.5rem;">✓ Not hand-waving. Not avoiding. Specific mechanism, specific chemistry, technology choice tied to data.</p>
+</div>
+
+<h2>Interactive Check</h2>
+
+<div class="quiz">
+  <h3>Self-test</h3>
+  <div class="q">
+    <p>Q1: You're at a site with TCE contamination. The groundwater is anaerobic (no oxygen). Which approach makes more sense and why?</p>
+    <button onclick="showAnswer('a1c',true)">A) BioBlend — anaerobic conditions favor reductive dechlorination by native bacteria</button>
+    <button onclick="showAnswer('a1w',false)">B) ISCO — persulfate works the same regardless of oxygen level</button>
+    <button onclick="showAnswer('a1w2',false)">C) Neither — you need to pump out all the water first</button>
+    <div id="a1c" class="answer">✅ <strong>Correct.</strong> Under anaerobic conditions, bacteria already doing reductive dechlorination are naturally active. Biostimulation gives them more energy to do it faster. ISCO can still work, but it's more expensive and you'd use the biological pathway first since the conditions already favor it.</div>
+    <div id="a1w" class="answer">❌ Not quite. ISCO <em>does</em> work in anaerobic conditions, but it's not the best first choice when native bacteria are already primed for the job. The C–Cl bond is the same target either way — you pick the cheapest tool that fits the conditions.</div>
+    <div id="a1w2" class="answer">❌ Pump-and-treat exists but is slow and expensive. Both CEG technologies work in-situ (in place) — that's the whole point.</div>
+  </div>
+
+  <div class="q">
+    <p>Q2: What is the "Lego brick" for benzene (the BTEX in B, T, E, X)?</p>
+    <button onclick="showAnswer('a2c',true)">A) The aromatic ring — the delocalized electron system that makes it flat and DNA-damaging</button>
+    <button onclick="showAnswer('a2w',false)">B) The carbon-hydrogen bonds — remove the H and it falls apart</button>
+    <button onclick="showAnswer('a2w2',false)">C) Benzene doesn't have a Lego brick — it's toxic no matter what you do</button>
+    <div id="a2c" class="answer">✅ <strong>Correct.</strong> The aromatic ring is what makes benzene flat, stable, and able to slide between DNA base pairs. Break the ring open (oxidation ring-opening) and you get linear molecules that biology can handle.</div>
+    <div id="a2w" class="answer">❌ C–H bonds are strong but they're not the source of benzene's toxicity. The ring structure is the problem.</div>
+    <div id="a2w2" class="answer">❌ Benzene is absolutely treatable. Both ISCO and bioremediation can break the ring. The molecule just fights harder than chlorinated solvents do.</div>
+  </div>
+
+  <div class="q">
+    <p>Q3: The persulfate radical (SO₄•⁻) does the actual work in ISCO. What makes it so effective at breaking C–Cl bonds?</p>
+    <button onclick="showAnswer('a3w',false)">A) It's hot — the activation step generates heat that melts the bond</button>
+    <button onclick="showAnswer('a3c',true)">B) It has an unpaired electron — it steals an electron from the C–Cl bond, destabilizing and breaking it</button>
+    <button onclick="showAnswer('a3w2',false)">C) It dissolves the chlorine atoms in water</button>
+    <div id="a3c" class="answer">✅ <strong>Correct.</strong> The unpaired electron makes SO₄•⁻ a radical — extremely reactive. It rips an electron from the C–Cl bond, which breaks the bond. The chlorine falls off as chloride ion (Cl⁻), which is harmless. This is why "activation" matters: without it, persulfate just sits there.</div>
+    <div id="a3w" class="answer">❌ Activation does sometimes involve heat, but the mechanism is electron transfer, not thermal decomposition. The radical is the active species.</div>
+    <div id="a3w2" class="answer">❌ Chlorine atoms are covalently bonded — they won't dissolve until the bond is broken. That's the whole problem.</div>
+  </div>
+</div>
+
+<h2>What you can now say with confidence</h2>
+
+<ul>
+  <li>"We target specific covalent bonds — C–Cl on chlorinated solvents, aromatic rings on BTEX — not the whole molecule."</li>
+  <li>"The mechanism is electron transfer. Our persulfate generates sulfate radicals that break those bonds."</li>
+  <li>"BioBlend uses the same principle — the bacteria are doing reductive dechlorination, replacing chlorine with hydrogen. Same target, biological tool."</li>
+  <li>"Which technology depends on site redox conditions. We don't guess — we profile first."</li>
+</ul>
+
+<h2>Next</h2>
+
+<p><strong>Before Lesson 0002:</strong> Pick one of your Milano sites and try to identify: what contaminants are there? What bonds need breaking? Is the site aerobic or anaerobic? Bring the answer and we'll map it to CEG technology selection.</p>
+
+<div class="footer-note">
+  <p>📝 <strong>Lesson 0001 · The Lego Brick</strong> · CEG Chemistry Learnings</p>
+  <p>Something unclear? Ask your agent teacher. That's what I'm here for.</p>
+  <p style="margin-top:0.8rem;">🔗 <a href="../reference/glossary.md" style="color:var(--accent);">Glossary</a> · <a href="../RESOURCES.md" style="color:var(--accent);">Resources</a> · <a href="../MISSION.md" style="color:var(--accent);">Mission</a></p>
+</div>
+
+</body>
+</html>

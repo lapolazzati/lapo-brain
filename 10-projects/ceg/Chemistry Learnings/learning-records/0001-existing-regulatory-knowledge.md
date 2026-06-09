@@ -1,0 +1,6 @@
+# Prior Knowledge: Italian Regulatory Framework and CEG Technology Positioning
+
+Lapo already has strong command of the Italian contaminated sites regulatory framework: D.Lgs. 152/2006 structure, CSC/CSR distinction, ISPRA risk analysis methodology (forward/backward analysis, conceptual site model), ARPA workflow and approval pathway, and MOSAICO database. He can navigate a conversation about CSC thresholds, Piano di Caratterizzazione, and Analisi di Rischio without freezing. He also understands CEG's technology positioning (Advanced Oxidation = ISCO, BioBlend = biostimulation, phytoremediation = polishing) and the business model (WaaS/infrastructure deployment vs. chemical sales). This sets the floor: future lessons should not re-teach regulatory structure, but SHOULD connect chemistry concepts back to regulatory thresholds and ARPA conversations.
+
+**Evidence:** ISPRA guidelines summary document (May 2026), CEG strategic notes (May 2026), 2-month learning curriculum designed with ADHD accommodations.
+**Implications:** Lessons on contaminant chemistry should include the CSC threshold and regulatory context for each contaminant — Lapo can already use that frame. The gap is the molecular-level understanding that makes regulatory thresholds make intuitive sense.
