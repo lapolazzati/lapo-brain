@@ -119,3 +119,61 @@ Use kebab-case: `my-note-title.md`. One note per file.
 - Do not treat files in `attachments/` as notes, types, or view definitions.
 - Do not silently overwrite an existing custom `AGENTS.md`.
 - Do not rewrite installation-specific app configuration unless the user explicitly asks.
+
+---
+
+## Claude Output Conventions
+
+This vault is the primary output hub for all Claude-produced research, leads, and plans. Use the routing table below to pick the right folder without asking.
+
+### Content routing
+
+| Content type | Path |
+|---|---|
+| Project lead | `10-projects/[PROJECT]/leads/[kebab-name].md` |
+| Project research | `10-projects/[PROJECT]/research/[topic].md` |
+| Cross-project research | `research/YYYY-MM-DD — [title].md` |
+| Consulting/non-code plans | `10-projects/[PROJECT]/docs/plans/[plan-name].md` |
+| Code-repo plans | Stay in that repo's own `docs/plans/` (unchanged) |
+| Raw / in-progress | `research-vault/raw/[filename].md` |
+
+**Write tool** for creating/updating notes. **Tolaria MCP** (`mcp__tolaria__search_notes`, `mcp__tolaria__get_note`) for searching and reading.
+
+**Do not write to** `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Agent/` — that vault is legacy.
+
+### Lead note template
+
+Based on `10-projects/AETHON/leads/lucis-life-lead.md`:
+
+```yaml
+---
+type: Note
+related_to:
+  - "[[aethon]]"
+status: Active
+url: https://...
+---
+
+# [Company] — AETHON Lead
+
+**Source:** [who/how]
+**Angle:** [expansion angle]
+
+## Company
+- **Name:**
+- **HQ:**
+- **Founded:**
+
+## What they do
+[core business]
+
+## Why AETHON
+[fit with expansion validation]
+```
+
+### Active projects
+
+- `10-projects/AETHON/` — international expansion consulting
+- `10-projects/catone/` — equity bet, software
+- `10-projects/ceg/` — equity bet, regulatory
+- `10-projects/klaaryo/` — cashflow, B2B SaaS
