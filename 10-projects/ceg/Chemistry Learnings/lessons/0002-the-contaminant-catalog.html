@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 0002: The Contaminant Catalog — Every Player on the Field</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f0883e;
+    --danger: #ff7b72;
+    --success: #56d364;
+    --warning: #d29922;
+    --chlorine: #3fb950;
+    --carbon: #8b949e;
+    --hydrogen: #e6edf3;
+    --bond: #58a6ff;
+    --break: #ff7b72;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  h1 { font-size: 2.1rem; margin-bottom: 0.3rem; color: #fff; letter-spacing: -0.02em; }
+  h2 { font-size: 1.45rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--text); }
+  p { margin: 0.9rem 0; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2rem; }
+  strong { color: #fff; }
+  em { color: var(--accent2); font-style: normal; }
+
+  .metaphor-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1.4rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .metaphor-box p { margin: 0.4rem 0; }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+  }
+  .tag-red { background: rgba(255,123,114,0.15); color: var(--danger); }
+  .tag-green { background: rgba(86,211,100,0.15); color: var(--success); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--warning); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: #bc8cff; }
+
+  .molecule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 600px) { .molecule-grid { grid-template-columns: 1fr; } }
+
+  .molecule-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .molecule-card .header {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(88,166,255,0.06);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .molecule-card .body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .molecule-card svg { max-width: 220px; height: auto; }
+
+  .fact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .fact-row span { color: var(--text-dim); }
+  .fact-row strong { color: var(--text); }
+
+  .pathway {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.2rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  .pathway .arrow { color: var(--accent2); font-weight: bold; font-size: 1.3rem; }
+  .pathway .step { background: rgba(88,166,255,0.08); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; }
+  .pathway .step-small { background: rgba(88,166,255,0.08); padding: 0.4rem 0.7rem; border-radius: 4px; white-space: nowrap; font-size: 0.85rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { background: rgba(88,166,255,0.06); font-weight: 600; font-size: 0.82rem; color: var(--text-dim); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz h3 { margin-top: 0; color: var(--warning); }
+  .quiz .q { margin: 1.2rem 0; }
+  .quiz .q p { margin: 0.3rem 0; font-weight: 600; }
+  .quiz button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 1rem;
+    margin: 0.3rem 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+  }
+  .quiz button:hover { border-color: var(--accent); }
+  .quiz .answer {
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    display: none;
+  }
+  .quiz .answer.show { display: block; }
+  .quiz .correct { background: rgba(86,211,100,0.12); border: 1px solid rgba(86,211,100,0.3); }
+  .quiz .wrong { background: rgba(255,123,114,0.12); border: 1px solid rgba(255,123,114,0.3); }
+
+  .ceg-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(240,136,62,0.06));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .ceg-box h3 { margin-top: 0; color: var(--accent2); }
+
+  .footer-note {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  ul { margin: 0.6rem 0 0.6rem 1.4rem; }
+  li { margin: 0.3rem 0; }
+
+  svg text { font-family: 'Inter', -apple-system, sans-serif; }
+</style>
+<script>
+  function showAnswer(id, correct) {
+    const el = document.getElementById(id);
+    el.className = 'answer show ' + (correct ? 'correct' : 'wrong');
+  }
+</script>
+</head>
+<body>
+
+<h1>🧪 Lesson 0002: The Contaminant Catalog</h1>
+<p class="subtitle">Every player on the field — and which CEG tech handles each one</p>
+
+<div class="metaphor-box">
+  <p><strong>The Site Report Is a Casting Call</strong></p>
+  <p>Every contaminated site has a roster. Some contaminants are the leads (high concentration, high toxicity). Some are extras (below threshold, negligible risk). Your job when you pick up a site report is to <em>read the credits</em> — name every player, know their signature move, and match it to CEG's toolkit before ARPA asks you.</p>
+  <p><strong>"What matters, at what bond, and which technology?"</strong> That's the entire lesson.</p>
+</div>
+
+<h2>Speed品类: BTEX — The Petroleum Gang</h2>
+
+<p>BTEX stands for benzene, toluene, ethylbenzene, xylene. They arrive together in gasoline, diesel, and fuel spills. If you see one, the others probably followed <em>in the same plume</em>. They share a family trait: an aromatic ring. Break the ring, you break the threat.</p>
+
+<div class="molecule-grid">
+
+  <div class="molecule-card">
+    <div class="header">⛽ Benzene — <span class="tag tag-red">Most toxic</span></div>
+    <div class="body">
+      <svg viewBox="0 0 240 200" width="240" height="200">
+        <polygon points="120,30 194,72 194,156 120,198 46,156 46,72" fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+        <circle cx="120" cy="114" r="28" fill="none" stroke="#ff7b72" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="120" y="25" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="204" y="77" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="204" y="165" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="120" y="208" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="36" y="165" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="36" y="77" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="120" y="10" text-anchor="middle" fill="#8b949e" font-size="10">H</text>
+        <text x="120" y="15" text-anchor="middle" fill="#ff7b72" font-size="9" opacity="0">aromatic</text>
+        <!-- Label -->
+        <text x="120" y="140" text-anchor="middle" fill="#ff7b72" font-size="9">aromatic ring</text>
+        <text x="120" y="187" text-anchor="middle" fill="#8b949e" font-size="10">H</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">Ring = target</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">CSC: 1 μg/L · LNAPL (floats)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="molecule-card">
+    <div class="header">🛢️ Toluene / Ethylbenzene / Xylene — <span class="tag tag-yellow">Same family</span></div>
+    <div class="body">
+      <svg viewBox="0 0 260 200" width="260" height="200">
+        <!-- Hexagon -->
+        <polygon points="130,30 204,72 204,156 130,198 56,156 56,72" fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+        <text x="130" y="25" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="214" y="77" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="214" y="165" text-anchor="start" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="130" y="208" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="46" y="165" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="46" y="77" text-anchor="end" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <!-- Side chain -->
+        <line x1="130" y1="25" x2="130" y2="5" stroke="#8b949e" stroke-width="2"/>
+        <text x="130" y="-2" text-anchor="middle" fill="#8b949e" font-size="10">R (methyl / ethyl)</text>
+        <!-- Label -->
+        <text x="130" y="140" text-anchor="middle" fill="#ff7b72" font-size="9">same ring + side group</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-yellow">Toluene CSC: 70 μg/L · Xylene: 50 μg/L</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">All LNAPLs · all ring-attackable</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="fact-row">
+  <div><span>Lego brick:</span> <strong>Aromatic ring</strong></div>
+  <div><span>CEG tech:</span> <strong>ISCO (ring-opening) + BioBlend (biodegradation)</strong></div>
+  <div><span>Plume:</span> <strong>LNAPL — floats on water table</strong></div>
+</div>
+
+<p>Benzene is the king of this crew — it has the lowest CSC (1 μg/L) and is the most carcinogenic. Toluene is less toxic, xylene (three isomers) sits in the middle. <em>When you see BTEX, start with the ring.</em> ISCO ring-opens it with persulfate radicals; BioBlend lets bacteria chew the opened fragments down to CO₂ and H₂O.</p>
+
+<h2>The Chlorinated Crew — Sinks, Doesn't Float</h2>
+
+<p>Chlorinated solvents are DNAPLs (Dense Non-Aqueous Phase Liquids). They <em>sink</em> through the aquifer and pool on low-permeability layers at the bottom. This is why they're harder to find and harder to treat than petroleum. The Lego brick is the C–Cl bond on every one of these.</p>
+
+<div class="molecule-grid">
+
+  <div class="molecule-card">
+    <div class="header">☠️ TCE — <span class="tag tag-red">Metal degreasing</span></div>
+    <div class="body">
+      <svg viewBox="0 0 260 140" width="260" height="140">
+        <text x="130" y="75" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="600">C–C double bond</text>
+        <!-- Left carbon cluster -->
+        <text x="90" y="50" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="50" y="30" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <text x="50" y="90" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <line x1="80" y1="42" x2="60" y2="32" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <line x1="80" y1="58" x2="60" y2="88" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <!-- Right carbon -->
+        <text x="170" y="50" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="210" y="30" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <line x1="180" y1="42" x2="200" y2="32" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <!-- H -->
+        <text x="210" y="90" text-anchor="middle" fill="#8b949e" font-size="11">H</text>
+        <line x1="180" y1="58" x2="200" y2="88" stroke="#8b949e" stroke-width="2"/>
+        <!-- Double bond -->
+        <line x1="108" y1="42" x2="152" y2="42" stroke="#58a6ff" stroke-width="2.5"/>
+        <line x1="108" y1="58" x2="152" y2="58" stroke="#58a6ff" stroke-width="2.5"/>
+        <!-- Bottom label -->
+        <text x="130" y="125" text-anchor="middle" fill="#ff7b72" font-size="10">3 × C–Cl bonds = targets</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">C–Cl ×3</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">CSC: 1.5 μg/L · DNAPL</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="molecule-card">
+    <div class="header">👔 PCE — <span class="tag tag-red">Dry cleaning</span></div>
+    <div class="body">
+      <svg viewBox="0 0 260 140" width="260" height="140">
+        <text x="130" y="75" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="600">C–C double bond</text>
+        <!-- Left carbon -->
+        <text x="90" y="50" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="50" y="30" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <text x="50" y="90" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <line x1="80" y1="42" x2="60" y2="32" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <line x1="80" y1="58" x2="60" y2="88" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <!-- Right carbon -->
+        <text x="170" y="50" text-anchor="middle" fill="#e6edf3" font-size="12" font-weight="600">C</text>
+        <text x="210" y="30" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <text x="210" y="90" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">Cl</text>
+        <line x1="180" y1="42" x2="200" y2="32" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <line x1="180" y1="58" x2="200" y2="88" stroke="#ff7b72" stroke-width="3" stroke-dasharray="6,3"/>
+        <!-- Double bond -->
+        <line x1="108" y1="42" x2="152" y2="42" stroke="#58a6ff" stroke-width="2.5"/>
+        <line x1="108" y1="58" x2="152" y2="58" stroke="#58a6ff" stroke-width="2.5"/>
+        <!-- Label -->
+        <text x="130" y="125" text-anchor="middle" fill="#ff7b72" font-size="10">4 × C–Cl bonds = jackpot</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">C–Cl ×4</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">CSC: 4 μg/L · DNAPL · even denser</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="pathway">
+  <div class="step"><strong>TCE / PCE</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">C–Cl bonds</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>Primary choice</strong><br/><span style="color:var(--accent);">ISCO ( persulfate )</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>If anaerobic</strong><br/><span style="color:var(--success);">BioBlend also works</span></div>
+</div>
+
+<p>TCE = three chlorines (trichloro), PCE = four chlorines (tetrachloro, also called perchloroethylene). More chlorines = harder to break = more persulfate needed <em>or</em> slower bioremediation. PCE takes longer in BioBlend because there are four Cl atoms to strip off. Both are classic ISCO targets.</p>
+
+<h2>PAHs — The Coal Tar Monsters</h2>
+
+<p>Polycyclic Aromatic Hydrocarbons: multiple benzene rings fused together. Naphthalene = 2 rings. Benzo(a)pyrene = 5 rings. The bigger they are, the more persistent and carcinogenic they become.</p>
+
+<div class="molecule-grid">
+
+  <div class="molecule-card">
+    <div class="header">🌑 Naphthalene — <span class="tag tag-blue">2 rings</span></div>
+    <div class="body">
+      <svg viewBox="0 0 260 160" width="260" height="160">
+        <!-- Left hex -->
+        <polygon points="80,20 135,50 135,110 80,140 25,110 25,50" fill="none" stroke="#58a6ff" stroke-width="2"/>
+        <!-- Right hex, sharing two carbons -->
+        <polygon points="180,20 235,50 235,110 180,140 135,110 135,50" fill="none" stroke="#58a6ff" stroke-width="2"/>
+        <!-- Fused side -->
+        <line x1="135" y1="50" x2="135" y2="110" stroke="#58a6ff" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="55" y="45" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">C</text>
+        <text x="160" y="45" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="600">C</text>
+        <!-- Hs -->
+        <text x="80" y="12" text-anchor="middle" fill="#8b949e" font-size="9">H</text>
+        <text x="180" y="12" text-anchor="middle" fill="#8b949e" font-size="9">H</text>
+        <text x="80" y="155" text-anchor="middle" fill="#8b949e" font-size="9">H</text>
+        <text x="180" y="155" text-anchor="middle" fill="#8b949e" font-size="9">H</text>
+        <!-- Tag -->
+        <text x="130" y="100" text-anchor="middle" fill="#ff7b72" font-size="10">2 fused rings</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-blue">CSC: 2 μg/L soil · 0.02 μg/L water</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">Smaller = more treatable</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="molecule-card">
+    <div class="header">🦠 Benzo(a)pyrene — <span class="tag tag-red">5 rings · carcinogen</span></div>
+    <div class="body">
+      <svg viewBox="0 0 220 170" width="220" height="170">
+        <!-- Simplified stacked rings -->
+        <polygon points="110,10 155,35 155,85 110,110 65,85 65,35" fill="none" stroke="#ff7b72" stroke-width="2.5"/>
+        <polygon points="65,85 110,110 110,160 65,135 20,110 20,60" fill="none" stroke="#ff7b72" stroke-width="2.5"/>
+        <polygon points="110,110 155,85 155,135 110,160" fill="none" stroke="#ff7b72" stroke-width="2.5"/>
+        <text x="110" y="65" text-anchor="middle" fill="#ff7b72" font-size="12" font-weight="600">5 rings</text>
+        <text x="110" y="80" text-anchor="middle" fill="#ff7b72" font-size="9">BaP</text>
+        <text x="110" y="145" text-anchor="middle" fill="#8b949e" font-size="9">Very persistent</text>
+      </svg>
+      <div style="text-align:center;font-size:0.85rem;">
+        <span class="tag tag-red">CSC: 0.1 μg/L soil · extremely low in water</span>
+        <div style="margin-top:0.3rem;color:var(--text-dim);">Large PAHs resist both ISCO and BioBlend</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="fact-row">
+  <div><span>Small PAHs (2–3 rings):</span> <strong>Naphthalene, anthracene — ISCO works</strong></div>
+  <div><span>Large PAHs (4+ rings):</span> <strong>BioBlend for polishing, or ex-situ incineration</strong></div>
+</div>
+
+<h2>Heavy Metals: A Different Game Entirely</h2>
+
+<div class="metaphor-box">
+  <p><strong>Key principle:</strong> You cannot "destroy" a metal. It's an element. It stays on the periodic table forever.</p>
+  <p>With organic contaminants, you break bonds and the molecule ceases to exist. With metals, you can't break the atom. You can only <em>change its form</em> — oxidation state, solubility, mobility — so it stops hurting people.</p>
+</div>
+
+<p>The headline example Lapo needs:</p>
+
+<div class="pathway">
+  <div class="step-small"><strong>Cr-VI</strong><br/><span style="color:var(--danger);">hexavalent</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>Reduction</strong><br/><span style="color:var(--accent);">ISCO byproducts or biology</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>Cr-III</strong><br/><span style="color:var(--success);">trivalent, precipitates</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>Cr(OH)₃</strong><br/><span style="color:var(--text-dim);">solid, immobile, safe</span></div>
+</div>
+
+<p>Cr-VI (chromate) is toxic, mobile, and carcinogenic. Cr-III is low-toxicity and precipitates as chromium hydroxide, which stays put. The same total chromium atoms are still there — you've just changed their behavior. CSC for Cr-VI in groundwater: <strong>5 μg/L</strong>.</p>
+
+<div class="fact-row">
+  <div><span>Lead:</span> <strong>Phosphate stabilization → insoluble pyromorphite</strong></div>
+  <div><span>Cadmium:</span> <strong>Precipitation / immobilization</strong></div>
+  <div><span>Mercury / Arsenic:</span> <strong>Specialized — often ex-situ</strong></div>
+</div>
+
+<h2>Quick-Reference: Contaminant → Tech → CSC</h2>
+
+<p>This table is the cheat sheet. Print it. Keep it open during ARPA calls:</p>
+
+<div class="table-wrap">
+  <table>
+    <tr>
+      <th>Contaminant</th>
+      <th>Lego Brick</th>
+      <th>CEG Tech</th>
+      <th>Plume</th>
+      <th>CSC (GW)</th>
+    </tr>
+    <tr>
+      <td>Benzene</td>
+      <td>Aromatic ring</td>
+      <td><span class="tag tag-blue">ISCO + BioBlend</span></td>
+      <td><span class="tag tag-yellow">LNAPL</span></td>
+      <td>1 μg/L</td>
+    </tr>
+    <tr>
+      <td>Toluene / Xylene</td>
+      <td>Aromatic ring</td>
+      <td><span class="tag tag-blue">ISCO + BioBlend</span></td>
+      <td><span class="tag tag-yellow">LNAPL</span></td>
+      <td>70 / 50 μg/L</td>
+    </tr>
+    <tr>
+      <td>TCE</td>
+      <td>C–Cl bonds (×3)</td>
+      <td><span class="tag tag-red">ISCO primary</span> <span class="tag tag-green">BioBlend if anaerobic</span></td>
+      <td><span class="tag tag-purple">DNAPL</span></td>
+      <td>1.5 μg/L</td>
+    </tr>
+    <tr>
+      <td>PCE</td>
+      <td>C–Cl bonds (×4)</td>
+      <td><span class="tag tag-red">ISCO primary</span> <span class="tag tag-green">BioBlend if anaerobic</span></td>
+      <td><span class="tag tag-purple">DNAPL</span></td>
+      <td>4 μg/L</td>
+    </tr>
+    <tr>
+      <td>Carbon tetrachloride</td>
+      <td>C–Cl bonds (×4)</td>
+      <td><span class="tag tag-red">ISCO primary</span></td>
+      <td><span class="tag tag-purple">DNAPL</span></td>
+      <td>2 μg/L</td>
+    </tr>
+    <tr>
+      <td>Naphthalene (PAH-2)</td>
+      <td>Fused rings</td>
+      <td><span class="tag tag-blue">ISCO</span></td>
+      <td><span class="tag tag-yellow">LNAPL</span></td>
+      <td>0.02 μg/L</td>
+    </tr>
+    <tr>
+      <td>Benzo(a)pyrene (PAH-5)</td>
+      <td>Fused rings</td>
+      <td><span class="tag tag-green">BioBlend polish</span> <span class="tag tag-yellow">or ex-situ</span></td>
+      <td><span class="tag tag-yellow">LNAPL</span></td>
+      <td>0.0001 μg/L</td>
+    </tr>
+    <tr>
+      <td>Cr-VI</td>
+      <td><em>Not a bond — oxidation state</em></td>
+      <td><span class="tag tag-purple">Reduction + immobilization</span></td>
+      <td>Dissolved</td>
+      <td>5 μg/L</td>
+    </tr>
+    <tr>
+      <td>Lead (Pb)</td>
+      <td><em>Element — cannot break</em></td>
+      <td><span class="tag tag-purple">Phosphate stabilization</span></td>
+      <td>Sorbed / particulate</td>
+      <td>10 μg/L</td>
+    </tr>
+  </table>
+</div>
+
+<h2>The ARPA Conversation You'll Actually Have</h2>
+
+<div class="ceg-box">
+  <h3>🇮🇹 Scenario: Milano site — Bovisasca</h3>
+  <p><strong>ARPA:</strong> "The site characterization found benzene at 120 μg/L, TCE at 45 μg/L, and naphthalene at 0.8 μg/L in groundwater. What are you proposing?"</p>
+  <p><strong>You (now):</strong> "Three distinct contaminant classes, three different mechanisms. For the benzene — it's above CSC — that's an aromatic ring target. ISCO ring-opening with persulfate radicals will cleave the ring, making linear fragments the native bacteria can finish. TCE is also above its 1.5 μg/L CSC and has three C–Cl bonds — our primary approach is Advanced Oxidation. Naphthalene at 0.8 is above 0.02, so it matters too — ISCO handles two-ring PAHs well. We'll profile redox conditions first: if the deeper zone is anaerobic, BioBlend can handle residual concentrations after ISCO. The treatment train is ISCO first for concentration, BioBlend for polishing."</p>
+  <p style="color:var(--success); margin-top:0.5rem;">✓ Every contaminant named. Every threshold cited. Every technology matched to a bond or mechanism. No hand-waving.</p>
+</div>
+
+<h2>Interactive Check</h2>
+
+<div class="quiz">
+  <h3>Self-test</h3>
+
+  <div class="q">
+    <p>Q1: A site report shows PCE at 8 μg/L. Which two facts must you know before choosing the technology?</p>
+    <button onclick="showAnswer('q1c',true)">A) That PCE is a DNAPL (sinks) and the site redox conditions (aerobic vs anaerobic)</button>
+    <button onclick="showAnswer('q1w',false)">B) The soil porosity and the price of persulfate</button>
+    <button onclick="showAnswer('q1w2',false)">C) Whether the site was a gas station or a dry cleaner</button>
+    <div id="q1c" class="answer">✅ <strong>Correct.</strong> PCE is always a DNAPL — it sinks — so you need to know where it pooled. Redox tells you whether ISCO or BioBlend is the primary choice. Both are always the first two facts.</div>
+    <div id="q1w" class="answer">❌ Porosity matters for injection radius calculations, but not for technology choice. Price matters for the bid, not for mechanism.</div>
+    <div id="q1w2" class="answer">❌ Source identification helps but doesn't drive chemistry. You already know PCE = dry cleaner solvent. Chemistry doesn't care where the pipe leaked.</div>
+  </div>
+
+  <div class="q">
+    <p>Q2: You see benzo(a)pyrene at 0.5 μg/L in soil. Which statement is correct?</p>
+    <button onclick="showAnswer('q2w',false)">A) This is below concern — BaP CSC is 1 μg/L</button>
+    <button onclick="showAnswer('q2c',true)">B) This is above CSC and BaP is one of the hardest PAHs to treat — 5-ring structure resists both ISCO and BioBlend</button>
+    <button onclick="showAnswer('q2w2',false)">C) ISCO will ring-open all five rings in a single pass</button>
+    <div id="q2c" class="answer">✅ <strong>Correct.</strong> BaP CSC is 0.1 μg/L in soil — 0.5 is 5× over. Large PAHs are recalcitrant. ISCO may partially oxidize but full degradation of 5-ring PAHs often requires ex-situ treatment or long-term BioBlend polishing.</div>
+    <div id="q2w" class="answer">❌ BaP CSC is 0.1 μg/L — not 1. This is a common mix-up with benzene's 1 μg/L threshold.</div>
+    <div id="q2w2" class="answer">❌ Five fused aromatic rings don't "single-pass" open. Partial oxidation can create even more reactive intermediates. This is why large PAHs need careful treatment design.</div>
+  </div>
+
+  <div class="q">
+    <p>Q3: A colleague says "We can just ISCO everything — metals, PFAS, solvents, PAHs." What's wrong with this?</p>
+    <button onclick="showAnswer('q3w',false)">A) Nothing — ISCO is CEG's flagship, it handles everything</button>
+    <button onclick="showAnswer('q3w2',false)">B) ISCO doesn't work on PAHs — only chlorinated solvents</button>
+    <button onclick="showAnswer('q3c',true)">C) Metals can't be "broken" — ISCO doesn't destroy elements. And PFAS C–F bonds are tougher than persulfate can handle</button>
+    <div id="q3c" class="answer">✅ <strong>Correct.</strong> ISCO breaks covalent bonds on organic molecules. Metals are elements — no bonds to break, only oxidation states to change. PFAS has C–F bonds (~485 kJ/mol) that persulfate radicals can't reliably break. Technology matching matters.</div>
+    <div id="q3w" class="answer">❌ ISCO is powerful but not magic. "One technology for all" is how you lose credibility in front of ARPA.</div>
+    <div id="q3w2" class="answer">❌ ISCO absolutely works on smaller PAHs (2–3 rings) and aromatic hydrocarbons. The limitation is large PAHs and non-organics.</div>
+  </div>
+
+</div>
+
+<h2>What you can now say with confidence</h2>
+
+<ul>
+  <li>"Benzene, toluene, xylene — all share an aromatic ring. ISCO ring-opens it; BioBlend degrades the fragments."</li>
+  <li>"TCE and PCE are DNAPLs — they sink. More chlorines means more C–Cl bonds to break. ISCO is primary; BioBlend works if anaerobic."</li>
+  <li>"Small PAHs (naphthalene): ISCO handles them. Large PAHs (benzo[a]pyrene): much harder — consider ex-situ or extended BioBlend."</li>
+  <li>"Metals aren't destroyed — they're transformed. Cr-VI → Cr-III by reduction. Lead → pyromorphite by stabilization."</li>
+  <li>"I can read a contaminant list, cite the CSC thresholds, and tell you the Lego brick and the CEG technology for each one."</li>
+</ul>
+
+<h2>Next</h2>
+
+<p><strong>Before Lesson 0003:</strong> Find a real site characterization report (anonymized is fine) and practice reading it with this table. List every contaminant, its concentration, whether it's above CSC, what the Lego brick is, and which CEG tech fits. Bring it — we'll review ISCO's mechanism in depth next.</p>
+
+<div class="footer-note">
+  <p>📝 <strong>Lesson 0002 · The Contaminant Catalog</strong> · CEG Chemistry Learnings</p>
+  <p>Something unclear? Ask your agent teacher. That's what I'm here for.</p>
+  <p style="margin-top:0.8rem;">🔗 <a href="../reference/glossary.md" style="color:var(--accent);">Glossary</a> · <a href="../RESOURCES.md" style="color:var(--accent);">Resources</a> · <a href="../MISSION.md" style="color:var(--accent);">Mission</a></p>
+</div>
+
+</body>
+</html>

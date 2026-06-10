@@ -12,6 +12,7 @@
 ---
 
 ### 0002 — The Contaminant Catalog: Every Player on the Field
+**Status:** Complete
 **Goal:** Lapo can look at a site characterization report and immediately know which contaminants matter, what bonds to break, and which CEG tech applies.
 **Structure:**
 - BTEX: benzene, toluene, ethylbenzene, xylene — petroleum fingerprints, aromatic rings, ISCO + BioBlend
