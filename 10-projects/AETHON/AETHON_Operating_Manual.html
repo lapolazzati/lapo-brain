@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AETHON — Operating Manual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1917; --ink-soft:#292524; --paper:#FAFAF9; --card:#FFFFFF;
+    --ember:#C2410C; --ember-bright:#E8744A; --ember-tint:#FDEBE0;
+    --stone:#57534E; --stone-lt:#A8A29E; --line:#E7E5E4;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;font-size:15px}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 28px}
+  a{color:var(--ember);text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+
+  /* ---------- header ---------- */
+  header{background:var(--ink);color:#fff;padding:56px 0 48px}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+  .brand svg{width:34px;height:34px}
+  .brand .name{font-family:var(--sans);font-weight:700;letter-spacing:.28em;font-size:15px}
+  .brand .tag{font-family:var(--mono);font-size:11px;color:var(--stone-lt);letter-spacing:.08em;border-left:1px solid #44403C;padding-left:12px;margin-left:2px}
+  header h1{font-family:var(--serif);font-weight:900;font-size:clamp(34px,5vw,52px);line-height:1.05;max-width:760px}
+  header h1 em{font-style:italic;color:var(--ember-bright)}
+  .rule-box{margin-top:26px;border:1px solid #44403C;border-radius:10px;padding:16px 20px;max-width:760px;background:var(--ink-soft)}
+  .rule-box .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ember-bright);text-transform:uppercase;display:block;margin-bottom:6px}
+  .rule-box p{color:#E7E5E4;font-size:15px}
+  .rule-box strong{color:#fff}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:10;background:rgba(250,250,249,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+  nav a{font-family:var(--mono);font-size:11.5px;color:var(--stone);padding:13px 12px;white-space:nowrap;letter-spacing:.02em;border-bottom:2px solid transparent}
+  nav a:hover{color:var(--ink);border-bottom-color:var(--ember)}
+
+  /* ---------- sections ---------- */
+  section{padding:58px 0 8px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember);margin-bottom:10px}
+  h2{font-family:var(--serif);font-weight:700;font-size:30px;margin-bottom:8px}
+  .lede{color:var(--stone);max-width:720px;margin-bottom:28px}
+
+  /* principles */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .p-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 16px}
+  .p-card h3{font-size:14.5px;font-weight:700;margin-bottom:6px}
+  .p-card p{font-size:13px;color:var(--stone)}
+
+  /* skill library — the command palette */
+  .palette{background:var(--ink);border-radius:14px;padding:10px 0;box-shadow:0 14px 36px rgba(28,25,23,.16)}
+  .palette-head{display:flex;align-items:center;gap:8px;padding:10px 22px 14px;border-bottom:1px solid #353230}
+  .dot{width:9px;height:9px;border-radius:50%;background:#44403C}
+  .palette-head span{font-family:var(--mono);font-size:11px;color:var(--stone-lt);margin-left:8px;letter-spacing:.06em}
+  .skill{display:grid;grid-template-columns:240px 1fr 92px;gap:18px;align-items:baseline;padding:13px 22px;border-bottom:1px solid #28252333}
+  .skill:last-child{border-bottom:none}
+  .skill:hover{background:#252220}
+  .cmd{font-family:var(--mono);font-size:13.5px;color:var(--ember-bright);font-weight:600;word-break:break-all}
+  .cmd::before{content:"❯ ";color:#57534E}
+  .skill p{font-size:12.5px;color:#C9C5C1}
+  .skill p b{color:#fff;font-weight:600}
+  .wave{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+  .w1{color:var(--ember-bright)} .w2{color:#D9A066} .w3{color:#8A8580}
+  .gate{margin-top:14px;background:var(--ember-tint);border:1px solid #F5D5C3;border-radius:10px;padding:14px 18px;font-size:13.5px}
+  .gate b{color:var(--ember)}
+  .howto{margin-top:14px;font-size:13px;color:var(--stone);max-width:840px}
+  .howto b{color:var(--ink)}
+
+  /* infrastructure */
+  .stack{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:14px}
+  .node{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .node.dark{background:var(--ink);color:#E7E5E4;border-color:var(--ink)}
+  .node h3{font-size:15px;font-weight:700;margin-bottom:4px}
+  .node .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);margin-bottom:10px;display:block}
+  .node.dark .sub{color:var(--ember-bright)}
+  .node ul{list-style:none;font-size:12.5px;color:var(--stone)}
+  .node.dark ul{color:#C9C5C1}
+  .node li{padding:4px 0 4px 16px;position:relative}
+  .node li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--ember)}
+  .tree{font-family:var(--mono);font-size:11.5px;line-height:1.7;background:var(--ink);color:#C9C5C1;border-radius:10px;padding:18px 20px;margin-top:14px;overflow-x:auto}
+  .tree .d{color:var(--ember-bright)} .tree .c{color:#8A8580}
+  .crm-rec{margin-top:14px}
+  .crm-rec .pick{border:1.5px solid var(--ember);background:var(--card)}
+  .pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;background:var(--ember);color:#fff;border-radius:99px;padding:3px 10px;margin-bottom:8px}
+  .pill.alt{background:transparent;color:var(--stone);border:1px solid var(--line)}
+  .pipe{font-family:var(--mono);font-size:12px;color:var(--stone);margin-top:12px}
+  .pipe b{color:var(--ink)}
+  .pipe .arr{color:var(--ember)}
+
+  /* playbook */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;counter-reset:step}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 14px;counter-increment:step;position:relative}
+  .step::before{content:counter(step,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--ember);letter-spacing:.1em;display:block;margin-bottom:8px}
+  .step h3{font-size:13.5px;font-weight:700;margin-bottom:5px;line-height:1.25}
+  .step p{font-size:11.5px;color:var(--stone)}
+  .exit{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .exit h3{font-size:14px;margin-bottom:10px}
+  .exit ul{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:6px 24px;font-size:12.5px;color:var(--stone)}
+  .exit li::before{content:"☐ ";color:var(--ember);font-weight:700}
+
+  /* talent */
+  .path{display:flex;align-items:stretch;gap:0;margin:18px 0 22px;flex-wrap:wrap}
+  .path .stage{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);padding:16px;position:relative}
+  .path .stage:first-child{border-radius:10px 0 0 10px}
+  .path .stage:last-child{border-radius:0 10px 10px 0;background:var(--ink);color:#fff;border-color:var(--ink)}
+  .path .stage h3{font-size:13.5px;font-weight:700;margin-bottom:4px}
+  .path .stage p{font-size:11.5px;color:var(--stone)}
+  .path .stage:last-child p{color:var(--stone-lt)}
+  .path .stage em{font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);display:block;margin-bottom:6px}
+  .path .stage:last-child em{color:var(--ember-bright)}
+
+  /* cadence */
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;text-align:left;color:var(--ember);padding:12px 16px;border-bottom:1px solid var(--line);background:#FCFCFB}
+  td{padding:11px 16px;border-bottom:1px solid var(--line);color:var(--stone);vertical-align:top}
+  td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+
+  footer{margin-top:64px;background:var(--ink);color:var(--stone-lt);padding:26px 0;font-size:12px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer b{color:#fff}
+
+  @media(max-width:880px){
+    .grid3,.stack{grid-template-columns:1fr 1fr}
+    .steps{grid-template-columns:repeat(2,1fr)}
+    .skill{grid-template-columns:1fr;gap:4px}
+    .wave{text-align:left}
+  }
+  @media(max-width:560px){
+    .grid3,.grid2,.stack,.exit ul{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="#E8744A" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 9.5c-.6-2.4-2.2-4-3.5-4.9L18 2.5c.1-.3-.2-.6-.5-.5l-3.6 1.2C13.3 3.1 12.7 3 12 3 6.5 3 3 7.6 3 12.5V21h4.5l.7-3.2c.5.1 1 .2 1.5.2h2.6c.5 0 1-.1 1.5-.2L14.5 21H19v-7.1c1.5-.4 2.1-2.6 1.5-4.4zM15 10a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+      <span class="name">AETHON</span>
+      <span class="tag">operating-manual · v0.1</span>
+    </div>
+    <h1>How we work, <em>written down</em> — so it can be handed over.</h1>
+    <div class="rule-box">
+      <span class="lbl">The one rule</span>
+      <p><strong>The founder validates the motion. The pod scales the motion.</strong> And every engagement must leave behind a reusable asset — data, a playbook, a relationship, or a skill.</p>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#principles">01 principles</a>
+    <a href="#skills">02 skill-library</a>
+    <a href="#infra">03 infrastructure</a>
+    <a href="#crm">04 crm</a>
+    <a href="#playbook">05 engagement</a>
+    <a href="#talent">06 talent</a>
+    <a href="#cadence">07 cadence</a>
+  </div>
+</nav>
+
+<!-- ============ 01 PRINCIPLES ============ -->
+<section id="principles">
+  <div class="wrap">
+    <div class="kicker">01 · Principles</div>
+    <h2>Six rules that decide everything else</h2>
+    <p class="lede">When a situation isn't covered by this manual, decide with these.</p>
+    <div class="grid3">
+      <div class="p-card"><h3>AI does the repeatable. Humans do the trust.</h3><p>Mapping, research, drafts, summaries → machines. Judgment, partners, senior calls, pricing → people.</p></div>
+      <div class="p-card"><h3>First mile, zero-to-one.</h3><p>We validate motions ourselves, then hand them to someone who scales them. The founder is never the volume caller for long.</p></div>
+      <div class="p-card"><h3>"Stop" is a deliverable.</h3><p>Kill criteria are agreed before every engagement starts. Recommending a stop is a success, not a failure.</p></div>
+      <div class="p-card"><h3>Everything compounds.</h3><p>Project → intelligence → dataset → content → leads → projects. Work that can't feed the loop gets questioned.</p></div>
+      <div class="p-card"><h3>No fake certainty.</h3><p>Every claim carries source, date, confidence. Deliverables separate facts, hypotheses, and assumptions.</p></div>
+      <div class="p-card"><h3>Be the showcase.</h3><p>We sell AI-enabled market entry — our own operation must be the best demo of AI-enabled work the client has ever seen.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 SKILL LIBRARY ============ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="kicker">02 · Skill Library</div>
+    <h2>One command, one repeatable job</h2>
+    <p class="lede">A skill is a documented workflow triggered by a slash command — spec lives at <code style="font-family:var(--mono);font-size:12.5px;background:var(--ember-tint);padding:1px 6px;border-radius:4px">/skills/&lt;name&gt;.md</code>, runs on Claude with vault + CRM access. Build in three waves.</p>
+
+    <div class="palette" role="list">
+      <div class="palette-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span>aethon — skill runner</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/marketresearch &lt;co&gt; &lt;country&gt;</span><p><b>The flagship.</b> Full country-entry pack: company profile, ICP hypothesis, competitor map, risks, signals, localized positioning, presentation skeleton.</p><span class="wave w1">wave 1</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/brief &lt;person&gt;</span><p>Pre-meeting brief 30 min before every meeting: who they are, recent news, likely objections, our angle, what we want.</p><span class="wave w1">wave 1</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/debrief &lt;transcript&gt;</span><p>Post-call processing: summary, objections → library, commitments, next actions, CRM draft, learnings tagged to corridor.</p><span class="wave w1">wave 1</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/signals &lt;corridor&gt;</span><p>Expansion-intent scan — funding, international hiring, localized sites, partner news → ranked prospect list with intro angle.</p><span class="wave w2">wave 2</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/accounts &lt;client&gt;</span><p>First 100 target accounts with decision-maker mapping and an entry angle per account.</p><span class="wave w2">wave 2</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/partners &lt;client&gt;</span><p>First 30 partners — integrators, platforms, distributors, associations — with technical and commercial fit notes.</p><span class="wave w2">wave 2</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/localize &lt;client&gt;</span><p>Translate the business, not the language: scripts, objection handling, and pricing rebuilt on <b>local anchors</b> — never converted EUR.</p><span class="wave w2">wave 2</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/warroom &lt;client&gt;</span><p>Weekly client digest: pipeline movement, meetings, objections, partner status, next actions — posted by the agent after review.</p><span class="wave w3">wave 3</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/proposal &lt;client&gt;</span><p>Sprint proposal from template: scope, outputs, timeline, pricing, <b>kill criteria</b>, explicit out-of-scope list.</p><span class="wave w3">wave 3</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/cm &lt;client&gt;</span><p>Country-manager install kit: scorecard, role profile, interview guide, candidate sources, first-90-days plan, pipeline handoff.</p><span class="wave w3">wave 3</span></div>
+      <div class="skill" role="listitem"><span class="cmd">/atlas &lt;engagement&gt;</span><p>End of engagement: packages accounts, partners, objections, pricing anchors and process notes into a reusable sector-country dataset.</p><span class="wave w3">wave 3</span></div>
+    </div>
+
+    <div class="gate"><b>The iron gate:</b> no skill output reaches a client or prospect without human review. The skill produces the draft; the architect signs it.</div>
+    <p class="howto"><b>Building a new skill:</b> run it manually twice and write down every step → spec it in <span style="font-family:var(--mono);font-size:12px">/skills/</span> → automate the repeatable parts, keep judgment steps as human checkpoints → run side-by-side with the manual version → mark <b>active</b> only after two runs needing &lt;15 min of correction.</p>
+  </div>
+</section>
+
+<!-- ============ 03 INFRASTRUCTURE ============ -->
+<section id="infra">
+  <div class="wrap">
+    <div class="kicker">03 · Infrastructure</div>
+    <h2>Hefner is the brain. Everything else connects to it.</h2>
+    <p class="lede">The repurposed VPS hosts the vault, the datasets, the agents and the dashboards. Access via SSH/Tailscale, nightly off-server backups. Nothing confidential leaves except through reviewed deliverables.</p>
+    <div class="stack">
+      <div class="node dark">
+        <span class="sub">Hefner VPS — the brain</span>
+        <h3>The Vault</h3>
+        <ul>
+          <li>Git-backed markdown knowledge base (Tolaria-compatible — any markdown editor works)</li>
+          <li>Single source of truth for everything except pipeline state</li>
+          <li>Source discipline: every claim ends with [source — date — confidence]</li>
+        </ul>
+      </div>
+      <div class="node">
+        <span class="sub">Agent layer</span>
+        <h3>One AETHON Agent per client Slack</h3>
+        <ul>
+          <li>Runs on Claude API; model-agnostic harness</li>
+          <li>Answers market questions from that client's folder, posts the weekly war-room digest, captures requests</li>
+          <li>Cannot quote prices, make commitments, or see other clients. Everything logged.</li>
+          <li>It's also the daily product demo in the client's own Slack</li>
+        </ul>
+      </div>
+      <div class="node">
+        <span class="sub">Pipeline ledger</span>
+        <h3>CRM</h3>
+        <ul>
+          <li>Who, what stage, next action, amounts — and nothing else</li>
+          <li>Knowledge stays in the vault; CRM records link to vault notes</li>
+          <li>Recommendation below ↓</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tree"><span class="d">/vault</span>
+  <span class="d">/playbooks</span>      <span class="c">← this manual, engagement playbook, templates</span>
+  <span class="d">/skills</span>         <span class="c">← one file per skill (spec + prompts)</span>
+  <span class="d">/corridors</span>      <span class="c">← brazil · italy · usa · france — corridor knowledge</span>
+  <span class="d">/clients/&lt;name&gt;</span> <span class="c">← 00-brief · 01-research · 02-gtm · 03-pipeline · 04-learnings</span>
+  <span class="d">/datasets</span>       <span class="c">← Atlas: packaged sector-country intelligence</span>
+  <span class="d">/team</span>           <span class="c">← onboarding, hiring scorecards, CM bench</span></div>
+  </div>
+</section>
+
+<!-- ============ 04 CRM ============ -->
+<section id="crm">
+  <div class="wrap">
+    <div class="kicker">04 · CRM decision</div>
+    <h2>Attio — because our business is a graph, not a funnel</h2>
+    <p class="lede">Clients, partners, funds, operators and CM candidates all interconnect across corridors. Decide once, by end of month; no migration for at least a year.</p>
+    <div class="grid2 crm-rec">
+      <div class="node pick">
+        <span class="pill">Recommended</span>
+        <h3>Attio</h3>
+        <ul>
+          <li>Flexible object model: custom objects + many-to-many links fit the client / partner / fund / signal graph</li>
+          <li>Auto-enriches from email & calendar — the network builds itself</li>
+          <li>Agent-friendly: modern API + MCP support</li>
+          <li>Cheap at 1–3 seats</li>
+        </ul>
+      </div>
+      <div class="node">
+        <span class="pill alt">Honest alternative</span>
+        <h3>HubSpot</h3>
+        <ul>
+          <li>We know it deeply from client work; sequences + calling built in</li>
+          <li>But: funnel-shaped, expensive as seats grow, models "a fund that is also a lead source" poorly</li>
+          <li>If chosen for familiarity, the same data model applies</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pipe"><b>Client pipeline:</b> Signal <span class="arr">→</span> Qualified <span class="arr">→</span> Diagnostic <span class="arr">→</span> Proposal <span class="arr">→</span> Active sprint <span class="arr">→</span> Install / Stop <span class="arr">→</span> Alumni (Expansion Board)</p>
+    <p class="pipe"><b>Partner pipeline:</b> Identified <span class="arr">→</span> Contacted <span class="arr">→</span> In conversation <span class="arr">→</span> Active corridor partner &nbsp;·&nbsp; every record carries a corridor tag (EU→BR, US→IT…)</p>
+  </div>
+</section>
+
+<!-- ============ 05 ENGAGEMENT ============ -->
+<section id="playbook">
+  <div class="wrap">
+    <div class="kicker">05 · Engagement playbook</div>
+    <h2>The Launch OS, week by week</h2>
+    <p class="lede">Cadence per engagement: weekly client call + war-room digest · monthly relationship check-in (ask explicitly, log the answer) · end-of-sprint decision memo.</p>
+    <div class="steps">
+      <div class="step"><h3>Hypothesis</h3><p>Week 0. Why this country, why now, who buys. Write 00-brief.md with <b style="color:var(--ember)">kill criteria</b> agreed with the client.</p></div>
+      <div class="step"><h3>Intelligence</h3><p>Weeks 1–3. /marketresearch · /signals · /accounts · /partners. Human pass kills false positives, ranks the first 20 conversations.</p></div>
+      <div class="step"><h3>Localized GTM</h3><p>Weeks 2–4. /localize. Pricing rebuilt on local anchors — what does our price <i>feel like</i> locally — never converted EUR.</p></div>
+      <div class="step"><h3>Activation</h3><p>Weeks 4–12. Warm intros first. Architect takes the first 5–10 calls, then hands volume to a local operator. /brief before, /debrief after — every meeting.</p></div>
+      <div class="step"><h3>Install · govern · stop</h3><p>Decision gate vs. kill criteria. Go: /cm kit, CM installed with pipeline. Stop: stop memo + /atlas. Either way: a clear decision.</p></div>
+    </div>
+    <div class="exit">
+      <h3>Exit checklist — an engagement isn't closed until:</h3>
+      <ul>
+        <li>Objection library updated (corridor level)</li>
+        <li>Partner map merged into corridor knowledge</li>
+        <li>Pricing anchors recorded</li>
+        <li>Process notes written (what we'd change)</li>
+        <li>/atlas run, dataset versioned</li>
+        <li>Reference / testimonial asked for</li>
+        <li>One publishable insight identified</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 TALENT ============ -->
+<section id="talent">
+  <div class="wrap">
+    <div class="kicker">06 · Team & talent</div>
+    <h2>The best audition in the industry for country-manager careers</h2>
+    <p class="lede">The talent pitch: many companies and markets in one year · an AI-native toolkit most consultancies won't have for years · a small senior team with no pyramid · and a real destination —</p>
+    <div class="path">
+      <div class="stage"><em>Join</em><h3>Local BD Operator</h3><p>Runs the validated motion in-country: outreach, calls, qualification, CRM hygiene. Native language, 2+ yrs BD, phone comfort, hunger for the path.</p></div>
+      <div class="stage"><em>Prove</em><h3>Owns a validated motion</h3><p>Trained on the skills, runs the war room, escalates senior conversations. Paid local base + per-qualified-meeting bonus, slightly above market.</p></div>
+      <div class="stage"><em>Destination</em><h3>Country Manager — installed</h3><p>The operator who runs the motion is first in line for the CM role we are paid to fill. The CM bench is tracked in the CRM — it's also a sellable asset (AETHON Pod).</p></div>
+    </div>
+    <div class="grid2">
+      <div class="p-card"><h3>Roles today</h3><p><b>Expansion Architect</b> (founders): client relationships, strategy, first 5–10 calls, senior conversations, go/no-go judgment — never the volume caller. <b>AI & research layer:</b> the skills + agents, owned by an architect until a builder joins. <b>Specialists</b> (legal, tax, integration) on demand — coordinated, never improvised.</p></div>
+      <div class="p-card"><h3>Onboarding, week one</h3><p>Day 1: this manual + the corridor file. Day 2: shadow the /brief → call → /debrief cycle. Day 3: run the skills on a practice account. Day 4: role-play the localized script until it sounds native. Day 5: first 10 supervised live touches.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 CADENCE ============ -->
+<section id="cadence">
+  <div class="wrap">
+    <div class="kicker">07 · Cadence & KPIs</div>
+    <h2>If it isn't in the vault, it didn't happen</h2>
+    <p class="lede" style="margin-bottom:18px">Monday 30': pipeline review, pick the 3 conversations that matter, one automation slot. Friday 30': vault commit — debriefs filed, CRM clean. Monthly: KPIs + one piece of content shipped + CM bench review. Quarterly: corridor doubling-down decision + manual version bump.</p>
+    <table>
+      <tr><th>Area</th><th>KPIs we actually watch</th></tr>
+      <tr><td>Pipeline</td><td>Qualified meetings / week · time to first qualified meeting · pipeline value per engagement</td></tr>
+      <tr><td>Market clarity</td><td>Time to go/no-go · validated personas · objections mapped</td></tr>
+      <tr><td>Operating leverage</td><td>Founder hours per launch · % of work produced by skills · skill outputs reused across clients</td></tr>
+      <tr><td>Compounding</td><td>Datasets shipped / quarter · inbound from content · revenue per corridor</td></tr>
+      <tr><td>Talent</td><td>Operators on bench · operator → CM conversions</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span><b>AETHON</b> · operating manual v0.1 · owner: Lapo</span>
+    <span>lives at /playbooks/operating-manual.md on Hefner · review monthly until first hire · changes via git commit with a one-line "why"</span>
+  </div>
+</footer>
+
+</body>
+</html>
