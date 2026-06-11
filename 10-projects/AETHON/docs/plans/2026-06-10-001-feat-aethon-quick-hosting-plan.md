@@ -12,6 +12,8 @@ type: feat
 
 Adapt Shopify's Quick concept to AETHON: a hosted layer where skill runners (warroom, marketresearch, proposal) drop HTML/assets into a folder and get back a URL — served from the Hetzner EX44 NVMe, routed by the existing Caddy instance, secured by Tailscale for internal access and Caddy basic-auth for client-shareable links. No gcsfuse, no cloud storage, no shared backend — just the filesystem and Caddy.
 
+The plan also covers two adjacent concerns that depend on the same server setup: (a) a dedicated `aethon` Linux user so AETHON services are isolated from other projects on the same machine, and (b) a lightweight partner access layer so non-technical co-founders/partners can reach documentation, shared files, and self-hosted tools without needing SSH or a technical setup.
+
 ---
 
 ## Problem Frame
@@ -19,6 +21,8 @@ Adapt Shopify's Quick concept to AETHON: a hosted layer where skill runners (war
 AETHON's skills (`/warroom`, `/marketresearch`, `/proposal`) produce HTML output today but have no standard serving path. Each dashboard is either a one-off Caddy vhost or lives only on disk. There is no way for Lapo or an agent to say "publish this output and send me a link" without manual server config per site.
 
 Shopify Quick shows that 50k+ sites can run on a single $200/month VM with a trivial filesystem+NGINX pattern. The Hetzner EX44 (64GB RAM, 1TB NVMe) is significantly more capable; the same pattern works with Caddy instead of NGINX, local NVMe instead of GCS.
+
+Two related gaps exist on the same server: the Hetzner EX44 is used for multiple projects (including Catone), so AETHON services need filesystem and process isolation via a dedicated system user. And non-technical partners currently have no self-service path to documentation, deliverables, or shared tools — they depend on Lapo to share things manually.
 
 ---
 
@@ -29,6 +33,8 @@ Shopify Quick shows that 50k+ sites can run on a single $200/month VM with a tri
 - R3: A site can be marked "shareable" and given a password-protected public URL to send to clients.
 - R4: `/warroom`, `/marketresearch`, and future HTML-output skills write to Quick paths by default.
 - R5: AETHON_Technical_Architecture.md is updated to reflect the new service.
+- R6: All AETHON processes, files, and directories run under a dedicated `aethon` Linux user, isolated from other projects (Catone, etc.) on the same EX44.
+- R7: Non-technical partners can access documentation, Google Drive, and published Quick sites via a browser and a single shared password — no VPN, no SSH, no technical setup required.
 
 ---
 
@@ -43,6 +49,8 @@ Shopify Quick shows that 50k+ sites can run on a single $200/month VM with a tri
 | Deploy mechanism | `quick-deploy` bash script: rsync local folder → server, write Caddy snippet, `caddy reload` | Mirrors `quick deploy` from Shopify. Runs locally by architects or called by n8n on the server for agent deployments. |
 | Backend | Static-only v1 | Covers the immediate use case. Shared API (DB, WebSockets) deferred — can be added if skill outputs need dynamic data. |
 | Site registry | `/srv/quick/_registry.json` — slug → {title, type, public, created_at} | Enables a listing page (`quick.aethon.internal/`) and audit of what's deployed. |
+| Linux user isolation | Dedicated `aethon` system user; all services, files, and cron jobs run as `aethon` | Separates AETHON from Catone and other projects on the same EX44; limits blast radius if a service is compromised. |
+| Partner access model | Public HTTPS portal page served by Quick at `https://portal.<domain>/` with a single shared password (1Password `core` → `partner-portal`) | No Tailscale enrollment needed for partners. Portal links to Google Drive, vault HTML docs, and published war rooms. Technical access (n8n admin, SSH) stays Tailscale-only for architects. |
 
 ---
 
