@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 0003: ISCO Deep Dive — The Chemical Sledgehammer</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f0883e;
+    --danger: #ff7b72;
+    --success: #56d364;
+    --warning: #d29922;
+    --chlorine: #3fb950;
+    --carbon: #8b949e;
+    --hydrogen: #e6edf3;
+    --bond: #58a6ff;
+    --break: #ff7b72;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  h1 { font-size: 2.1rem; margin-bottom: 0.3rem; color: #fff; letter-spacing: -0.02em; }
+  h2 { font-size: 1.45rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--text); }
+  p { margin: 0.9rem 0; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2rem; }
+  strong { color: #fff; }
+  em { color: var(--accent2); font-style: normal; }
+
+  .metaphor-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1.4rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .metaphor-box p { margin: 0.4rem 0; }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+  }
+  .tag-red { background: rgba(255,123,114,0.15); color: var(--danger); }
+  .tag-green { background: rgba(86,211,100,0.15); color: var(--success); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--warning); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: #bc8cff; }
+
+  .pathway {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.2rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  .pathway .arrow { color: var(--accent2); font-weight: bold; font-size: 1.3rem; }
+  .pathway .step { background: rgba(88,166,255,0.08); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; }
+  .pathway .step-small { background: rgba(88,166,255,0.08); padding: 0.4rem 0.7rem; border-radius: 4px; white-space: nowrap; font-size: 0.85rem; text-align: center; }
+
+  .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { background: rgba(88,166,255,0.06); font-weight: 600; font-size: 0.82rem; color: var(--text-dim); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz h3 { margin-top: 0; color: var(--warning); }
+  .quiz .q { margin: 1.2rem 0; }
+  .quiz .q p { margin: 0.3rem 0; font-weight: 600; }
+  .quiz button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 1rem;
+    margin: 0.3rem 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+  }
+  .quiz button:hover { border-color: var(--accent); }
+  .quiz .answer {
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    display: none;
+  }
+  .quiz .answer.show { display: block; }
+  .quiz .correct { background: rgba(86,211,100,0.12); border: 1px solid rgba(86,211,100,0.3); }
+  .quiz .wrong { background: rgba(255,123,114,0.12); border: 1px solid rgba(255,123,114,0.3); }
+
+  .ceg-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(240,136,62,0.06));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .ceg-box h3 { margin-top: 0; color: var(--accent2); }
+
+  .footer-note {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  ul { margin: 0.6rem 0 0.6rem 1.4rem; }
+  li { margin: 0.3rem 0; }
+
+  svg text { font-family: 'Inter', -apple-system, sans-serif; }
+
+  .radical-highlight { color: var(--danger); font-weight: 600; }
+  .electron-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--danger);
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+
+  .byproducts-flow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 600px) { .byproducts-flow { grid-template-columns: 1fr; } }
+
+  .byproduct-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .byproduct-card .formula {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+  }
+  .byproduct-card .label {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .byproduct-card .fate {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .mechanism-box {
+    background: rgba(255,123,114,0.06);
+    border: 1px solid rgba(255,123,114,0.2);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .mechanism-box strong { color: var(--danger); }
+</style>
+<script>
+  function showAnswer(id, correct) {
+    const el = document.getElementById(id);
+    el.className = 'answer show ' + (correct ? 'correct' : 'wrong');
+  }
+</script>
+</head>
+<body>
+
+<h1>⚡ Lesson 0003: ISCO Deep Dive</h1>
+<p class="subtitle">The chemical sledgehammer: persulfate, radicals, and the electron theft that breaks contamination</p>
+
+<div class="metaphor-box">
+  <p><strong>You Are Handing ARPA a Receipt</strong></p>
+  <p>ARPA doesn't just want to hear "we oxidize the contaminants." They want to know — <em>and so should you</em> — exactly what chemical species attacks what bond, what the byproducts are, and why those byproducts are harmless. This lesson gives you the mechanism behind CEG's core technology. When someone says "how does persulfate work?", you'll know every step.</p>
+  <p><strong>The headline: a radical steals an electron and a molecule collapses.</strong> Everything else is filling in the blanks.</p>
+</div>
+
+<h2>Step 1: Radicals — Chemistry's Angry Loners</h2>
+
+<p>Most molecules have paired electrons — they fill every orbital with two electrons, one spin-up, one spin-down. This is stable. Happy. Boring. A <strong>radical</strong> has <em>one unpaired electron</em>. That's like having one shoe on. It wants a second one, desperately, and will steal it from whatever walks closest.</p>
+
+<div class="mechanism-box">
+  <p><strong>The Rule of Radicals:</strong> Unpaired electron → unstable → highly reactive → steals an electron from anything nearby → breaks bonds.</p>
+  <p>A radical's half-life is measured in <em>microseconds</em>. It doesn't wait around. It finds a target, attacks, and turns into a stable ion. That speed is why ISCO works fast — and why you need to inject the activator <em>in situ</em>, not pre-mix it in a tank.</p>
+</div>
+
+<div class="pathway">
+  <div class="step"><strong>Stable molecule</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">paired e⁻</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong style="color:var(--danger);">Radical</strong><br/><span style="color:var(--danger);font-size:0.8rem;">unpaired e⁻</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>Steals electron</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">from contaminant bond</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>Bond breaks</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">contaminant fragments</span></div>
+</div>
+
+<p>In CEG's ISCO system, the radical is the <strong>persulfate radical</strong>: SO₄•⁻ (sulfate radical anion). It is generated by activating sodium persulfate, and it is one of the most powerful oxidizing radicals used in environmental remediation.</p>
+
+<h2>Step 2: From Persulfate to Radical — The Activation</h2>
+
+<p>Persulfate starts as a stable salt: <strong>Na₂S₂O₈</strong> (sodium persulfate). The S₂O₈²⁻ anion is the persulfate ion. It has an O–O bond in the middle of two sulfate groups: <strong>S₂O₈²⁻ = O₃S–O–O–SO₃²⁻</strong>. That O–O bond is the key. Break it, and you get two radicals.</p>
+
+<p>The activation step:</p>
+
+<div style="background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1.2rem; margin:1.2rem 0; text-align:center; font-size:1.1rem;">
+  <strong>S₂O₈²⁻</strong> <span style="color:var(--accent2);">→ (activation)</span> <strong>2 SO₄•⁻</strong>
+  <div style="margin-top:0.5rem; font-size:0.85rem; color:var(--text-dim);">
+    One persulfate ion → two sulfate radicals. Each radical is a potent oxidizer on its own.
+  </div>
+</div>
+
+<p>Three ways to activate it:</p>
+
+<div class="table-wrap">
+  <table>
+    <tr>
+      <th>Activation Method</th>
+      <th>Mechanism</th>
+      <th>CEG Relevance</th>
+      <th>Pros / Cons</th>
+    </tr>
+    <tr>
+      <td><strong>Heat</strong></td>
+      <td>Thermal cleavage of O–O bond</td>
+      <td>Used in hot ISCO injection zones</td>
+      <td>Fast, reliable; requires heated injection water</td>
+    </tr>
+    <tr>
+      <td><strong>Fe²⁺</strong></td>
+      <td>Ferrous iron donates electron, cleaves O–O bond</td>
+      <td>CEG's most common field approach — cheaper, natural Fe in aquifer</td>
+      <td>Cost-effective, but Fe³⁺ precipitation can slow delivery</td>
+    </tr>
+    <tr>
+      <td><strong>High pH</strong></td>
+      <td>Alkaline hydrolysis of S₂O₈²⁻</td>
+      <td>Specialized — used when site pH is already high</td>
+      <td>Boosts radical yield, but requires base injection</td>
+    </tr>
+  </table>
+</div>
+
+<p>CEG typically uses <strong>Fe²⁺ activation</strong> in the field: ferrous sulfate or ferrous chloride is co-injected with persulfate. The reaction is:</p>
+
+<div style="background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1.2rem; margin:1.2rem 0; overflow-x:auto;">
+  <code style="color:var(--text); font-size:1rem;">Fe²⁺ + S₂O₈²⁻ → 2 SO₄•⁻ + Fe³⁺</code>
+</div>
+
+<p>Fe²⁺ reduces persulfate. The persulfate splits into two sulfate radicals. Fe²⁺ becomes Fe³⁺ (ferric iron) — which may precipitate as Fe(OH)₃, a natural mineral. This is why iron injection is "self-cleaning" on the reductant side.</p>
+
+<h2>Step 3: The Electron Theft — SO₄•⁻ Attacks a C–Cl Bond</h2>
+
+<p>This is the chemistry that matters. Here's what happens when a sulfate radical meets TCE's C–Cl bond.</p>
+
+<div style="background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1.5rem; margin:1.5rem 0;">
+  <p><strong style="color:var(--danger);">The Attack Sequence</strong></p>
+  <ol style="margin:0.8rem 0 0.8rem 1.4rem;">
+    <li><strong>SO₄•⁻</strong> approaches a C–Cl bond in TCE.</li>
+    <li>The radical <em>oxidizes</em> the carbon — steals an electron from the electron pair in the C–Cl bond.</li>
+    <li>The C–Cl bond destabilizes and breaks homolytically: the two electrons split, one goes to Cl, one to the carbon fragment.</li>
+    <li>Cl accepts the electron → <strong>Cl⁻</strong> (chloride ion, harmless).</li>
+    <li>The oxidized carbon fragment is now unstable and is attacked by a second SO₄•⁻, breaking another bond or adding an oxygen.</li>
+    <li>Repeated radical attacks <em>mineralize</em> the molecule: <strong>→ CO₂ + H₂O + Cl⁻ + SO₄²⁻</strong>.</li>
+  </ol>
+</div>
+
+<p>In simpler terms: the radical rips off the chlorine, then keeps kicking the carbon skeleton until it's nothing but carbon dioxide, water, chloride, and stable sulfate. <em>This is mineralization.</em> The contaminant molecule is gone. No transformation products that might still be toxic. Just simple, safe, natural ions and molecules.</p>
+
+<div class="pathway">
+  <div class="step-small"><strong>TCE</strong><br/><span style="color:var(--text-dim);">CHCl=CCl₂</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong style="color:var(--danger);">SO₄•⁻</strong><br/><span style="color:var(--danger);">steals e⁻</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>Cl removed</strong><br/><span style="color:var(--text-dim);">Cl⁻ released</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>More SO₄•⁻</strong><br/><span style="color:var(--text-dim);">repeated attack</span></div>
+  <span class="arrow">→</span>
+  <div class="step-small"><strong>CO₂ + H₂O</strong><br/><span style="color:var(--success);">mineralized</span></div>
+</div>
+
+<h2>Step 4: What Remains — Byproducts and Their Fate</h2>
+
+<p>ARPA asks about byproducts. You <em>must</em> know this table cold. Here are the products of ISCO on chlorinated solvents:</p>
+
+<div class="byproducts-flow">
+  <div class="byproduct-card">
+    <div class="formula">Cl⁻</div>
+    <div class="label">Chloride ion</div>
+    <div class="fate">Natural in groundwater (seawater = 19,000 mg/L). At ISCO scale, harmless dilution.</div>
+  </div>
+  <div class="byproduct-card">
+    <div class="formula">SO₄²⁻</div>
+    <div class="label">Sulfate ion</div>
+    <div class="fate">Stable, end-product of persulfate. Natural in groundwater. EPA drinking water guidance: 250 mg/L.</div>
+  </div>
+  <div class="byproduct-card">
+    <div class="formula">CO₂ + H₂O</div>
+    <div class="label">Carbon dioxide + water</div>
+    <div class="fate">Fully mineralized. CO₂ dissolves in groundwater (HCO₃⁻) or vents to vadose zone. Water is water.</div>
+  </div>
+</div>
+
+<div class="metaphor-box">
+  <p><strong>"But what about toxic intermediates?"</strong></p>
+  <p>If ISCO is done correctly with sufficient oxidant dose, the contaminant is driven straight to mineralization. Partial oxidation is a risk only if the oxidant dose is <em>insufficient</em> — the radical attacks some bonds but runs out before finishing the job. This is why CEG injects a <em>stoichiometric excess</em> of persulfate. Not "spray and pray" — calculate the bonds, calculate the electrons, add a safety margin.</p>
+  <p>For TCE in particular, the feared intermediates are cis-1,2-DCE and vinyl chloride (VC) — but those are products of <em>reductive</em> dechlorination (BioBlend's pathway), not ISCO. ISCO goes the opposite direction: oxidation. You're not making vinyl chloride — you're destroying the C=C double bond too.</p>
+</div>
+
+<h2>Step 5: Heat, Iron, and Alkaline — Choosing Your Trigger</h2>
+
+<p>Not all activations are equal. Here's the comparison you need when ARPA asks "why this method?"</p>
+
+<div class="table-wrap">
+  <table>
+    <tr>
+      <th>Method</th>
+      <th>Typical Dose</th>
+      <th>Radical Yield</th>
+      <th>Best For</th>
+      <th>Field Watchouts</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">Heat</span></td>
+      <td>40–60°C injection</td>
+      <td>High</td>
+      <td>High-concentration source zones</td>
+      <td>Energy cost; aquifer heating may alter hydraulic properties</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-green">Fe²⁺</span></td>
+      <td>1:1 to 1:3 molar ratio with persulfate</td>
+      <td>Moderate–High</td>
+      <td>General ISCO, most cost-effective</td>
+      <td>Fe³⁺ precipitation (rust) can clog injection wells</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-purple">Alkaline</span></td>
+      <td>pH > 10.5</td>
+      <td>Very High</td>
+      <td>Recalcitrant compounds (large PAHs, mixed plumes)</td>
+      <td>pH recovery post-treatment; buffering required</td>
+    </tr>
+  </table>
+</div>
+
+<p>CEG's standard field approach combines <strong>Fe²⁺ activation</strong> with careful buffering to manage pH and Fe³⁺ precipitation. The key parameter: monitor ORP during injection. If ORP spikes above +600 mV, you're in the radical zone. If it's lower, you need more activator.</p>
+
+<h2>Things That Can Go Wrong</h2>
+
+<ul>
+  <li><strong>Persulfate scavengers:</strong> Natural organic matter (NOM), bicarbonate, carbonate, and sulfide all compete for radicals. High-NOM aquifers "waste" persulfate on background organics before it reaches the contaminant. Solution: pilot test, dose accordingly.</li>
+  <li><strong>Insufficient contact time:</strong> Radicals last microseconds. You need the persulfate injection to disperse through the plume uniformly. Poor hydraulic connectivity = dead zones. Solution: multi-point injection grid.</li>
+  <li><strong>Over-dosing:</strong> Excess persulfate oxidizes aquifer minerals, mobilizing metals (iron, manganese). Solution: staged injection with monitoring.</li>
+  <li><strong>Gas generation:</strong> CO₂ from mineralization can create bubbles, temporarily reducing permeability. Solution: gentle post-treatment pumping to vent CO₂.</li>
+</ul>
+
+<h2>The ARPA Conversation You'll Actually Have</h2>
+
+<div class="ceg-box">
+  <h3>🇮🇹 Scenario: ARPA asks the hard question</h3>
+  <p><strong>ARPA:</strong> "Explain the mechanism. How does injecting persulfate into the ground eliminate TCE without creating toxic byproducts?"</p>
+  <p><strong>You (now):</strong> "We inject sodium persulfate activated with ferrous iron. The iron reduces persulfate, producing two sulfate radicals per ion. Each sulfate radical is a powerful oxidizer with an unpaired electron — it oxidizes the carbon in a C–Cl bond, breaking it and releasing chloride as a harmless ion. The carbon fragments are then attacked by additional radicals in repeated cycles until the molecule is fully mineralized to carbon dioxide, water, and stable sulfate. With sufficient stoichiometric dose, there are no toxic intermediates — the reaction goes to completion because the radical is non-selective and attacks any remaining carbon bonds. The chloride remains below natural background, sulfate is within drinking water guidelines, and the carbon dioxide either dissolves as bicarbonate or vents harmlessly."</p>
+  <p><strong>ARPA:</strong> "And how do you verify the dose was sufficient?"</p>
+  <p><strong>You:</strong> "We pilot-test with small injection volumes and monitor ORP, chloride, and sulfate in downgradient monitoring wells. When we see the ORP spike and TCE drop below detection with corresponding chloride rise, we have confirmation of complete mineralization. That's the basis for our full-scale design."</p>
+  <p style="color:var(--success);margin-top:0.5rem;">✓ Mechanism explained in first principles. Byproducts named and dismissed. Verification approach given. ARPA has nothing left to ask.</p>
+</div>
+
+<h2>Interactive Check</h2>
+
+<div class="quiz">
+  <h3>Self-test</h3>
+
+  <div class="q">
+    <p>Q1: Why is a radical "unstable" and why does that make it useful in ISCO?</p>
+    <button onclick="showAnswer('q1c',true)">A) It has an unpaired electron and will steal an electron from a nearby bond, breaking that bond</button>
+    <button onclick="showAnswer('q1w',false)">B) It has too much energy and explodes, shattering contaminants via shockwaves</button>
+    <button onclick="showAnswer('q1w2',false)">C) It's radioactive and emits gamma rays that destroy molecules</button>
+    <div id="q1c" class="answer">✅ <strong>Correct.</strong> Radicals are electron-deficient. They pull an electron from a bond, destabilizing it and causing cleavage. This is the core of oxidation chemistry — not explosions or radiation.</div>
+    <div id="q1w" class="answer">❌ No shockwaves involved. Radicals operate at the molecular scale via electron transfer, not mechanical force.</div>
+    <div id="q1w2" class="answer">❌ Sulfate radicals are not radioactive. This confuses chemical radicals with nuclear radiation — a common layperson error.</div>
+  </div>
+
+  <div class="q">
+    <p>Q2: Fe²⁺ activation produces SO₄•⁻ radicals, but Fe²⁺ is consumed. What does it become?</p>
+    <button onclick="showAnswer('q2w',false)">A) Fe²⁺ is regenerated by the reaction itself — it's a catalyst</button>
+    <button onclick="showAnswer('q2c',true)">B) Fe²⁺ becomes Fe³⁺ (ferric iron), which may precipitate as Fe(OH)₃</button>
+    <button onclick="showAnswer('q2w2',false)">C) Fe²⁺ evaporates as iron gas and leaves the aquifer</button>
+    <div id="q2c" class="answer">✅ <strong>Correct.</strong> Fe²⁺ donates an electron (is oxidized) to cleave the O–O bond in persulfate, becoming Fe³⁺. Ferric iron can precipitate as ferric hydroxide — brown rust — which is why injection equipment can clog and why monitoring well screens need cleaning post-treatment.</div>
+    <div id="q1w" class="answer">❌ Fe²⁺ is consumed, not regenerated. At high persulfate doses it acts as a reductant (stoichiometric), not a catalyst. True catalytic persulfate activation uses other methods.</div>
+    <div id="q1w2" class="answer">❌ Iron does not evaporate as a gas at groundwater temperatures. Ferric iron precipitates as a solid hydroxide.</div>
+  </div>
+
+  <div class="q">
+    <p>Q3: A site has TCE at 500 μg/L and high natural organic matter (NOM). What is the main risk for ISCO?</p>
+    <button onclick="showAnswer('q3w',false)">A) NOM will react with TCE and make it more toxic</button>
+    <button onclick="showAnswer('q3w2',false)">B) NOM deactivates the TCE, making it harder to find</button>
+    <button onclick="showAnswer('q3c',true)">C) NOM competes for sulfate radicals, consuming persulfate before it reaches TCE</button>
+    <div id="q3c" class="answer">✅ <strong>Correct.</strong> Natural organic matter, bicarbonate, carbonate, and sulfide are all radical scavengers. In high-NOM aquifers, the persulfate dose must be increased to account for "background demand" before the radicals reach the target contaminant. This is why pilot testing is non-negotiable.</div>
+    <div id="q3w" class="answer">❌ NOM does not react with TCE. TCE is recalcitrant precisely because it's hard to react with — plus NOM is not reactive with chlorinated solvents in this way.</div>
+    <div id="q3w2" class="answer">❌ TCE doesn't get "deactivated" or hidden. It stays right where it is. The persulfate just gets used up on the wrong target first.</div>
+  </div>
+
+</div>
+
+<h2>What you can now say with confidence</h2>
+
+<ul>
+  <li>"A radical has an unpaired electron. It steals an electron from a covalent bond, breaking it. That's oxidation."</li>
+  <li>"S₂O₈²⁻ + Fe²⁺ → 2 SO₄•⁻ + Fe³⁺. Two radicals per persulfate ion. Fe²⁺ becomes Fe³⁺ and precipitates."</li>
+  <li>"The sulfate radical attacks C–Cl bonds first, removes chlorine as Cl⁻, then mineralizes the carbon skeleton to CO₂ and H₂O. No toxic intermediates if dose is sufficient."</li>
+  <li>"ISCO byproducts are Cl⁻, SO₄²⁻, and CO₂+H₂O — all harmless at remediation scale. The only field concern is radical scavengers, handled by pilot testing."</li>
+  <li>"I can compare heat, Fe²⁺, and alkaline activation and explain to ARPA why CEG uses Fe²⁺ in standard applications."</li>
+</ul>
+
+<h2>Next</h2>
+
+<p><strong>Before Lesson 0004:</strong> Look at a real CEG ISCO project proposal or field report. Find the persulfate dose, the activation method, and the monitoring parameters. Ask yourself: can you now explain every number on that page? If yes, you're ready. If not, re-read the activation comparison table above. Next lesson: BioBlend — the biological scalpel, where bacteria do the work instead of radicals.</p>
+
+<div class="footer-note">
+  <p>📝 <strong>Lesson 0003 · ISCO Deep Dive</strong> · CEG Chemistry Learnings</p>
+  <p>Something unclear? Ask your agent teacher. That's what I'm here for.</p>
+  <p style="margin-top:0.8rem;">🔗 <a href="../reference/glossary.md" style="color:var(--accent);">Glossary</a> · <a href="../RESOURCES.md" style="color:var(--accent);">Resources</a> · <a href="../MISSION.md" style="color:var(--accent);">Mission</a></p>
+</div>
+
+</body>
+</html>

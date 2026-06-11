@@ -25,7 +25,8 @@
 ---
 
 ### 0003 — ISCO Deep Dive: The Chemical Sledgehammer
-**Goal:** Lapo can explain persulfate activation, radical generation, and electron transfer to a chemist and sound like he knows what he's talking about.
+**Status:** Complete
+**Published:** https://present-trellis-fjyy.here.now/chemistry-for-bioremediation/lessons/0003-isco-deep-dive.html
 **Structure:**
 - What is a radical? Unpaired electron → unstable → reactive
 - Persulfate (S₂O₈²⁻) → activation (heat, Fe²⁺, high pH) → 2 × SO₄•⁻
