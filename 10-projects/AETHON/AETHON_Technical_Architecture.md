@@ -54,6 +54,8 @@ hetzner/
   backups          ← restic → Hetzner Storage Box, nightly, tested monthly
 ```
 
+**Linux user isolation:** All AETHON services and files run under a dedicated `aethon` system user (no login shell, key-only SSH). Home: `/home/aethon/`. All AETHON directories (`/srv/quick/`, vault mirror, skill-runner, agents) owned `aethon:aethon`. Caddy added to the `aethon` group for read access. This isolates AETHON completely from other projects (Catone, etc.) on the same EX44.
+
 Rules: Tailscale-only SSH; per-client agents have filesystem scoping to their own folder; every agent action appended to `agent-log.md`; secrets injected from 1Password, never in the repo.
 
 ### 3a. AETHON Quick — static hosting layer
@@ -72,6 +74,8 @@ Inspired by Shopify's Quick platform. Any skill or agent can publish a folder of
 **Deploy:** `quick-deploy <slug> <folder> [--public --password <pw>]` — rsync + Caddy snippet generation + `caddy reload`. Server-side variant called directly by skill runners.
 
 **Site registry:** `/srv/quick/_registry.json` — index of all deployed slugs with metadata.
+
+**Partner portal:** `https://portal.<domain>/` — a Quick-deployed static page, password-protected (1Password `core` → `partner-portal`). Links to: Google Drive shared folder, vault HTML docs, active war room URLs, Cal.com, Slack. Architects access everything via Tailscale; partners access the portal only (no VPN needed).
 
 **Plan:** `10-projects/AETHON/docs/plans/2026-06-10-001-feat-aethon-quick-hosting-plan.md`
 
