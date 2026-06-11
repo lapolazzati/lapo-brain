@@ -111,6 +111,8 @@ Server filesystem layout:
 - `quick-deploy` bash script (local execution + server-side path for agent use)
 - `/warroom` and `/marketresearch` output path integration
 - `AETHON_Technical_Architecture.md` update
+- Dedicated `aethon` Linux user with correct ownership of all AETHON directories
+- Partner portal page (static HTML, served by Quick, password-protected)
 
 ### Deferred to Follow-Up Work
 - Shared backend API (DB, WebSockets) — Quick v2 if skill outputs need dynamic data
