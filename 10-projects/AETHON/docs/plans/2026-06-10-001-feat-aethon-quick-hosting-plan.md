@@ -43,7 +43,7 @@ Two related gaps exist on the same server: the Hetzner EX44 is used for multiple
 | Decision | Choice | Rationale |
 |---|---|---|
 | Storage root | `/srv/quick/<slug>/` on NVMe | Local filesystem — faster than any mount, avoids gcsfuse complexity. `/srv/` is conventional for served content. |
-| Internal URL scheme | `http://quick.aethon.internal/<slug>/` via Tailscale MagicDNS | Path-based avoids wildcard subdomain cert. One Caddy vhost handles all internal sites. Tailscale provides the auth layer. |
+| Internal URL scheme | `https://catone.<tailnet>.ts.net/quick/<slug>/` via Tailscale MagicDNS | CATONE's existing MagicDNS hostname — no custom DNS needed. Caddy already handles `catone.ts.net` for code-server; Quick is another path on the same vhost. Tailscale provides the auth layer. |
 | External shareable scheme | `https://share.<public-aethon-domain>/<slug>/` | Path-based on a single public domain = single Let's Encrypt cert, no wildcard DNS challenge needed. |
 | Per-site external auth | Caddy `basicauth` with bcrypt hash, generated at deploy time | Simple, Caddy-native, no extra dependency. Credential stored in 1Password under `quick/<slug>`. |
 | Deploy mechanism | `quick-deploy` bash script: rsync local folder → server, write Caddy snippet, `caddy reload` | Mirrors `quick deploy` from Shopify. Runs locally by architects or called by n8n on the server for agent deployments. |
@@ -142,7 +142,7 @@ Server filesystem layout:
 - `Caddyfile` — add `import /etc/caddy/quick/*.caddy`
 - `infrastructure/quick/internal.caddy` — the internal vhost config (repo reference copy)
 
-**Approach:** The internal vhost is a single Caddy block on `http://quick.aethon.internal`. It uses a wildcard `handle /{slug}/*` pattern with `file_server` rooted at `/srv/quick/{slug}/`. No HTTPS needed on the Tailscale network — Tailscale provides transport encryption and access control. The index at `http://quick.aethon.internal/` can 404 or show a simple listing of `_registry.json` for now.
+**Approach:** Quick adds a `/quick/*` path block to the existing `catone.<tailnet>.ts.net` vhost in the Caddyfile — no new domain needed. Caddy already holds a Tailscale TLS cert for this hostname (provisioned for code-server). The `handle /quick/{slug}/*` block uses `file_server` rooted at `/srv/quick/{slug}/`. Tailscale provides transport encryption and access control. A request to `/quick/nonexistent/` returns 404.
 
 **Patterns to follow:** Existing Caddy vhost pattern in `infrastructure/` (the `n8n.aethon.x` and `cal.aethon.x` blocks).
 
@@ -438,7 +438,20 @@ Notification lands in whatever channel Lapo checks (Slack DM, Messages, email) b
 
 ---
 
+## Integration Notes — CATONE personal layer
+
+CATONE (EX44) doubles as Lapo's personal dev server (`research/2026-06-10 — Self-Hosted Dev Environment Tailscale.md`). Services running under Lapo's user: code-server (iPad coding via `catone.<tailnet>.ts.net`), Syncthing (`~/Developer` ↔ Mac ↔ iPhone), Nextcloud (iCloud/GDrive replacement), Samba (iPhone Files). AETHON services run under the separate `aethon` user (U6) — no filesystem overlap.
+
+**Caddy is already installed** on CATONE for code-server and Nextcloud. Quick's Caddy snippets are additive — no new Caddy install. The existing `catone.<tailnet>.ts.net` vhost gets a `/quick/*` path block added.
+
+**Syncthing brings `~/Developer/aethon-ops/` to CATONE automatically** (under Lapo's user) — the ops folder for managing the `aethon` layer is available on CATONE itself without extra setup.
+
+**n8n consolidation opportunity:** the openclaw-n8n CAX21 (€8.49/mo) runs n8n for Lapo's personal automations. Once AETHON's n8n is stable on CATONE under the `aethon` user, evaluate whether the CAX21 can be shut down — that's €8.49/mo eliminated and one fewer machine to manage.
+
+---
+
 ## Sources & Research
 
 - Shopify Engineering: *Quick: Internal Hosting Platform* (https://shopify.engineering/quick) — the direct inspiration. Key takeaway: storage mount + reverse proxy wildcard + auth = all you need. Replicated here with NVMe + Caddy + Tailscale instead of GCS + NGINX + IAP.
-- AETHON Technical Architecture v0.1 (`10-projects/AETHON/AETHON_Technical_Architecture.md`) — existing Caddy/Hetzner/Tailscale stack constraints.
+- AETHON Technical Architecture v0.2 (`10-projects/AETHON/AETHON_Technical_Architecture.md`) — existing Caddy/Hetzner/Tailscale stack constraints.
+- Self-Hosted Dev Environment guide (`research/2026-06-10 — Self-Hosted Dev Environment Tailscale.md`) — CATONE personal layer (code-server, Syncthing, Nextcloud, Samba) that AETHON runs alongside.
