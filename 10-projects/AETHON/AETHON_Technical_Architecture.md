@@ -58,6 +58,16 @@ hetzner/
 
 Rules: Tailscale-only SSH; per-client agents have filesystem scoping to their own folder; every agent action appended to `agent-log.md`; secrets injected from 1Password, never in the repo.
 
+### 3b. Local ops access — managing the EX44 from Lapo's Macs
+
+Each Mac Lapo works from has:
+- **SSH config entry**: `Host aethon-server` → EX44 Tailscale address, `User aethon`, `ServerAliveInterval 60`
+- **One-word alias**: `aethon` → SSH in one keystroke
+- **Ops folder** at `~/Developer/aethon-ops/` (synced via Dropbox): `CLAUDE.md` + `AGENTS.md` describing the server layout, services, and common failure modes; `bin/status.sh` and `bin/revive.sh` scripts the agent runs over SSH
+- **Scheduled health check**: launchd job (primary Mac, 8am) — Claude opens the ops folder, SSHes in, runs status.sh, posts a one-paragraph summary to Slack/Messages
+
+**Path convention**: all agent commands use `~/Developer/aethon/` (home-relative) on local Macs. The EX44 uses `/home/aethon/vault/` — the ops folder `CLAUDE.md` documents the remote path so agents never have to guess. Absolute paths are never used in skill commands or agent instructions.
+
 ### 3a. AETHON Quick — static hosting layer
 
 Inspired by Shopify's Quick platform. Any skill or agent can publish a folder of HTML/assets and get back a URL with zero manual server config.
@@ -182,6 +192,7 @@ Every task a secretary or ops hire would do, and who does it instead:
 | Document formatting | Vault markdown → pandoc/pptx pipeline on Hetzner |
 | Hiring funnel admin | Applications land in Attio (CM bench / operator list); agent screens against scorecard, drafts rejections, schedules interviews |
 | Travel booking | Don't systematize at this size — book directly |
+| Server health monitoring | Scheduled launchd job (8am, primary Mac) → Claude opens ops folder, SSHes to EX44, runs status.sh, posts summary to Slack before Lapo notices anything |
 
 The only recurring human admin left: approving drafts, signing things, and the Friday vault commit.
 

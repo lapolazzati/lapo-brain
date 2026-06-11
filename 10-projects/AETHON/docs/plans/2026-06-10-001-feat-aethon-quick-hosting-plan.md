@@ -361,6 +361,69 @@ Password: a single shared bcrypt password for all partners (not per-engagement).
 
 ---
 
+### U8. Local ops setup — managing the EX44 from Lapo's Macs
+
+**Goal:** Every Mac Lapo works from can manage the Hetzner EX44 in one word. An ops folder gives any Claude/agent session the context to SSH in, check services, and act — without Lapo typing commands manually. A scheduled health check runs automatically before problems become surprises.
+
+**Requirements:** R1, R6 (enables architects to operate the AETHON user without friction)
+
+**Dependencies:** U6 (the `aethon` Linux user must exist before SSH config is finalized)
+
+**Files:**
+- `~/.ssh/config` (each of Lapo's Macs) — `Host aethon-server` entry pointing to EX44 Tailscale address, `User aethon`, `ServerAliveInterval 60`
+- `~/.zshrc` / `~/.config/fish/config.fish` (each Mac) — `alias aethon='ssh aethon-server'`
+- `~/Developer/aethon-ops/` (each Mac, synced via git or Dropbox):
+  - `CLAUDE.md` — EX44 context: Tailscale hostname, SSH alias, services running, common failure modes, what to check
+  - `AGENTS.md` — same for Codex and other agents
+  - `bin/status.sh` — quick health check (disk, services, recent logs); agent runs this over SSH
+  - `bin/revive.sh` — restart pattern for when a service is overloaded
+- `~/Library/LaunchAgents/com.aethon.healthcheck.plist` (on primary Mac) — runs morning health check on a cron schedule
+
+**Approach:**
+
+**SSH config** (one entry per Mac's `~/.ssh/config`):
+```
+Host aethon-server
+  HostName <EX44-tailscale-address>
+  User aethon
+  IdentityFile ~/.ssh/id_ed25519
+  ServerAliveInterval 60
+```
+One-word alias: `alias aethon='ssh aethon-server'` → type `aethon`, land on the server.
+
+**Folder consistency:** The article's rule — home-relative paths must match across all machines. On all of Lapo's Macs: `~/Developer/aethon/` is the vault clone root. Agents and skill commands use `~/Developer/aethon/` not absolute paths. The EX44 uses `/home/aethon/vault/` (different OS, different home), but the ops folder `CLAUDE.md` documents this explicitly so agents know the remote path convention without guessing.
+
+**Ops folder** (`~/Developer/aethon-ops/`): A Claude Code session opened here can be told "check on the EX44" and it will SSH in, run `status.sh`, and report back in plain language. The folder does not contain secrets or SSH keys — only context and scripts. Sync via Dropbox or the git vault so it's identical on every Mac.
+
+```
+CLAUDE.md contents (shape, not final):
+- SSH alias: aethon-server → <tailscale-address>
+- Remote user: aethon
+- Services to check: caddy, n8n, skill-runner, agents/<client>
+- Quick paths: /srv/quick/, /home/aethon/vault/
+- Common failures: disk full (/srv/quick/), caddy config parse error, n8n queue stalled
+- How to check: ssh aethon-server 'df -h && systemctl status caddy n8n skill-runner'
+```
+
+**Scheduled health check** (launchd on primary Mac):
+```
+Every morning → cd ~/Developer/aethon-ops && claude --print "Run status.sh on the EX44. Report: disk usage, services up/down, last Quick deploy, any errors in the last 12h. One paragraph if all OK, bullet list if anything needs attention."
+```
+Notification lands in whatever channel Lapo checks (Slack DM, Messages, email) before the day starts.
+
+**Patterns to follow:** The ops-folder pattern from the Cathryn Lavery article; the existing Tailscale + SSH setup already in use for the AETHON stack.
+
+**Test scenarios:**
+- Type `aethon` on any of Lapo's Macs → SSH session opens on EX44 as `aethon` user.
+- Open `~/Developer/aethon-ops/` in Claude Code, say "check on the EX44" → agent SSHes, runs status.sh, reports back without Lapo typing any commands.
+- Scheduled launchd job fires at 8am → Slack/Messages notification arrives with EX44 health summary.
+- EX44 has a stalled service → launchd check catches it and reports before Lapo notices organically.
+- Reset Lapo's MacBook Pro → install Tailscale + clone Dropbox → `aethon` alias and ops folder available immediately; `ssh aethon-server` works.
+
+**Verification:** From a fresh terminal tab, typing `aethon` lands on the EX44. The ops folder's `CLAUDE.md` is complete enough that a Claude session can diagnose common issues without additional context from Lapo.
+
+---
+
 ## Risks & Dependencies
 
 | Risk | Mitigation |
