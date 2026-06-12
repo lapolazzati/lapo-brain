@@ -38,7 +38,8 @@
 
 ---
 
-### 0004 — BioBlend Deep Dive: The Biological Scalpel
+### 0004 — BioBlend Deep Dive: The Biological Scalpel ✅
+**Status:** Complete
 **Goal:** Lapo can explain microbial metabolism and reductive dechlorination with confidence.
 **Structure:**
 - The bacteria are already there — you're feeding them, not importing them
