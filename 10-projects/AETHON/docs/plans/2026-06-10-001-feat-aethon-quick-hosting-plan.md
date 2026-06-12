@@ -5,7 +5,6 @@ date: 2026-06-10
 origin: inspired by https://shopify.engineering/quick
 type: feat
 ---
-
 # feat: AETHON Quick — internal static site hosting on Hetzner EX44
 
 ## Summary
@@ -14,7 +13,7 @@ Adapt Shopify's Quick concept to AETHON: a hosted layer where skill runners (war
 
 The plan also covers two adjacent concerns that depend on the same server setup: (a) a dedicated `aethon` Linux user so AETHON services are isolated from other projects on the same machine, and (b) a lightweight partner access layer so non-technical co-founders/partners can reach documentation, shared files, and self-hosted tools without needing SSH or a technical setup.
 
----
+***
 
 ## Weekend Execution Checklist
 
@@ -24,78 +23,102 @@ Current state (2026-06-11): CATONE is a clean Ubuntu 24.04 base. Tailscale is in
 
 - [ ] **Rename Tailscale device** — Tailscale admin console (browser) → Machines → rename `ubuntu-2404-noble-amd64-base` to `catone`
 - [ ] **Note your MagicDNS domain** — Tailscale admin → DNS tab → copy the `*.ts.net` domain (e.g. `lapo-lazzati.ts.net`). You'll need `catone.<tailnet>.ts.net` for Caddy config.
-- [ ] **Install Caddy:**
-  ```bash
-  sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-  curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
-  sudo apt update && sudo apt install -y caddy
-  ```
+- [x] **Install Caddy:**
+
+```bash
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update && sudo apt install -y caddy
+```
+
 - [ ] **Grant Caddy permission to fetch Tailscale TLS certs:**
-  ```bash
-  echo 'TS_PERMIT_CERT_UID=caddy' | sudo tee -a /etc/default/tailscaled
-  sudo systemctl restart tailscaled
-  ```
-- [ ] **Create `aethon` user + `/srv/quick/` directory:**
-  ```bash
-  sudo useradd --system --create-home --shell /usr/sbin/nologin --comment "AETHON services" aethon
-  sudo mkdir -p /srv/quick
-  sudo chown -R aethon:aethon /srv/quick
-  sudo usermod -aG aethon caddy
-  ```
-- [ ] **Create `/etc/caddy/quick/` directory:**
-  ```bash
-  sudo mkdir -p /etc/caddy/quick
-  sudo chown -R aethon:aethon /etc/caddy/quick
-  ```
+
+```bash
+echo 'TS_PERMIT_CERT_UID=caddy' | sudo tee -a /etc/default/tailscaled
+sudo systemctl restart tailscaled
+```
+
+- [ ] **Create** `aethon` **user +** `/srv/quick/` **directory:**
+
+```bash
+sudo useradd --system --create-home --shell /usr/sbin/nologin --comment "AETHON services" aethon
+sudo mkdir -p /srv/quick
+sudo chown -R aethon:aethon /srv/quick
+sudo usermod -aG aethon caddy
+```
+
+- [ ] **Create** `/etc/caddy/quick/` **directory:**
+
+```bash
+sudo mkdir -p /etc/caddy/quick
+sudo chown -R aethon:aethon /etc/caddy/quick
+```
 
 ### Phase 2 — Personal layer (iPad + iPhone + Mac sync)
 
 - [ ] **Configure Caddy for code-server** — add to `/etc/caddy/Caddyfile`:
-  ```caddy
-  catone.<tailnet>.ts.net {
-      reverse_proxy 127.0.0.1:8080
-  }
-  ```
-  Then `sudo systemctl reload caddy`
+
+```caddy
+catone.<tailnet>.ts.net {
+    reverse_proxy 127.0.0.1:8080
+}
+```
+
+Then `sudo systemctl reload caddy`
+
 - [ ] **Install and configure code-server** (iPad coding):
-  ```bash
-  curl -fsSL https://code-server.dev/install.sh | sh
-  sudo systemctl enable --now code-server@$USER
-  ```
-  Edit `~/.config/code-server/config.yaml` → set `bind-addr: 127.0.0.1:8080` and a strong password.
+
+```bash
+curl -fsSL https://code-server.dev/install.sh | sh
+sudo systemctl enable --now code-server@$USER
+```
+
+Edit `~/.config/code-server/config.yaml` → set `bind-addr: 127.0.0.1:8080` and a strong password.
+
 - [ ] **Install Samba** (iPhone Files app):
-  ```bash
-  sudo apt install -y samba
-  sudo smbpasswd -a catone
-  sudo systemctl enable --now smbd nmbd
-  ```
-  Add `[Developer]` share to `/etc/samba/smb.conf` (see research note for full config). Connect from iPhone: Files → … → Connect to Server → `smb://100.81.15.13`
+
+```bash
+sudo apt install -y samba
+sudo smbpasswd -a catone
+sudo systemctl enable --now smbd nmbd
+```
+
+Add `[Developer]` share to `/etc/samba/smb.conf` (see research note for full config). Connect from iPhone: Files → … → Connect to Server → `smb://100.81.15.13`
+
 - [ ] **Install Syncthing** (Mac ↔ CATONE `~/Developer` sync):
-  ```bash
-  sudo apt install -y syncthing
-  sudo systemctl enable --now syncthing@catone
-  ```
-  Access UI via SSH tunnel: `ssh -L 8385:127.0.0.1:8384 catone` → open `http://127.0.0.1:8385`. Pair with Mac, set folder type Send & Receive. Create `~/Developer/.stignore` before first sync (see research note).
+
+```bash
+sudo apt install -y syncthing
+sudo systemctl enable --now syncthing@catone
+```
+
+Access UI via SSH tunnel: `ssh -L 8385:127.0.0.1:8384 catone` → open `http://127.0.0.1:8385`. Pair with Mac, set folder type Send & Receive. Create `~/Developer/.stignore` before first sync (see research note).
+
 - [ ] **Mobius Sync on iPhone** — install from App Store, add CATONE as device, set CATONE folder to Send Only, iPhone to Receive Only. Sync `lapo-brain/` subfolder only (not all of `~/Developer`).
 
 ### Phase 3 — AETHON hosting layer
 
 - [ ] **Add Quick path block to Caddyfile** — add under the existing `catone.<tailnet>.ts.net` block:
-  ```caddy
-  handle /quick/* {
-      root * /srv/quick
-      file_server strip_prefix /quick
-  }
-  ```
-  Then `sudo systemctl reload caddy`
+
+```caddy
+handle /quick/* {
+    root * /srv/quick
+    file_server strip_prefix /quick
+}
+```
+
+Then `sudo systemctl reload caddy`
+
 - [ ] **Add external share domain to Caddyfile** — requires a public domain pointed at CATONE's IP:
-  ```caddy
-  share.<your-aethon-domain> {
-      # per-slug basicauth blocks go here (generated by quick-deploy)
-  }
-  ```
-- [ ] **Deploy `quick-deploy` script** — write `scripts/quick-deploy` from plan (U3), make executable, symlink to `/usr/local/bin/quick-deploy` on CATONE
+
+```caddy
+share.<your-aethon-domain> {
+    # per-slug basicauth blocks go here (generated by quick-deploy)
+}
+```
+
+- [ ] **Deploy** `quick-deploy` **script** — write `scripts/quick-deploy` from plan (U3), make executable, symlink to `/usr/local/bin/quick-deploy` on CATONE
 - [ ] **Test Quick end-to-end** — create a test `index.html`, run `quick-deploy test-site ./test/`, hit `https://catone.<tailnet>.ts.net/quick/test-site/` from any Tailscale device
 
 ### Phase 4 — AETHON services
@@ -115,17 +138,19 @@ Current state (2026-06-11): CATONE is a clean Ubuntu 24.04 base. Tailscale is in
 ### Local ops setup (do on your Mac, not the server)
 
 - [ ] **Add CATONE to SSH config** (`~/.ssh/config` on each Mac):
-  ```
-  Host catone
-    HostName 100.81.15.13
-    User catone
-    IdentityFile ~/.ssh/id_ed25519
-    ServerAliveInterval 60
-  ```
+
+```text
+Host catone
+  HostName 100.81.15.13
+  User catone
+  IdentityFile ~/.ssh/id_ed25519
+  ServerAliveInterval 60
+```
+
 - [ ] **Add shell alias** (`~/.zshrc`): `alias catone='ssh catone'`
 - [ ] **Create ops folder** `~/Developer/aethon-ops/` with `CLAUDE.md` and `bin/status.sh` (Syncthing will sync it to CATONE automatically once Syncthing is set up)
 
----
+***
 
 ## Problem Frame
 
@@ -135,7 +160,7 @@ Shopify Quick shows that 50k+ sites can run on a single $200/month VM with a tri
 
 Two related gaps exist on the same server: the Hetzner EX44 is used for multiple projects (including Catone), so AETHON services need filesystem and process isolation via a dedicated system user. And non-technical partners currently have no self-service path to documentation, deliverables, or shared tools — they depend on Lapo to share things manually.
 
----
+***
 
 ## Requirements
 
@@ -147,27 +172,27 @@ Two related gaps exist on the same server: the Hetzner EX44 is used for multiple
 - R6: All AETHON processes, files, and directories run under a dedicated `aethon` Linux user, isolated from other projects (Catone, etc.) on the same EX44.
 - R7: Non-technical partners can access documentation, Google Drive, and published Quick sites via a browser and a single shared password — no VPN, no SSH, no technical setup required.
 
----
+***
 
 ## Key Technical Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Storage root | `/srv/quick/<slug>/` on NVMe | Local filesystem — faster than any mount, avoids gcsfuse complexity. `/srv/` is conventional for served content. |
-| Internal URL scheme | `https://catone.<tailnet>.ts.net/quick/<slug>/` via Tailscale MagicDNS | CATONE's existing MagicDNS hostname — no custom DNS needed. Caddy already handles `catone.ts.net` for code-server; Quick is another path on the same vhost. Tailscale provides the auth layer. |
-| External shareable scheme | `https://share.<public-aethon-domain>/<slug>/` | Path-based on a single public domain = single Let's Encrypt cert, no wildcard DNS challenge needed. |
-| Per-site external auth | Caddy `basicauth` with bcrypt hash, generated at deploy time | Simple, Caddy-native, no extra dependency. Credential stored in 1Password under `quick/<slug>`. |
-| Deploy mechanism | `quick-deploy` bash script: rsync local folder → server, write Caddy snippet, `caddy reload` | Mirrors `quick deploy` from Shopify. Runs locally by architects or called by n8n on the server for agent deployments. |
-| Backend | Static-only v1 | Covers the immediate use case. Shared API (DB, WebSockets) deferred — can be added if skill outputs need dynamic data. |
-| Site registry | `/srv/quick/_registry.json` — slug → {title, type, public, created_at} | Enables a listing page (`quick.aethon.internal/`) and audit of what's deployed. |
-| Linux user isolation | Dedicated `aethon` system user; all services, files, and cron jobs run as `aethon` | Separates AETHON from Catone and other projects on the same EX44; limits blast radius if a service is compromised. |
-| Partner access model | Public HTTPS portal page served by Quick at `https://portal.<domain>/` with a single shared password (1Password `core` → `partner-portal`) | No Tailscale enrollment needed for partners. Portal links to Google Drive, vault HTML docs, and published war rooms. Technical access (n8n admin, SSH) stays Tailscale-only for architects. |
+| Decision                  | Choice                                                                                                                                     | Rationale                                                                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Storage root              | `/srv/quick/<slug>/` on NVMe                                                                                                               | Local filesystem — faster than any mount, avoids gcsfuse complexity. `/srv/` is conventional for served content.                                                                               |
+| Internal URL scheme       | `https://catone.<tailnet>.ts.net/quick/<slug>/` via Tailscale MagicDNS                                                                     | CATONE's existing MagicDNS hostname — no custom DNS needed. Caddy already handles `catone.ts.net` for code-server; Quick is another path on the same vhost. Tailscale provides the auth layer. |
+| External shareable scheme | `https://share.<public-aethon-domain>/<slug>/`                                                                                             | Path-based on a single public domain = single Let's Encrypt cert, no wildcard DNS challenge needed.                                                                                            |
+| Per-site external auth    | Caddy `basicauth` with bcrypt hash, generated at deploy time                                                                               | Simple, Caddy-native, no extra dependency. Credential stored in 1Password under `quick/<slug>`.                                                                                                |
+| Deploy mechanism          | `quick-deploy` bash script: rsync local folder → server, write Caddy snippet, `caddy reload`                                               | Mirrors `quick deploy` from Shopify. Runs locally by architects or called by n8n on the server for agent deployments.                                                                          |
+| Backend                   | Static-only v1                                                                                                                             | Covers the immediate use case. Shared API (DB, WebSockets) deferred — can be added if skill outputs need dynamic data.                                                                         |
+| Site registry             | `/srv/quick/_registry.json` — slug → {title, type, public, created_at}                                                                     | Enables a listing page (`quick.aethon.internal/`) and audit of what's deployed.                                                                                                                |
+| Linux user isolation      | Dedicated `aethon` system user; all services, files, and cron jobs run as `aethon`                                                         | Separates AETHON from Catone and other projects on the same EX44; limits blast radius if a service is compromised.                                                                             |
+| Partner access model      | Public HTTPS portal page served by Quick at `https://portal.<domain>/` with a single shared password (1Password `core` → `partner-portal`) | No Tailscale enrollment needed for partners. Portal links to Google Drive, vault HTML docs, and published war rooms. Technical access (n8n admin, SSH) stays Tailscale-only for architects.    |
 
----
+***
 
 ## High-Level Technical Design
 
-```
+```typescript
 Deploy flow:
   local/agent: quick-deploy <slug> [--public --password <pw>] <folder>/
     │
@@ -198,7 +223,7 @@ Serving (Caddy):
     }
 ```
 
-```
+```text
 Server filesystem layout:
   /srv/quick/
     _registry.json         ← site index
@@ -212,11 +237,12 @@ Server filesystem layout:
     <slug>.caddy           ← generated per deployment, imported by Caddyfile
 ```
 
----
+***
 
 ## Scope Boundaries
 
 ### In scope
+
 - `/srv/quick/` storage layout and Caddy serving config
 - External shareable URLs with per-site basic auth
 - `quick-deploy` bash script (local execution + server-side path for agent use)
@@ -226,16 +252,18 @@ Server filesystem layout:
 - Partner portal page (static HTML, served by Quick, password-protected)
 
 ### Deferred to Follow-Up Work
+
 - Shared backend API (DB, WebSockets) — Quick v2 if skill outputs need dynamic data
 - Subdomain-based URLs (`<slug>.quick.aethon.co`) — possible upgrade; requires wildcard cert
 - Site expiry / TTL — auto-delete old deployments after N days
 - A web UI listing page at `quick.aethon.internal/`
 
 ### Out of scope
+
 - GCS/S3 or any cloud storage — unnecessary on a dedicated NVMe server
 - Container-per-site isolation — overkill at AETHON's scale
 
----
+***
 
 ## Implementation Units
 
@@ -248,6 +276,7 @@ Server filesystem layout:
 **Dependencies:** none
 
 **Files:**
+
 - `/srv/quick/` directory tree (server-side)
 - `/etc/caddy/quick/` directory (server-side)
 - `Caddyfile` — add `import /etc/caddy/quick/*.caddy`
@@ -258,6 +287,7 @@ Server filesystem layout:
 **Patterns to follow:** Existing Caddy vhost pattern in `infrastructure/` (the `n8n.aethon.x` and `cal.aethon.x` blocks).
 
 **Test scenarios:**
+
 - Deploy a folder with `index.html` + CSS asset to slug `test-site`. Hit `http://quick.aethon.internal/test-site/` from a Tailscale-connected device → returns the HTML correctly.
 - Hit `http://quick.aethon.internal/nonexistent/` → 404 (not a 500 or Caddy error page).
 - Deploy two sites with the same slug → second deploy overwrites first, serving the new content after `caddy reload`.
@@ -265,7 +295,7 @@ Server filesystem layout:
 
 **Verification:** URL returns content within 5s of `caddy reload` completing.
 
----
+***
 
 ### U2. External shareable URLs with per-site basic auth
 
@@ -276,6 +306,7 @@ Server filesystem layout:
 **Dependencies:** U1
 
 **Files:**
+
 - `/etc/caddy/quick/<slug>.caddy` — generated snippet with `basicauth` block
 - `infrastructure/quick/share-template.caddy` — template reference (repo copy)
 - `quick-deploy` script (extended in U3)
@@ -285,6 +316,7 @@ Server filesystem layout:
 **Auth model note:** A single Caddy server block for `https://share.<domain>` with multiple `handle /<slug>/*` blocks, each with its own `basicauth`. Caddy evaluates handle blocks by specificity; this works correctly. Let's Encrypt auto-provisions the cert for `share.<domain>`.
 
 **Test scenarios:**
+
 - Deploy a shareable site with password `hunter2`. Hit `https://share.<domain>/<slug>/` without credentials → 401 Unauthorized.
 - Hit with correct credentials → returns HTML content.
 - Deploy a second shareable site with different password. Verify first site's password does not unlock second site.
@@ -293,7 +325,7 @@ Server filesystem layout:
 
 **Verification:** Client can open the URL on any browser without Tailscale, enter password, and view the dashboard.
 
----
+***
 
 ### U3. `quick-deploy` CLI script
 
@@ -304,12 +336,13 @@ Server filesystem layout:
 **Dependencies:** U1, U2
 
 **Files:**
+
 - `scripts/quick-deploy` (bash, in vault repo or a standalone tool dir on the server)
 - `scripts/quick-deploy.md` — usage doc embedded as comments + a short README
 
 **Approach:**
 
-```
+```yaml
 Usage: quick-deploy <slug> <local-folder> [--public] [--password <pw>] [--title <title>]
 
 Steps (directional, not final):
@@ -326,6 +359,7 @@ Server-side version (called by skill-runners/n8n): same script, skips the rsync 
 **Patterns to follow:** Existing `scripts/` tooling in the vault repo (build-on-push wrappers).
 
 **Test scenarios:**
+
 - Run `quick-deploy test-slug ./my-site/` → rsync succeeds, Caddy reloads, internal URL printed.
 - Run with a slug containing spaces or uppercase → script errors with a clear message before touching the server.
 - Run `quick-deploy test-slug ./my-site/ --public` without `--password` → script prompts for password or errors if non-interactive.
@@ -335,7 +369,7 @@ Server-side version (called by skill-runners/n8n): same script, skips the rsync 
 
 **Verification:** A skill runner calling `quick-deploy warroom-acmecorp /srv/agents/acmecorp/warroom-output/` produces a working internal URL in the Slack response.
 
----
+***
 
 ### U4. Skill runner integration
 
@@ -346,6 +380,7 @@ Server-side version (called by skill-runners/n8n): same script, skips the rsync 
 **Dependencies:** U3
 
 **Files:**
+
 - `skills/warroom.md` — update output path + add `quick-deploy` step
 - `skills/marketresearch.md` — update output path + add `quick-deploy` step
 - `infrastructure/skill-runner/` — any runner config that sets output directories
@@ -359,6 +394,7 @@ Server-side version (called by skill-runners/n8n): same script, skips the rsync 
 For `/warroom` specifically: flag `--public` with a per-engagement password from 1Password, so the client-facing war room link is always ready. Password generated once at engagement start, stored in 1Password `quick/<slug>`, never regenerated unless explicitly rotated.
 
 **Test scenarios:**
+
 - Run `/warroom acmecorp` → Slack response includes `http://quick.aethon.internal/warroom-acmecorp/` and (if flagged public) `https://share.<domain>/warroom-acmecorp/`.
 - Run `/marketresearch acmecorp brazil` → Slack response includes internal URL; `/srv/quick/research-acmecorp-br/index.html` exists and is browsable.
 - Run `/warroom` twice → second run updates the site content; URL remains the same.
@@ -366,7 +402,7 @@ For `/warroom` specifically: flag `--public` with a per-engagement password from
 
 **Verification:** After a `/warroom` run, Lapo can open the link from any Tailscale device and see the current dashboard, without any manual server steps.
 
----
+***
 
 ### U5. Update AETHON Technical Architecture
 
@@ -377,9 +413,11 @@ For `/warroom` specifically: flag `--public` with a per-engagement password from
 **Dependencies:** U1 (can be done in parallel once design is settled)
 
 **Files:**
+
 - `10-projects/AETHON/AETHON_Technical_Architecture.md` (in lapo-brain vault)
 
 **Approach:** Edit the following sections:
+
 - **Section 2 (Stack at a glance):** Add `quick` row — tool: `quick (Caddy + /srv/quick/)`, why: internal static hosting for skill outputs and client dashboards, cost: €0 (runs on existing Hetzner).
 - **Section 3 (Hetzner server layout):** Add `quick` to the Docker Compose service list with its paths and role.
 - **Section 3 (or new subsection):** Add URL scheme table: internal Tailscale URLs vs. external shareable URLs.
@@ -388,7 +426,7 @@ For `/warroom` specifically: flag `--public` with a per-engagement password from
 
 **Test expectation:** none — this is a documentation update. Verification: a new team member reading the doc understands the Quick pattern without needing this plan.
 
----
+***
 
 ### U6. Dedicated `aethon` Linux user
 
@@ -399,6 +437,7 @@ For `/warroom` specifically: flag `--public` with a per-engagement password from
 **Dependencies:** none (should be the first thing done on the server before any AETHON service is deployed)
 
 **Files:**
+
 - Server-side: `aethon` Linux user, home at `/home/aethon/`
 - `/srv/quick/` — owned `aethon:aethon`, `755`
 - `/etc/caddy/quick/` — owned `aethon:aethon` (Caddy reads this; check if Caddy runs as its own user and needs group access)
@@ -412,6 +451,7 @@ Tailscale ACL: create a `tag:aethon` device tag. All AETHON-serving devices use 
 **Patterns to follow:** The existing Docker Compose + Caddy layout in the AETHON Technical Architecture (Section 3).
 
 **Test scenarios:**
+
 - SSH as `aethon` user (key-based) → succeeds; `whoami` returns `aethon`.
 - A file written by a skill-runner process → owned by `aethon`, readable by `caddy` group.
 - Attempt to `cat` a Catone project file from the `aethon` session → permission denied.
@@ -420,7 +460,7 @@ Tailscale ACL: create a `tag:aethon` device tag. All AETHON-serving devices use 
 
 **Verification:** No AETHON process runs as root or as another project's user. `ls -la /srv/quick/` shows `aethon` ownership throughout.
 
----
+***
 
 ### U7. Partner portal — browser-based access for non-technical partners
 
@@ -431,6 +471,7 @@ Tailscale ACL: create a `tag:aethon` device tag. All AETHON-serving devices use 
 **Dependencies:** U1, U2 (portal is a Quick site, deployed via `quick-deploy --public`)
 
 **Files:**
+
 - `/srv/quick/partner-portal/index.html` — the portal page (hand-authored or generated by a skill)
 - `/srv/quick/partner-portal/style.css` — minimal styling
 - `/etc/caddy/quick/partner-portal.caddy` — generated by `quick-deploy --public`
@@ -438,7 +479,7 @@ Tailscale ACL: create a `tag:aethon` device tag. All AETHON-serving devices use 
 
 **Approach:** The portal is a static HTML page deployed via Quick like any other site. Content:
 
-```
+```text
 AETHON Partner Hub
 ├── Google Drive → [link to the shared "AETHON Partners" Google Drive folder]
 ├── Documentation
@@ -457,10 +498,12 @@ Password: a single shared bcrypt password for all partners (not per-engagement).
 **War room section maintenance:** when `/warroom` deploys a new site, it appends an entry to a JSON config file (`/srv/quick/partner-portal/_warrooms.json`) and regenerates the portal `index.html`. The portal always reflects current active war rooms.
 
 **What partners see vs. architects:**
+
 - Partners (portal): documentation, Drive, war room links (read-only)
 - Architects (Tailscale): full `quick.aethon.internal` listing, n8n admin, SSH, all services
 
 **Test scenarios:**
+
 - Open `https://portal.<domain>/` in an incognito browser without credentials → 401.
 - Enter the correct portal password → page loads with links.
 - Click the Google Drive link → opens the shared folder (partner must have been added as a Drive collaborator separately).
@@ -470,7 +513,7 @@ Password: a single shared bcrypt password for all partners (not per-engagement).
 
 **Verification:** A non-technical partner, given only the portal URL and password via 1Password share, can reach all linked resources without any additional help.
 
----
+***
 
 ### U8. Local ops setup — managing the EX44 from Lapo's Macs
 
@@ -481,6 +524,7 @@ Password: a single shared bcrypt password for all partners (not per-engagement).
 **Dependencies:** U6 (the `aethon` Linux user must exist before SSH config is finalized)
 
 **Files:**
+
 - `~/.ssh/config` (each of Lapo's Macs) — `Host aethon-server` entry pointing to EX44 Tailscale address, `User aethon`, `ServerAliveInterval 60`
 - `~/.zshrc` / `~/.config/fish/config.fish` (each Mac) — `alias aethon='ssh aethon-server'`
 - `~/Developer/aethon-ops/` (each Mac, synced via git or Dropbox):
@@ -493,20 +537,22 @@ Password: a single shared bcrypt password for all partners (not per-engagement).
 **Approach:**
 
 **SSH config** (one entry per Mac's `~/.ssh/config`):
-```
+
+```text
 Host aethon-server
   HostName <EX44-tailscale-address>
   User aethon
   IdentityFile ~/.ssh/id_ed25519
   ServerAliveInterval 60
 ```
+
 One-word alias: `alias aethon='ssh aethon-server'` → type `aethon`, land on the server.
 
 **Folder consistency:** The article's rule — home-relative paths must match across all machines. On all of Lapo's Macs: `~/Developer/aethon/` is the vault clone root. Agents and skill commands use `~/Developer/aethon/` not absolute paths. The EX44 uses `/home/aethon/vault/` (different OS, different home), but the ops folder `CLAUDE.md` documents this explicitly so agents know the remote path convention without guessing.
 
 **Ops folder** (`~/Developer/aethon-ops/`): A Claude Code session opened here can be told "check on the EX44" and it will SSH in, run `status.sh`, and report back in plain language. The folder does not contain secrets or SSH keys — only context and scripts. Sync via Dropbox or the git vault so it's identical on every Mac.
 
-```
+```text
 CLAUDE.md contents (shape, not final):
 - SSH alias: aethon-server → <tailscale-address>
 - Remote user: aethon
@@ -517,14 +563,17 @@ CLAUDE.md contents (shape, not final):
 ```
 
 **Scheduled health check** (launchd on primary Mac):
-```
+
+```text
 Every morning → cd ~/Developer/aethon-ops && claude --print "Run status.sh on the EX44. Report: disk usage, services up/down, last Quick deploy, any errors in the last 12h. One paragraph if all OK, bullet list if anything needs attention."
 ```
+
 Notification lands in whatever channel Lapo checks (Slack DM, Messages, email) before the day starts.
 
 **Patterns to follow:** The ops-folder pattern from the Cathryn Lavery article; the existing Tailscale + SSH setup already in use for the AETHON stack.
 
 **Test scenarios:**
+
 - Type `aethon` on any of Lapo's Macs → SSH session opens on EX44 as `aethon` user.
 - Open `~/Developer/aethon-ops/` in Claude Code, say "check on the EX44" → agent SSHes, runs status.sh, reports back without Lapo typing any commands.
 - Scheduled launchd job fires at 8am → Slack/Messages notification arrives with EX44 health summary.
@@ -533,21 +582,21 @@ Notification lands in whatever channel Lapo checks (Slack DM, Messages, email) b
 
 **Verification:** From a fresh terminal tab, typing `aethon` lands on the EX44. The ops folder's `CLAUDE.md` is complete enough that a Claude session can diagnose common issues without additional context from Lapo.
 
----
+***
 
 ## Risks & Dependencies
 
-| Risk | Mitigation |
-|---|---|
-| Caddy wildcard `handle` blocks per slug grow indefinitely | `/srv/quick/` cleanup script (deferred); for now, old deployments are cheap on 1TB NVMe |
-| External URL leakage (client sends password to wrong person) | Per-site passwords, not a global one; rotate via `quick-deploy --rotate-password <slug>` |
-| `caddy reload` fails due to a malformed generated snippet | Validate the Caddy snippet with `caddy validate` before reloading; abort and error on failure |
-| Skill runner writes a broken HTML output to the Quick path | Quick serves whatever is there — bad HTML is a skill quality issue, not a hosting issue |
+| Risk                                                              | Mitigation                                                                                                                                   |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Caddy wildcard `handle` blocks per slug grow indefinitely         | `/srv/quick/` cleanup script (deferred); for now, old deployments are cheap on 1TB NVMe                                                      |
+| External URL leakage (client sends password to wrong person)      | Per-site passwords, not a global one; rotate via `quick-deploy --rotate-password <slug>`                                                     |
+| `caddy reload` fails due to a malformed generated snippet         | Validate the Caddy snippet with `caddy validate` before reloading; abort and error on failure                                                |
+| Skill runner writes a broken HTML output to the Quick path        | Quick serves whatever is there — bad HTML is a skill quality issue, not a hosting issue                                                      |
 | Caddy runs as `caddy` user, can't read `aethon`-owned directories | Add `caddy` to the `aethon` group, set dirs `750` with group read; or configure Caddy to run as `aethon` (simpler on a single-tenant server) |
-| Partner portal password leaked | Per-site password (not a master key); changing it only affects the portal, not war rooms or other sites |
-| Catone processes accidentally interact with AETHON dirs | `aethon` user + directory ownership prevents this; validate with `namei -l /srv/quick/` on setup |
+| Partner portal password leaked                                    | Per-site password (not a master key); changing it only affects the portal, not war rooms or other sites                                      |
+| Catone processes accidentally interact with AETHON dirs           | `aethon` user + directory ownership prevents this; validate with `namei -l /srv/quick/` on setup                                             |
 
----
+***
 
 ## Integration Notes — CATONE personal layer
 
@@ -555,14 +604,14 @@ CATONE (EX44) doubles as Lapo's personal dev server (`research/2026-06-10 — Se
 
 **Caddy is already installed** on CATONE for code-server and Nextcloud. Quick's Caddy snippets are additive — no new Caddy install. The existing `catone.<tailnet>.ts.net` vhost gets a `/quick/*` path block added.
 
-**Syncthing brings `~/Developer/aethon-ops/` to CATONE automatically** (under Lapo's user) — the ops folder for managing the `aethon` layer is available on CATONE itself without extra setup.
+**Syncthing brings** `~/Developer/aethon-ops/` **to CATONE automatically** (under Lapo's user) — the ops folder for managing the `aethon` layer is available on CATONE itself without extra setup.
 
 **n8n consolidation opportunity:** the openclaw-n8n CAX21 (€8.49/mo) runs n8n for Lapo's personal automations. Once AETHON's n8n is stable on CATONE under the `aethon` user, evaluate whether the CAX21 can be shut down — that's €8.49/mo eliminated and one fewer machine to manage.
 
----
+***
 
 ## Sources & Research
 
-- Shopify Engineering: *Quick: Internal Hosting Platform* (https://shopify.engineering/quick) — the direct inspiration. Key takeaway: storage mount + reverse proxy wildcard + auth = all you need. Replicated here with NVMe + Caddy + Tailscale instead of GCS + NGINX + IAP.
+- Shopify Engineering: *Quick: Internal Hosting Platform* (<https://shopify.engineering/quick>) — the direct inspiration. Key takeaway: storage mount + reverse proxy wildcard + auth = all you need. Replicated here with NVMe + Caddy + Tailscale instead of GCS + NGINX + IAP.
 - AETHON Technical Architecture v0.2 (`10-projects/AETHON/AETHON_Technical_Architecture.md`) — existing Caddy/Hetzner/Tailscale stack constraints.
 - Self-Hosted Dev Environment guide (`research/2026-06-10 — Self-Hosted Dev Environment Tailscale.md`) — CATONE personal layer (code-server, Syncthing, Nextcloud, Samba) that AETHON runs alongside.
