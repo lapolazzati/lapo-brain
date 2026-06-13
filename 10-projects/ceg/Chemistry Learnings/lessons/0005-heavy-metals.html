@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 0005: Heavy Metals — Different Beast, Different Rules</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f0883e;
+    --danger: #ff7b72;
+    --success: #56d364;
+    --warning: #d29922;
+    --metal: #bc8cff;
+    --metal-reduced: #56d364;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+  h1 { font-size: 2.1rem; margin-bottom: 0.3rem; color: #fff; letter-spacing: -0.02em; }
+  h2 { font-size: 1.45rem; margin: 2.5rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--text); }
+  p { margin: 0.9rem 0; }
+  .subtitle { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 2rem; }
+  strong { color: #fff; }
+  em { color: var(--accent2); font-style: normal; }
+
+  .metaphor-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1.4rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .metaphor-box p { margin: 0.4rem 0; }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+  }
+  .tag-red { background: rgba(255,123,114,0.15); color: var(--danger); }
+  .tag-green { background: rgba(86,211,100,0.15); color: var(--success); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--warning); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--metal); }
+
+  .pathway {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.2rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  .pathway .arrow { color: var(--accent2); font-weight: bold; font-size: 1.3rem; }
+  .pathway .step { background: rgba(88,166,255,0.08); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; }
+  .pathway .step-danger { background: rgba(255,123,114,0.12); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; font-size: 0.85rem; border: 1px solid rgba(255,123,114,0.25); }
+  .pathway .step-success { background: rgba(86,211,100,0.12); padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap; font-size: 0.85rem; border: 1px solid rgba(86,211,100,0.25); }
+
+  .table-wrap { overflow-x: auto; margin: 1.2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { background: rgba(188,140,255,0.06); font-weight: 600; font-size: 0.82rem; color: var(--text-dim); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz h3 { margin-top: 0; color: var(--warning); }
+  .quiz .q { margin: 1.2rem 0; }
+  .quiz .q p { margin: 0.3rem 0; font-weight: 600; }
+  .quiz button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.55rem 1rem;
+    margin: 0.3rem 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+  }
+  .quiz button:hover { border-color: var(--accent); }
+  .quiz .answer {
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    display: none;
+  }
+  .quiz .answer.show { display: block; }
+  .quiz .correct { background: rgba(86,211,100,0.12); border: 1px solid rgba(86,211,100,0.3); }
+  .quiz .wrong { background: rgba(255,123,114,0.12); border: 1px solid rgba(255,123,114,0.3); }
+
+  .ceg-box {
+    background: linear-gradient(135deg, rgba(188,140,255,0.08), rgba(240,136,62,0.06));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .ceg-box h3 { margin-top: 0; color: var(--accent2); }
+  .ceg-box .arpa-line { margin: 0.6rem 0; }
+  .ceg-box .arpa-label { display: inline-block; width: 70px; font-weight: 600; color: var(--metal); }
+
+  .footer-note {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  ul { margin: 0.6rem 0 0.6rem 1.4rem; }
+  li { margin: 0.3rem 0; }
+
+  .metal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .metal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: center;
+    position: relative;
+  }
+  .metal-card .symbol {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--metal);
+    margin-bottom: 0.2rem;
+  }
+  .metal-card .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+  .metal-card .oxidation {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+  }
+  .metal-card .desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .metal-card .strategy {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+  }
+  .metal-card .strategy-reduction { background: rgba(86,211,100,0.12); color: var(--success); }
+  .metal-card .strategy-stabilize { background: rgba(210,153,34,0.12); color: var(--warning); }
+  .metal-card .strategy-precip { background: rgba(88,166,255,0.12); color: var(--accent); }
+
+  .warning-box {
+    background: rgba(255,123,114,0.06);
+    border: 1px solid rgba(255,123,114,0.2);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .warning-box strong { color: var(--danger); }
+
+  .reduction-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .reduction-diagram .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin: 0.6rem 0;
+  }
+  .reduction-diagram .compound {
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .reduction-diagram .compound-danger { background: rgba(255,123,114,0.12); border: 1px solid rgba(255,123,114,0.3); color: var(--danger); }
+  .reduction-diagram .compound-safe { background: rgba(86,211,100,0.12); border: 1px solid rgba(86,211,100,0.3); color: var(--success); }
+  .reduction-diagram .arrow-rx { color: var(--accent2); font-weight: bold; font-size: 1.2rem; }
+  .reduction-diagram .annotation { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem; }
+
+  .classify-quiz-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0;
+  }
+  .classify-quiz-item .metal-name { font-weight: 600; margin-bottom: 0.5rem; }
+  .classify-quiz-item .choice-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .classify-quiz-item button {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .classify-quiz-item button:hover { border-color: var(--accent); }
+  .classify-quiz-item .feedback {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: none;
+  }
+  .classify-quiz-item .feedback.show { display: block; }
+</style>
+<script>
+  function showAnswer(id, correct) {
+    const el = document.getElementById(id);
+    el.className = 'answer show ' + (correct ? 'correct' : 'wrong');
+  }
+  function classifyMetal(id, correctStrategy, chosen) {
+    const el = document.getElementById(id);
+    const isCorrect = chosen === correctStrategy;
+    el.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+    if (isCorrect) {
+      el.innerHTML = '✅ <strong>Correct!</strong>';
+    } else {
+      el.innerHTML = '❌ Not quite. Try again!';
+    }
+  }
+</script>
+</head>
+<body>
+
+<h1>⚗️ Lesson 0005: Heavy Metals</h1>
+<p class="subtitle">Different beast, different rules: why you can't "destroy" a metal, and how CEG makes it harmless anyway</p>
+
+<div class="metaphor-box">
+  <p><strong>You Can't Burn a Metal Into Nothing</strong></p>
+  <p>With TCE, you can break C-Cl bonds and turn the molecule into CO₂ and water — the contaminant is <em>destroyed</em>. But a metal is an element. Chromium doesn't become "not chromium." Lead doesn't evaporate into thin air. You can't break a metal atom into smaller, harmless pieces.</p>
+  <p><strong>So what's the strategy? You change its shape, its charge, or where it lives — making it toxic but stuck, or mobile but safe.</strong> This lesson is about the transformation game.</p>
+</div>
+
+<h2>Step 1: The Fundamental Difference</h2>
+
+<p>Organic contaminants (TCE, benzene, PCE) are made of carbon, hydrogen, and a few other atoms arranged in <em>molecules</em>. Those molecules can be dismantled. Break the right bonds and the toxic structure is gone.</p>
+
+<p>Metals are different. Chromium (Cr) is element 24 on the periodic table. It has 24 protons. You can't remove protons with chemistry — that takes a nuclear reactor. The same is true for lead (Pb, 82), cadmium (Cd, 48), mercury (Hg, 80), and arsenic (As, 33).</p>
+
+<div class="pathway">
+  <div class="step"><strong>Organic contaminant</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">TCE, benzene, etc.</span></div>
+  <span class="arrow">→</span>
+  <div class="step-success"><strong>Break bonds → CO₂ + H₂O</strong><br/><span style="color:var(--success);font-size:0.8rem;">Gone forever</span></div>
+</div>
+
+<div class="pathway">
+  <div class="step-danger"><strong>Metal contaminant</strong><br/><span style="color:var(--danger);font-size:0.8rem;">Cr, Pb, Cd, Hg, As</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>Change form</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">oxidation state, solubility</span></div>
+  <span class="arrow">→</span>
+  <div class="step-success"><strong>Immobile + low toxicity</strong><br/><span style="color:var(--success);font-size:0.8rem;">Still there, but harmless</span></div>
+</div>
+
+<p>The goal isn't elimination — it's <strong>immobilization</strong> or <strong>detoxification</strong>. You make the metal stop moving through groundwater. You make it stop being absorbed by human cells. You reduce its bioavailability.</p>
+
+<h2>Step 2: Chromium — The Two Faces of Cr</h2>
+
+<p>Chromium is the perfect teaching case because it shows exactly why oxidation state matters. Same element, two very different behaviors.</p>
+
+<div class="reduction-diagram">
+  <div class="row">
+    <div class="compound compound-danger">Cr⁶⁺ (Cr-VI)</div>
+    <span class="arrow-rx">→</span>
+    <div>
+      <div style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.3rem;">Reduction + electrons</div>
+      <div style="font-size:0.78rem;color:var(--accent2);">From ISCO byproducts or bacteria</div>
+    </div>
+    <span class="arrow-rx">→</span>
+    <div class="compound compound-safe">Cr³⁺ (Cr-III)</div>
+  </div>
+  <div class="annotation">Cr-VI: carcinogenic, mobile, water-soluble | Cr-III: low toxicity, precipitates as Cr(OH)₃</div>
+</div>
+
+<p><strong>Cr-VI (hexavalent chromium)</strong> is what Erin Brockovich made famous. It's what caused the contamination in Hinkley, California. In Italy, it's common near tanneries, electroplating shops, and metal finishing facilities. It dissolves easily in water and moves with groundwater. It's carcinogenic when inhaled or ingested.</p>
+
+<p><strong>Cr-III (trivalent chromium)</strong> is what your body actually uses in trace amounts for insulin metabolism. It's much less toxic. And critically — <strong>Cr-III is insoluble</strong> in neutral-to-alkaline water. It precipitates out as chromium hydroxide, Cr(OH)₃, and sticks to soil particles. Immobile. Safe.</p>
+
+<div class="table-wrap">
+  <table>
+    <tr>
+      <th>Property</th>
+      <th>Cr-VI</th>
+      <th>Cr-III</th>
+    </tr>
+    <tr>
+      <td>Toxicity</td>
+      <td>High — carcinogen</td>
+      <td>Low — essential trace element</td>
+    </tr>
+    <tr>
+      <td>Solubility</td>
+      <td>Very soluble</td>
+      <td>Insoluble (precipitates)</td>
+    </tr>
+    <tr>
+      <td>Mobility</td>
+      <td>High — travels with groundwater</td>
+      <td>Low — sticks to soil</td>
+    </tr>
+    <tr>
+      <td>How to make</td>
+      <td>Oxidation of Cr-III</td>
+      <td>Reduction of Cr-VI</td>
+    </tr>
+    <tr>
+      <td>CSC in groundwater</td>
+      <td>5 μg/L (Italy)</td>
+      <td>50 μg/L (Italy)</td>
+    </tr>
+  </table>
+</div>
+
+<p><strong>The remediation strategy:</strong> Reduce Cr-VI to Cr-III. You can do this chemically (ISCO byproducts like ferrous iron, Fe²⁺, are excellent reducing agents) or biologically (certain bacteria reduce Cr-VI as part of their metabolism). Once reduced, Cr-III precipitates naturally and stays put.</p>
+
+<div class="warning-box">
+  <p><strong>The ARPA question:</strong> "If the metal is still in the ground, how do you know it won't turn back into Cr-VI?"</p>
+  <p><strong>Your answer:</strong> "Cr-III is stable in the reducing conditions we create. As long as the zone stays anaerobic, Cr-III remains insoluble. We monitor ORP and pH long-term to confirm stability. If conditions shift, we can re-treat."</p>
+</div>
+
+<h2>Step 3: Lead — The Phosphate Trick</h2>
+
+<p>Lead is a classic "stabilize in place" metal. You don't remove it. You lock it.</p>
+
+<p>The chemistry is elegant: <strong>phosphate + lead → pyromorphite</strong>. Pyromorphite is a lead phosphate mineral. It's one of the most stable lead compounds known. Once formed, lead in pyromorphite doesn't dissolve in water, doesn't leach, and doesn't get absorbed by plants or human digestive systems.</p>
+
+<div class="pathway">
+  <div class="step-danger"><strong>Pb²⁺ in soil</strong><br/><span style="color:var(--danger);font-size:0.8rem;">mobile, toxic, bioavailable</span></div>
+  <span class="arrow">→</span>
+  <div class="step"><strong>Add phosphate</strong><br/><span style="color:var(--text-dim);font-size:0.8rem;">PO₄³⁻ (apatite, rock phosphate)</span></div>
+  <span class="arrow">→</span>
+  <div class="step-success"><strong>Pb₅(PO₄)₃Cl</strong><br/><span style="color:var(--success);font-size:0.8rem;">pyromorphite — immobile, stable</span></div>
+</div>
+
+<p>This is called <strong>in situ stabilization</strong> or <strong>phytostabilization</strong> (if plants are involved). The lead is still there — you haven't dug it up, you haven't shipped it anywhere — but it's chemically imprisoned. ARPA understands this. It's accepted practice.</p>
+
+<p><strong>CEG relevance:</strong> In areas near old gas stations, shooting ranges, or battery recycling facilities in Milano, lead is common. CEG doesn't have a specific "lead technology" — but CEG needs to know when to recommend stabilization (usually with phosphate amendments) rather than excavation.</p>
+
+<h2>Step 4: The Rest of the Gang — Cd, Hg, As</h2>
+
+<p>These three show up regularly on Italian contaminated sites. Each needs a different approach.</p>
+
+<div class="metal-grid">
+  <div class="metal-card">
+    <div class="symbol">Cd</div>
+    <div class="name">Cadmium</div>
+    <div class="oxidation">Cd²⁺ (usually)</div>
+    <div class="desc">From batteries, pigments, electroplating. Similar to lead — tends to stay in the +2 state. Strategy is immobilization or phytoremediation.</div>
+    <span class="strategy strategy-stabilize">Stabilize in place</span>
+  </div>
+  <div class="metal-card">
+    <div class="symbol">Hg</div>
+    <div class="name">Mercury</div>
+    <div class="oxidation">Hg⁰, Hg²⁺, CH₃Hg⁺</div>
+    <div class="desc">The most toxic form is methylmercury (CH₃Hg⁺) — bioaccumulates up the food chain. Elemental mercury (Hg⁰) vaporizes. Complex — typically requires excavation + off-site treatment.</div>
+    <span class="strategy strategy-reduction">Excavation + off-site</span>
+  </div>
+  <div class="metal-card">
+    <div class="symbol">As</div>
+    <div class="name">Arsenic</div>
+    <div class="oxidation">As⁵⁺, As³⁺</div>
+    <div class="desc">As³⁺ is more toxic and mobile than As⁵⁺. Iron oxides adsorb arsenic strongly. Strategy: oxidation to As⁵⁺ + iron oxide sorption.</div>
+    <span class="strategy strategy-precip">Oxidize + adsorb on Fe-oxides</span>
+  </div>
+</div>
+
+<h2>Step 5: CSC Thresholds for Metals</h2>
+
+<p>These are the numbers ARPA cares about. Memorize the big ones.</p>
+
+<div class="table-wrap">
+  <table>
+    <tr>
+      <th>Metal</th>
+      <th>Form</th>
+      <th>Soil CSC (mg/kg)</th>
+      <th>Groundwater CSC (μg/L)</th>
+      <th>Health driver</th>
+    </tr>
+    <tr>
+      <td><strong>Chromium</strong></td>
+      <td>Cr-VI</td>
+      <td>2 (residential)</td>
+      <td>5</td>
+      <td>Carcinogen</td>
+    </tr>
+    <tr>
+      <td><strong>Chromium</strong></td>
+      <td>Cr-III</td>
+      <td>150</td>
+      <td>50</td>
+      <td>Low toxicity</td>
+    </tr>
+    <tr>
+      <td><strong>Lead</strong></td>
+      <td>Pb total</td>
+      <td>100</td>
+      <td>10</td>
+      <td>Neurotoxin (children)</td>
+    </tr>
+    <tr>
+      <td><strong>Cadmium</strong></td>
+      <td>Cd total</td>
+      <td>2 (residential)</td>
+      <td>5</td>
+      <td>Kidney damage</td>
+    </tr>
+    <tr>
+      <td><strong>Mercury</strong></td>
+      <td>Hg total</td>
+      <td>1</td>
+      <td>1</td>
+      <td>Neurotoxin</td>
+    </tr>
+    <tr>
+      <td><strong>Arsenic</strong></td>
+      <td>As total</td>
+      <td>20 (residential)</td>
+      <td>10</td>
+      <td>Carcinogen</td>
+    </tr>
+  </table>
+</div>
+
+<p><strong>Key observation:</strong> The Cr-VI soil CSC is <strong>2 mg/kg</strong>. The Cr-III CSC is <strong>150 mg/kg</strong>. That's a 75× difference. If you can prove site chromium is Cr-III (and that it won't convert back), the cleanup target gets dramatically easier. This is where reduction pays off — not just chemically, but regulatorily.</p>
+
+<h2>Step 6: CEG's Position on Metals</h2>
+
+<div class="ceg-box">
+  <h3>🎯 The Real Conversation with ARPA</h3>
+
+  <div class="arpa-line">
+    <span class="arpa-label">ARPA:</span> "Can your ISCO or BioBlend remove heavy metals?"
+  </div>
+  <div class="arpa-line">
+    <span class="arpa-label">You:</span> "No — metals can't be destroyed. But we have two strategies that work. First, the reducing conditions in BioBlend zones convert Cr-VI to Cr-III, which precipitates and stays put. Second, we can amend soils with phosphate to lock lead in place as pyromorphite. Both are standard, accepted approaches."
+  </div>
+  <div class="arpa-line">
+    <span class="arpa-label">ARPA:</span> "And if mercury is present?"
+  </div>
+  <div class="arpa-line">
+    <span class="arpa-label">You:</span> "Mercury is the exception — we typically recommend excavation and off-site treatment for elemental or methylmercury. It's volatile and methylates in situ, so leaving it in place is rarely acceptable."
+  </div>
+</div>
+
+<p><strong>CEG doesn't need a 'metal technology'</strong> in the same way it has ISCO and BioBlend. What CEG needs is <em>knowledge</em>: knowing when a metal requires excavation vs. stabilization vs. reduction; knowing which ARPA thresholds apply; knowing how to answer the "can you destroy metals?" question honestly and competently.</p>
+
+<h2>Interactive Self-Test: Classify the Metal</h2>
+
+<div class="quiz">
+  <h3>🧪 Classify Each Metal by Strategy</h3>
+  <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:1rem;">For each metal, choose whether the primary remediation strategy is <strong>reduction</strong>, <strong>stabilization/precipitation</strong>, or <strong>excavation + off-site</strong>.</p>
+
+  <div class="classify-quiz-item">
+    <div class="metal-name">🏭 Chromium (Cr-VI) in groundwater</div>
+    <div class="choice-row">
+      <button onclick="classifyMetal('cr-feedback','reduction','reduction')">Reduction to Cr-III</button>
+      <button onclick="classifyMetal('cr-feedback','reduction','stabilize')">Stabilization in place</button>
+      <button onclick="classifyMetal('cr-feedback','reduction','excavate')">Excavation + off-site</button>
+    </div>
+    <div id="cr-feedback" class="feedback"></div>
+  </div>
+
+  <div class="classify-quiz-item">
+    <div class="metal-name">🎯 Lead (Pb²⁺) in soil near old gas station</div>
+    <div class="choice-row">
+      <button onclick="classifyMetal('pb-feedback','stabilize','reduction')">Reduction</button>
+      <button onclick="classifyMetal('pb-feedback','stabilize','stabilize')">Stabilization (phosphate)</button>
+      <button onclick="classifyMetal('pb-feedback','stabilize','excavate')">Excavation + off-site</button>
+    </div>
+    <div id="pb-feedback" class="feedback"></div>
+  </div>
+
+  <div class="classify-quiz-item">
+    <div class="metal-name">🌡️ Methylmercury (CH₃Hg⁺) in wetland soil</div>
+    <div class="choice-row">
+      <button onclick="classifyMetal('hg-feedback','excavate','reduction')">Reduction</button>
+      <button onclick="classifyMetal('hg-feedback','excavate','stabilize')">Stabilization</button>
+      <button onclick="classifyMetal('hg-feedback','excavate','excavate')">Excavation + off-site</button>
+    </div>
+    <div id="hg-feedback" class="feedback"></div>
+  </div>
+
+  <div class="classify-quiz-item">
+    <div class="metal-name">⚙️ Arsenic (As³⁺) in groundwater</div>
+    <div class="choice-row">
+      <button onclick="classifyMetal('as-feedback','precip','reduction')">Reduction</button>
+      <button onclick="classifyMetal('as-feedback','precip','precip')">Oxidize + Fe-oxide adsorption</button>
+      <button onclick="classifyMetal('as-feedback','precip','excavate')">Excavation + off-site</button>
+    </div>
+    <div id="as-feedback" class="feedback"></div>
+  </div>
+</div>
+
+<div style="margin-top: 2rem; padding: 1.2rem; background: rgba(88,166,255,0.05); border: 1px dashed var(--border); border-radius: 6px; text-align: center;">
+  <p style="font-size: 1rem; color: var(--text); margin-bottom: 0.4rem;"><strong>Next up:</strong> PFAS — The Forever Chemical (Lesson 0006)</p>
+  <p style="font-size: 0.85rem; color: var(--text-dim);">Why the C-F bond is stronger than anything ISCO can throw at it, and what actually works instead.</p>
+</div>
+
+<div class="footer-note">
+  <p><a href="reference/glossary.html">📚 Glossary</a> · <a href="reference/resources.html">📖 Resources</a> · <a href="mission.html">🎯 Mission</a></p>
+  <p style="margin-top: 0.5rem; font-size: 0.8rem;">CEG Italia · Chemistry for Bioremediation · Lesson 0005</p>
+</div>
+
+</body>
+</html>
