@@ -52,7 +52,8 @@
 
 ---
 
-### 0005 — Heavy Metals: Different Beast, Different Rules
+### 0005 — Heavy Metals: Different Beast, Different Rules ✅
+**Status:** Complete
 **Goal:** Lapo understands why metals need immobilization/reduction, not destruction, and can explain Cr-VI remediation.
 **Structure:**
 - You can't "destroy" a metal — it's an element, it stays
